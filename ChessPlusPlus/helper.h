@@ -14,6 +14,7 @@ std::string alphToNum(std::string position_in) {
     return std::to_string(toupper(position_in[0]) - 65) +
         std::to_string((8 - (int(position_in[1]) - 48)));
 }
+
 void fillGridInit(std::vector<std::vector<Piece*>> &grid) {
 
     std::vector<Piece*> minigrid;
@@ -44,6 +45,13 @@ void fillGrid(std::vector<std::vector<Piece*>>WhitePieces,
         }
     }
 
+}
+void updateGrid(int position1x,int position1y, 
+    int position2x, int position2y,
+    std::vector<std::vector<Piece*>> &grid) {
+
+    grid[position2x][position2y] = grid[position1x][position1y];
+    grid[position1x][position1y] = nullptr;
 }
 void printGrid(std::vector<std::vector<Piece*>> grid) {
     for (size_t i = 0; i < grid.size(); ++i) {

@@ -2,6 +2,7 @@
 #define GAME_H
 #include <iostream>
 #include <string>
+#include <cmath>   
 
 const int alphToNumX(std::string position_in) {
     return toupper(position_in[0]) - 65;
@@ -33,10 +34,11 @@ public:
             << ypos << "\nAlph: " << getAlphPos() 
             << std::endl << std::endl;
     }
-    virtual void move(std::string position_in) = 0;
+    virtual bool move(int newxpos, int newypos) = 0;
     void print() {
         std::cout << "x,y: " << xpos << " " << ypos << std::endl;
     }
+
     virtual ~Piece() {}
 protected:
     std::string title;
@@ -61,9 +63,19 @@ public:
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
     }
-    void move(std::string position_in) override {
-        std::cout << "King move" << std::endl;
+    bool move(int newxpos, int newypos) override {
+
+        if(abs(newxpos - xpos) > 1 || abs(newypos - ypos) > 1) {
+            std::cout << "error in moving" << std::endl;
+            return false;
+        }
+        std::cout << "success in moving" << std::endl;
+
+        xpos = newxpos;
+        ypos = newypos;
+        return true;
     }
+
 };
 class Queen : public Piece {
 public:
@@ -81,8 +93,10 @@ public:
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
     }
-    void move(std::string position_in) override {
-        std::cout << "Queen move" << std::endl;
+    bool move(int newxpos, int newypos) override {
+        xpos = newxpos;
+        ypos = newypos;
+        return true;
     }
 };
 class Rook : public Piece {
@@ -101,8 +115,10 @@ public:
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
     }
-    void move(std::string position_in) override {
-        std::cout << "Rook move" << std::endl;
+    bool move(int newxpos, int newypos) override {
+        xpos = newxpos;
+        ypos = newypos;
+        return true;
     }
 };
 class Bishop : public Piece {
@@ -121,8 +137,10 @@ public:
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
     }
-    void move(std::string position_in) override {
-        std::cout << "Bishop move" << std::endl;
+    bool move(int newxpos, int newypos) override {
+        xpos = newxpos;
+        ypos = newypos;
+        return true;
     }
 };
 class Knight : public Piece {
@@ -141,8 +159,10 @@ public:
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
     }
-    void move(std::string position_in) override {
-        std::cout << "Knight move" << std::endl;
+    bool move(int newxpos, int newypos) override {
+        xpos = newxpos;
+        ypos = newypos;
+        return true;
     }
 };
 class Pawn : public Piece {
@@ -161,8 +181,10 @@ public:
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
     }
-    void move(std::string position_in) override {
-        std::cout << "Pawn move" << std::endl;
+    bool move(int newxpos, int newypos) override {
+        xpos = newxpos;
+        ypos = newypos;
+        return true;
     }
 };
 #endif
