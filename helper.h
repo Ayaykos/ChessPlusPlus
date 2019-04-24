@@ -6,14 +6,8 @@
 #include <vector>
 #include <string>
 #include <cassert>
+#include "conversions.h"
 
-std::string numToAlph(int xpos, int ypos) {
-    return char(xpos + 65) + std::to_string(8 - ypos);
-}
-std::string alphToNum(std::string position_in) {
-    return std::to_string(toupper(position_in[0]) - 65) +
-        std::to_string((8 - (int(position_in[1]) - 48)));
-}
 
 void fillGridInit(std::vector<std::vector<Piece*>> &grid) {
 

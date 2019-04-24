@@ -3,13 +3,9 @@
 #include <iostream>
 #include <string>
 #include <cmath>   
+#include "conversions.h"
 
-const int alphToNumX(std::string position_in) {
-    return toupper(position_in[0]) - 65;
-}
-const int alphToNumY(std::string position_in) {
-    return 8 - (int(position_in[1]) - 48);
-}
+
 class Piece {
 public:
     void updateStatus(int status_in) { status = status_in; }
@@ -22,6 +18,10 @@ public:
         return title[0]; 
     }
     char getTeam() { return team; }
+    std::string getFullTeam() {
+        if (team == 'B') { return "Black"; }
+        else { return "White"; }
+    }
     int getXPos() { return xpos; }
     int getYPos() { return ypos; }
     std::string getAlphPos() {
@@ -66,11 +66,16 @@ public:
     bool move(int newxpos, int newypos) override {
 
         if(abs(newxpos - xpos) > 1 || abs(newypos - ypos) > 1) {
-            std::cout << "error in moving" << std::endl;
+            std::cout << "Cannot move " << this->getFullTeam() 
+                << " King from " << numToAlph(xpos, ypos) <<
+                " to " << numToAlph(newxpos,newypos)
+                << std::endl;
             return false;
         }
-        std::cout << "success in moving" << std::endl;
-
+        std::cout << "Success in moving " << this->getFullTeam()
+            << " King from " << numToAlph(xpos, ypos) <<
+            " to " << numToAlph(newxpos, newypos)
+            << std::endl;
         xpos = newxpos;
         ypos = newypos;
         return true;
@@ -94,6 +99,18 @@ public:
         ypos = alphToNumY(position_in);
     }
     bool move(int newxpos, int newypos) override {
+        if ((abs(newxpos - xpos) > 0 && abs(newypos - ypos) > 0) &&
+            (abs(newxpos - xpos) != abs(newypos - ypos))) {
+            std::cout << "Cannot move " << this->getFullTeam()
+                << " Queen from " << numToAlph(xpos, ypos) <<
+                " to " << numToAlph(newxpos, newypos)
+                << std::endl;
+            return false;
+        }
+        std::cout << "Success in moving " << this->getFullTeam()
+            << " Queen from " << numToAlph(xpos, ypos) <<
+            " to " << numToAlph(newxpos, newypos)
+            << std::endl;
         xpos = newxpos;
         ypos = newypos;
         return true;
@@ -116,6 +133,18 @@ public:
         ypos = alphToNumY(position_in);
     }
     bool move(int newxpos, int newypos) override {
+        if (abs(newxpos - xpos) > 0 && abs(newypos - ypos) > 0) {
+            std::cout << "Cannot move " << this->getFullTeam()
+                << " Rook from " << numToAlph(xpos, ypos) <<
+                " to " << numToAlph(newxpos, newypos)
+                << std::endl;
+            return false;
+        }
+        
+        std::cout << "Success in moving " << this->getFullTeam()
+            << " Rook from " << numToAlph(xpos,ypos) << 
+            " to " << numToAlph(newxpos, newypos)
+            << std::endl;
         xpos = newxpos;
         ypos = newypos;
         return true;
@@ -138,6 +167,17 @@ public:
         ypos = alphToNumY(position_in);
     }
     bool move(int newxpos, int newypos) override {
+        if (abs(newxpos - xpos) != abs(newypos - ypos)) {
+            std::cout << "Cannot move " << this->getFullTeam()
+                << " Bishop from " << numToAlph(xpos, ypos) <<
+                " to " << numToAlph(newxpos, newypos)
+                << std::endl;
+            return false;
+        }
+        std::cout << "Success in moving " << this->getFullTeam()
+            << " Bishop from " << numToAlph(xpos, ypos) <<
+            " to " << numToAlph(newxpos, newypos)
+            << std::endl;
         xpos = newxpos;
         ypos = newypos;
         return true;
@@ -160,9 +200,21 @@ public:
         ypos = alphToNumY(position_in);
     }
     bool move(int newxpos, int newypos) override {
-        xpos = newxpos;
-        ypos = newypos;
-        return true;
+        if ((abs(newxpos - xpos) == 2 && abs(newypos - ypos) == 1) ||
+            (abs(newxpos - xpos) == 1 && abs(newypos - ypos) == 2)) {
+            std::cout << "Success in moving " << this->getFullTeam()
+                << " Knight from " << numToAlph(xpos, ypos) <<
+                " to " << numToAlph(newxpos, newypos)
+                << std::endl;
+            xpos = newxpos;
+            ypos = newypos;
+            return true;
+        }
+        std::cout << "Cannot move " << this->getFullTeam()
+            << " Knight from " << numToAlph(xpos, ypos) <<
+            " to " << numToAlph(newxpos, newypos)
+            << std::endl;
+        return false;
     }
 };
 class Pawn : public Piece {

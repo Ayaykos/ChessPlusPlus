@@ -4,6 +4,7 @@
 #include <string>
 #include "game.h"
 #include "helper.h"
+#include "conversions.h"
 
 class Grid {
 public:
