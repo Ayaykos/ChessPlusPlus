@@ -1,6 +1,6 @@
 # ChessPlusPlus
 
-Working on a Chess spinoff, exploring where I can take this. 
+Working on a Chess spinoff, exploring where I can take this. Will incorporate proper GUI and interactive interface.
 
 - game.cpp  *//main driver*
   - game.h  *//Piece classes/subclasses*
