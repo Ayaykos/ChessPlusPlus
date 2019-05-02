@@ -34,16 +34,12 @@ public:
         testrootpath.test();
     }
 };
-void asd() {
-    std::cout << "asds" << std::endl;
-}
+
 int main() {
     //TestBasicMoves tbm;
     //tbm.test();
     TestCheckPaths tcp;
     tcp.test();
-    ostringstream oss;
-    //oss << asd();
-    std::cout << oss.str();
+
     return 0;
 }

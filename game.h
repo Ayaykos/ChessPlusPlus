@@ -10,6 +10,10 @@ class Piece {
 public:
     void updateStatus(int status_in) { status = status_in; }
     void updatePos(int x, int y) { xpos = x, ypos = y; }
+    void updatePos(std::string xy) { 
+        xpos = alphToNumX(xy), 
+        ypos = alphToNumY(xy); 
+    }
     std::string getTitle() { return title; }
     char getTitleChar() { 
         if (title == "Knight") {

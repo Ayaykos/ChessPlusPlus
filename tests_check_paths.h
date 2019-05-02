@@ -44,6 +44,17 @@ public:
         GridObj.movePiece("B8", "A8");
         std::cout << "\tAssert: Not blocked." << std::endl;
         GridObj.movePiece("A8", "C8");
+        GridObj.removePiece("B8");
+        GridObj.movePiece("A8", "B8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("B8", "B7");
+        GridObj.movePiece("B8", "B2");
+        GridObj.removePiece("B7");
+        GridObj.movePiece("B8", "B2");
+        GridObj.movePiece("B8", "B3");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+
+        GridObj.restoreGrid();
 
         GridObj.print();
 

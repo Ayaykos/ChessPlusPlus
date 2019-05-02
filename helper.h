@@ -7,7 +7,7 @@
 #include <string>
 #include <cassert>
 #include "conversions.h"
-
+#include "path.h"
 
 void fillGridInit(std::vector<std::vector<Piece*>> &grid) {
 
@@ -46,65 +46,6 @@ void updateGrid(int position1x,int position1y,
     grid[position1x][position1y] = nullptr;
 }
 
-
-bool checkRookPath(int p1x, int p1y, int p2x, int p2y,
-    std::vector<std::vector<Piece*>> &grid) {
-    //right
-    if (abs(p2x - p1x) > 0 && p2x > p1x) {
-        for (int i = p1x + 1; i <= p2x; ++i) {
-            if (grid[i][p1y] != nullptr) {
-                std::cout << "Blocked by: " <<
-                    grid[i][p1y]->getFullTeam() << " " <<
-                    grid[i][p1y]->getTitle() << " at " <<
-                    numToAlph(i,p1y) << "\n";
-                return false;
-            }
-        }
-        return true;
-    }
-    //left
-    else if (abs(p2x - p1x) > 0 && p1x > p2x) {
-        for (int i = p1x - 1; i >= p2x; --i) {
-            if (grid[i][p1y] != nullptr) {
-                std::cout << "Blocked by: " <<
-                    grid[i][p1y]->getFullTeam() << " " <<
-                    grid[i][p1y]->getTitle() << " at " <<
-                    numToAlph(i, p1y) << "\n";
-                return false;
-            }
-        }
-        return true;
-    }
-    //down
-    else if (abs(p2y - p1y) > 0 && p2y > p1y) {
-        for (int i = p1y + 1; i <= p2y; ++i) {
-            if (grid[p1x][i] != nullptr) {
-                std::cout << "Blocked by: " <<
-                    grid[p1x][i]->getFullTeam() << " " <<
-                    grid[p1x][i]->getTitle() << " at " <<
-                    numToAlph(p1x, i) << "\n";
-                return false;
-            }
-        }
-        return true;
-    }
-    //up
-    else {
-        for (int i = p1y - 1; i >= p2y; --i) {
-            if (grid[p1x][i] != nullptr) {
-                std::cout << "Blocked by: " <<
-                    grid[p1x][i]->getFullTeam() << " " <<
-                    grid[p1x][i]->getTitle() << " at " <<
-                    numToAlph(p1x, i) << "\n";
-                return false;
-            }
-        }
-        return true;
-    }
-    std::cout << "error in checkRootPath" << "\n";
-    assert(false);
-    return false;
-}
 bool checkMove(int p1x, int p1y,
     int p2x, int p2y,
     std::vector<std::vector<Piece*>> &grid) {
@@ -112,7 +53,7 @@ bool checkMove(int p1x, int p1y,
     if (grid[p2x][p2y] != nullptr){
         if (grid[p1x][p1y]->getTeam() ==
             grid[p2x][p2y]->getTeam()) {
-            std::cout << "Blocked by " << grid[p2x][p2y]->getFullTeam() << " " 
+            std::cout << "\tBlocked by " << grid[p2x][p2y]->getFullTeam() << " " 
                 << grid[p2x][p2y]->getTitle() << " in place on " << 
                 numToAlph(p2x, p2y) << "\n";
             return false;
