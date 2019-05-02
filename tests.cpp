@@ -30,8 +30,14 @@ public:
 class TestCheckPaths {
 public:
     void test() {
-        TestRookPath testrootpath;
-        testrootpath.test();
+        //TestRookPath trp;
+        //trp.test();
+        //TestBishopPath tbp;
+        //tbp.test();
+        //TestKingPath tKp;
+        //tKp.test();
+        TestQueenPath tqp;
+        tqp.test();
     }
 };
 

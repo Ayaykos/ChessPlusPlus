@@ -70,20 +70,17 @@ public:
         ypos = alphToNumY(position_in);
     }
     bool checkValidMove(int newxpos, int newypos) override {
-        std::cout << "Didn't fix xpos ypos in checkValidPath." << std::endl;
         if(abs(newxpos - xpos) > 1 || abs(newypos - ypos) > 1) {
-            std::cout << "Cannot move " << this->getFullTeam() 
+            std::cout << "Invalid move: " << this->getFullTeam() 
                 << " King from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos,newypos)
                 << "\n";
             return false;
         }
-        std::cout << "Success in moving " << this->getFullTeam()
+        std::cout << "Valid move: " << this->getFullTeam()
             << " King from " << numToAlph(xpos, ypos) <<
             " to " << numToAlph(newxpos, newypos)
             << "\n";
-        xpos = newxpos;
-        ypos = newypos;
         return true;
     }
     void move(int newxpos, int newypos) override {
@@ -109,22 +106,18 @@ public:
         ypos = alphToNumY(position_in);
     }
     bool checkValidMove(int newxpos, int newypos) override {
-        std::cout << "Didn't fix xpos ypos in checkValidPath." << std::endl;
-
         if ((abs(newxpos - xpos) > 0 && abs(newypos - ypos) > 0) &&
             (abs(newxpos - xpos) != abs(newypos - ypos))) {
-            std::cout << "Cannot move " << this->getFullTeam()
+            std::cout << "Invalid move: " << this->getFullTeam()
                 << " Queen from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos, newypos)
                 << "\n";
             return false;
         }
-        std::cout << "Success in moving " << this->getFullTeam()
+        std::cout << "Valid move: " << this->getFullTeam()
             << " Queen from " << numToAlph(xpos, ypos) <<
             " to " << numToAlph(newxpos, newypos)
             << "\n";
-        xpos = newxpos;
-        ypos = newypos;
         return true;
     }
     void move(int newxpos, int newypos) override {
@@ -188,8 +181,6 @@ public:
         ypos = alphToNumY(position_in);
     }
     bool checkValidMove(int newxpos, int newypos) override {
-        std::cout << "Didn't fix xpos ypos in checkValidPath." << std::endl;
-
         if (abs(newxpos - xpos) != abs(newypos - ypos)) {
             std::cout << "Invalid move: " << this->getFullTeam()
                 << " Bishop from " << numToAlph(xpos, ypos) <<
@@ -201,8 +192,6 @@ public:
             << " Bishop from " << numToAlph(xpos, ypos) <<
             " to " << numToAlph(newxpos, newypos)
             << "\n";
-        xpos = newxpos;
-        ypos = newypos;
         return true;
     }
     void move(int newxpos, int newypos) override {

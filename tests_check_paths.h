@@ -61,5 +61,145 @@ public:
         //GridObj.deleteAll();
     }
 };
+class TestBishopPath {
+public:
+    void test() {
+        Grid GridObj;
+        GridObj.initPieces();
+        GridObj.initGrid();
+        GridObj.fill();
 
+        GridObj.movePiece("C8", "B7");
+        GridObj.movePiece("C8", "A6");
+        GridObj.movePiece("C8", "D7");
+        GridObj.movePiece("C8", "E6");
+
+        GridObj.removePiecesGroup("Black", "Pawn");
+        GridObj.movePiece("C8", "B7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("B7", "C8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("C8", "A6");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("A6", "C8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("C8", "D7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("D7", "C8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("C8", "H3");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("H3", "E6");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("E6", "C4");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("C4", "A6");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("A6", "C8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+
+        GridObj.print();
+    }
+};
+class TestKingPath {
+public:
+    void test() {
+        Grid GridObj;
+        GridObj.initPieces();
+        GridObj.initGrid();
+        GridObj.fill();
+
+        GridObj.movePiece("E8", "D8");
+        GridObj.movePiece("E8", "D7");
+        GridObj.movePiece("E8", "E7");
+        GridObj.movePiece("E8", "F7");
+        GridObj.movePiece("E8", "F8");
+
+        GridObj.removePiecesGroup("Black", "Pawn");
+        GridObj.movePiece("E8", "D7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("D7", "E8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("E8", "E7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("E7", "E8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("E8", "F7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("F7", "E8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("E8", "F7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("F7", "F6");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("F6", "F5");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("F5", "F6");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+
+        GridObj.print();
+    }
+};
+class TestQueenPath {
+public:
+    void test() {
+        Grid GridObj;
+        GridObj.initPieces();
+        GridObj.initGrid();
+        GridObj.fill();
+
+        //blocked
+        GridObj.movePiece("D8", "C8");
+        GridObj.movePiece("D8", "C7");
+        GridObj.movePiece("D8", "D7");
+        GridObj.movePiece("D8", "E7");
+        GridObj.movePiece("D8", "E8");
+
+        //not blocked
+        GridObj.removePiecesGroup("Black", "Pawn");
+        GridObj.movePiece("D8", "D7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("D7", "D8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("D8", "D3");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("D3", "A3");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("A3", "A7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("A7", "H7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("H7", "H3");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("H3", "D3");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("D3", "D8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+
+        GridObj.movePiece("D8", "E7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("E7", "D8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("D8", "C7");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("C7", "D8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("D8", "A5");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("A5", "C3");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("C3", "F6");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("F6", "D8");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+
+        GridObj.movePiece("D8", "D2");
+        GridObj.movePiece("D8", "A5");
+        std::cout << "\tAssert: Not blocked." << std::endl;
+        GridObj.movePiece("A5", "D2");
+
+
+        GridObj.print();
+    }
+};
 #endif

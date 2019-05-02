@@ -62,6 +62,16 @@ bool checkMove(int p1x, int p1y,
     if (grid[p1x][p1y]->getTitleChar() == 'R') {
         return checkRookPath(p1x, p1y, p2x, p2y, grid);
     }
+    if (grid[p1x][p1y]->getTitleChar() == 'B') {
+        return checkBishopPath(p1x, p1y, p2x, p2y, grid);
+    }
+    if (grid[p1x][p1y]->getTitleChar() == 'K') {
+        //nullptr check already done??
+        return checkKingPath(p1x, p1y, p2x, p2y, grid);
+    }
+    if (grid[p1x][p1y]->getTitleChar() == 'Q') {
+        return checkQueenPath(p1x, p1y, p2x, p2y, grid);
+    }
     //use polymorphism similar to move function to determine
     //whether specific piece can make the travel
     return true;
