@@ -21,10 +21,7 @@ public:
     void print() {
         printGrid(grid);
     }
-    void deleteAll() {
-        deletePieces(WhitePieces);
-        deletePieces(BlackPieces);
-    }
+
     Piece* operator[](std::string lookup) {
         int x = alphToNumX(lookup);
         int y = alphToNumY(lookup);
@@ -36,9 +33,32 @@ public:
         int newx = alphToNumX(position2);
         int newy = alphToNumY(position2);
 
-        if (grid[x][y]->move(newx, newy) == true) {
-            updateGrid(x, y, newx, newy, grid);
+        if (grid[x][y]->checkValidMove(newx, newy) == true) {
+            //CHECKMOVE NEEDS TO BE DONE BEFORE ->MOVE CHANGES XPOS & YPOS
+            if (checkMove(x, y, newx, newy, grid) == true) {
+                grid[x][y]->move(newx, newy);
+                updateGrid(x, y, newx, newy, grid);
+            }
+            else {
+                std::cout << "  //Path Check Failed." << "\n";
+            }
         }
+    }
+    void removePiece(std::string position) {
+        grid[alphToNumX(position)][alphToNumY(position)] = nullptr;
+    }
+    void restoreGrid() {
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                grid[j][i] = nullptr;
+            }
+
+        }
+        fillGrid(WhitePieces, BlackPieces, grid);
+    }
+    ~Grid() {
+        deletePieces(WhitePieces);
+        deletePieces(BlackPieces);
     }
 private:
     std::vector<std::vector<Piece*>> grid;

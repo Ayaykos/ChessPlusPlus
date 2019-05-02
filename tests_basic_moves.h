@@ -11,28 +11,28 @@ void rookTest(Grid &GridObj) {
         GridObj.movePiece(current, next);
         current = next;
         next = current[0] + std::to_string(i);
-        std::cout << current << " " << next << std::endl;
+        std::cout << current << " " << next << "\n";
     }
     current = "A1", next = "B1";
     for (int i = 0; i < 7; ++i) {
         GridObj.movePiece(current, next);
         current = next;
         next = char(current[0] + 1) + std::to_string(1);
-        std::cout << current << " " << next << std::endl;
+        std::cout << current << " " << next << "\n";
     }
     current = "H1", next = "H2";
     for (int i = 3; i < 10; ++i) {
         GridObj.movePiece(current, next);
         current = next;
         next = current[0] + std::to_string(i);
-        std::cout << current << " " << next << std::endl;
+        std::cout << current << " " << next << "\n";
     }
     current = "H8", next = "G8";
     for (int i = 0; i < 7; ++i) {
         GridObj.movePiece(current, next);
         current = next;
         next = char(current[0] - 1) + std::to_string(8);
-        std::cout << current << " " << next << std::endl;
+        std::cout << current << " " << next << "\n";
     }
     GridObj.movePiece("A8", "A1");
     GridObj.movePiece("A1", "H1");
@@ -50,7 +50,7 @@ void bishopTest(Grid &GridObj) {
     GridObj.movePiece("H3", "C8");
 }
 
-class TestKnight {
+class TestKnightBasic {
 public:
     void testsuccess() {
         Grid GridObj;
@@ -72,7 +72,7 @@ public:
         GridObj.movePiece("D4", "B3");
 
         GridObj.print();
-        GridObj.deleteAll();
+        //GridObj.deleteAll();
     }
     void testfail() {
         Grid GridObj;
@@ -112,10 +112,10 @@ public:
         GridObj.movePiece("A6", "D6");
 
         GridObj.print();
-        GridObj.deleteAll();
+        //GridObj.deleteAll();
     }
 };
-class TestQueen {
+class TestQueenBasic {
 public:
     void testsuccess() {
         Grid GridObj;
@@ -130,7 +130,7 @@ public:
         bishopTest(GridObj);
 
         GridObj.print();
-        GridObj.deleteAll();
+        //GridObj.deleteAll();
     }
     void testfail() {
         Grid GridObj;
@@ -149,10 +149,10 @@ public:
         GridObj.movePiece("D8", "F7");
 
         GridObj.print();
-        GridObj.deleteAll();
+        //GridObj.deleteAll();
     }
 };
-class TestBishop {
+class TestBishopBasic {
 public:
     void testsuccess() {
         Grid GridObj;
@@ -164,7 +164,7 @@ public:
         bishopTest(GridObj);
         
         GridObj.print();
-        GridObj.deleteAll();
+        //GridObj.deleteAll();
     }
     void testfail() {
         Grid GridObj;
@@ -188,11 +188,11 @@ public:
         GridObj.movePiece("C8", "H4");
 
         GridObj.print();
-        GridObj.deleteAll();
+        //GridObj.deleteAll();
     }
 };
 
-class TestRook {
+class TestRookBasic {
 public:
     void testsuccess() {
         Grid GridObj;
@@ -206,7 +206,7 @@ public:
 
         GridObj.print();
 
-        GridObj.deleteAll();
+        //GridObj.deleteAll();
     }
     void testfail() {
         Grid GridObj;
@@ -219,11 +219,11 @@ public:
         GridObj.movePiece("A8", "B6");
         GridObj.movePiece("A8", "H1");
 
-        GridObj.deleteAll();
+        //GridObj.deleteAll();
     }
     
 };
-class TestKing {
+class TestKingBasic {
 public:
     void test() {
         Grid GridObj;
@@ -280,7 +280,7 @@ public:
 
         GridObj.print();
 
-        GridObj.deleteAll();
+        //GridObj.deleteAll();
     }
 };
 #endif
