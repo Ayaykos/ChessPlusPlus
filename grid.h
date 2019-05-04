@@ -307,6 +307,11 @@ bool Grid::checkKingPath(int p1x, int p1y, int p2x, int p2y) {
     }
     return true;
 }
+//differentiate between blocks along the way and block at end
+//any piece blocks along the way are issue
+//piece at end depends on team or not
+
+//test for end of path team/not team
 bool Grid::checkMove(int p1x, int p1y, int p2x, int p2y) {
 
     if (grid[p2x][p2y] != nullptr) {
@@ -331,8 +336,7 @@ bool Grid::checkMove(int p1x, int p1y, int p2x, int p2y) {
     if (grid[p1x][p1y]->getTitleChar() == 'Q') {
         return this->checkQueenPath(p1x, p1y, p2x, p2y);
     }
-    //use polymorphism similar to move function to determine
-    //whether specific piece can make the travel
+
     return true;
 }
 
