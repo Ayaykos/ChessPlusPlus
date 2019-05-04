@@ -9,35 +9,6 @@
 #include "conversions.h"
 #include "path.h"
 
-void fillGridInit(std::vector<std::vector<Piece*>> &grid) {
-
-    std::vector<Piece*> minigrid;
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            //minigrid.push_back(char(j + 65) + std::to_string(8 - i));
-            minigrid.push_back(nullptr);
-        }
-        grid.push_back(minigrid);
-        minigrid.clear();
-    }
-    
-}
-void fillGrid(std::vector<std::vector<Piece*>>WhitePieces,
-    std::vector<std::vector<Piece*>>BlackPieces,
-    std::vector<std::vector<Piece*>> &grid) {
-    for (size_t i = 0; i < WhitePieces.size(); ++i) {
-        for (size_t j = 0; j < WhitePieces[i].size(); ++j) {
-            grid[WhitePieces[i][j]->getXPos()][WhitePieces[i][j]->getYPos()] =
-                WhitePieces[i][j];
-        }
-    }
-    for (size_t i = 0; i < BlackPieces.size(); ++i) {
-        for (size_t j = 0; j < BlackPieces[i].size(); ++j) {
-            grid[BlackPieces[i][j]->getXPos()][BlackPieces[i][j]->getYPos()] =
-                BlackPieces[i][j];
-        }
-    }
-}
 void updateGrid(int position1x,int position1y, 
     int position2x, int position2y,
     std::vector<std::vector<Piece*>> &grid) {
@@ -46,57 +17,6 @@ void updateGrid(int position1x,int position1y,
     grid[position1x][position1y] = nullptr;
 }
 
-bool checkMove(int p1x, int p1y,
-    int p2x, int p2y,
-    std::vector<std::vector<Piece*>> &grid) {
-
-    if (grid[p2x][p2y] != nullptr){
-        if (grid[p1x][p1y]->getTeam() ==
-            grid[p2x][p2y]->getTeam()) {
-            std::cout << "\tBlocked by " << grid[p2x][p2y]->getFullTeam() << " " 
-                << grid[p2x][p2y]->getTitle() << " in place on " << 
-                numToAlph(p2x, p2y) << "\n";
-            return false;
-        }
-    }
-    if (grid[p1x][p1y]->getTitleChar() == 'R') {
-        return checkRookPath(p1x, p1y, p2x, p2y, grid);
-    }
-    if (grid[p1x][p1y]->getTitleChar() == 'B') {
-        return checkBishopPath(p1x, p1y, p2x, p2y, grid);
-    }
-    if (grid[p1x][p1y]->getTitleChar() == 'K') {
-        //nullptr check already done??
-        return checkKingPath(p1x, p1y, p2x, p2y, grid);
-    }
-    if (grid[p1x][p1y]->getTitleChar() == 'Q') {
-        return checkQueenPath(p1x, p1y, p2x, p2y, grid);
-    }
-    //use polymorphism similar to move function to determine
-    //whether specific piece can make the travel
-    return true;
-}
-void printGrid(std::vector<std::vector<Piece*>> grid) {
-    for (size_t i = 0; i < grid.size(); ++i) {
-        for (size_t j = 0; j < grid.size(); ++j) {
-            //std::cout << "|__";
-            if (grid[j][i] != nullptr) {
-                std::cout << "|_" << grid[j][i]->getTitleChar() << "_";
-            }
-            else {
-                std::cout << "|___";
-            }
-        }
-        std::cout << "\n";
-    }
-    /*
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            std::cout << grid[i][j] << " ";
-        }
-        std::cout << "\n";
-    }*/
-}
 void fillPieces(std::vector<std::vector<Piece*>> &Pieces, char team) {
     assert(Pieces.empty());
     std::vector<Piece*> kings;
