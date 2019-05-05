@@ -42,9 +42,6 @@ public:
     virtual bool checkValidMove(int newxpos, int newypos) = 0;
     //execute move
     virtual void move(int newxpos, int newypos) = 0;
-    void print() {
-        std::cout << "x,y: " << xpos << " " << ypos << "\n";
-    }
     virtual ~Piece() {}
 protected:
     std::string title;
@@ -267,4 +264,8 @@ public:
         ypos = newypos;
     }
 };
+
+std::ostream & operator<<(std::ostream & os, Piece & piece) {
+    return os << piece.getFullTeam() << " " << piece.getTitle();
+}
 #endif
