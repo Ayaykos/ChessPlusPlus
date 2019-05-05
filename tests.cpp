@@ -34,11 +34,10 @@ public:
         //trp.test();
         //TestBishopPath tbp;
         //tbp.test();
-        TestKingPath tKp;
+        //TestKingPath tKp;
         //tKp.test();
-        tKp.testOvertake();
-        //TestQueenPath tqp;
-        //tqp.test();
+        TestQueenPath tqp;
+        tqp.test();
     }
 };
 

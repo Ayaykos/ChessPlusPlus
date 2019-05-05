@@ -8,38 +8,36 @@
 
 class Grid {
 public:
-    Piece* operator[](std::string lookup);
     void initPieces();
     void initGrid();
     void fill();
     void print();
+    /*Piece* operator[](std::string lookup) {
+        int x = alphToNumX(lookup);
+        int y = alphToNumY(lookup);
+        return grid[x][y];
+    }*/
     void movePiece(std::string position1, std::string position2);
     void removePiece(std::string position);
     void restoreGrid();
     //function only for testing
     void removePiecesGroup(std::string team, std::string title);
+    ~Grid();
     bool checkRookPath(int p1x, int p1y, int p2x, int p2y);
     bool checkBishopPath(int p1x, int p1y, int p2x, int p2y);
     bool checkQueenPath(int p1x, int p1y, int p2x, int p2y);
     bool checkKingPath(int p1x, int p1y, int p2x, int p2y);
     bool checkMove(int p1x, int p1y, int p2x, int p2y);
-    void printCaptured();
-    ~Grid();
 
 private:
     std::vector<std::vector<Piece*>> grid;
     std::vector<std::vector<Piece*>> WhitePieces;
     std::vector<std::vector<Piece*>> BlackPieces;
-    std::pair<std::vector<Piece*>, 
-        std::vector<Piece*>>CapturedPieces;
+    std::vector<Piece*> CapturedWhitePieces;
+    std::vector<Piece*> CapturedBlackPieces;
 };
 
 
-Piece* Grid::operator[](std::string lookup) {
-    int x = alphToNumX(lookup);
-    int y = alphToNumY(lookup);
-    return grid[x][y];
-}
 void Grid::initPieces() {
     fillPieces(WhitePieces, 'W');
     fillPieces(BlackPieces, 'B');
@@ -70,26 +68,16 @@ void Grid::fill() {
     }
 }
 void Grid::print() {
-    std::cout << "  ";
     for (size_t i = 0; i < grid.size(); ++i) {
-        std::cout << "__" << char(i + 65) << "_";
-    }
-    std::cout << "\n";
-    for (size_t i = 0; i < grid.size(); ++i) {
-        std::cout << 8 - i << " ";
         for (size_t j = 0; j < grid.size(); ++j) {
             //std::cout << "|__";
             if (grid[j][i] != nullptr) {
-                std::cout << "|_" << grid[j][i]->getTitleChar();
-                grid[j][i]->getTeam() == 'W' ? std::cout << "_" :
-                    std::cout << ".";
+                std::cout << "|_" << grid[j][i]->getTitleChar() << "_";
             }
             else {
                 std::cout << "|___";
             }
         }
-        if (i == 0) std::cout << "  B";
-        if (i == 7) std::cout << "  W";
         std::cout << "\n";
     }
     /*
@@ -109,7 +97,7 @@ void Grid::movePiece(std::string position1, std::string position2) {
 
     if (grid[x][y]->checkValidMove(newx, newy) == true) {
         //CHECKMOVE NEEDS TO BE DONE BEFORE ->MOVE CHANGES XPOS & YPOS
-        if (this->checkMove(x, y, newx, newy) == true) {
+        if (checkMove(x, y, newx, newy) == true) {
             grid[x][y]->move(newx, newy);
             updateGrid(x, y, newx, newy, grid);
         }
@@ -187,8 +175,6 @@ void Grid::removePiecesGroup(std::string team, std::string title) {
         }
     }
 }
-
-//Path Functions
 bool Grid::checkRookPath(int p1x, int p1y, int p2x, int p2y) {
     //right
     if (abs(p2x - p1x) > 0 && p2x > p1x) {
@@ -318,18 +304,6 @@ bool Grid::checkKingPath(int p1x, int p1y, int p2x, int p2y) {
                 numToAlph(p2x, p2y) << std::endl;
             return false;
         }
-        else {
-            std::cout << "\t" << grid[p2x][p2y]->getFullTeam() << " " <<
-                grid[p1x][p1y]->getTitle() << " overtook " << 
-                grid[p2x][p2y]->getFullTeam() << " " <<
-                grid[p2x][p2y]->getTitle() << " at " << 
-                numToAlph(p2x, p2y) << std::endl;
-            grid[p2x][p2y]->getTeam() == 'W' ? 
-                CapturedPieces.first.push_back(grid[p2x][p2y]) : 
-                CapturedPieces.second.push_back(grid[p2x][p2y]);
-
-            return true;
-        }
     }
     return true;
 }
@@ -365,26 +339,7 @@ bool Grid::checkMove(int p1x, int p1y, int p2x, int p2y) {
 
     return true;
 }
-void Grid::printCaptured() {
-    if (CapturedPieces.first.empty()) {
-        std::cout << "Captured White: None.\n";
-    }
-    else {
-        std::cout << "Captured White:\n";
-        for (size_t i = 0; i < CapturedPieces.first.size(); ++i) {
-            std::cout << *CapturedPieces.first[i] << "\n";
-        }
-    }
-    if (CapturedPieces.second.empty()) {
-        std::cout << "Captured Black: None.\n";
-    }
-    else {
-        std::cout << "Captured Black:\n";
-        for (size_t i = 0; i < CapturedPieces.second.size(); ++i) {
-            std::cout << CapturedPieces.second[i] << "\n";
-        }
-    }
-}
+
 Grid::~Grid() {
     deletePieces(WhitePieces);
     deletePieces(BlackPieces);

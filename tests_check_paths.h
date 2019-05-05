@@ -139,24 +139,6 @@ public:
 
         GridObj.print();
     }
-    void testOvertake() {
-        Grid GridObj;
-        GridObj.initPieces();
-        GridObj.initGrid();
-        GridObj.fill();
-
-        GridObj.removePiece("E7");
-        GridObj.movePiece("E8", "E7");
-        GridObj.movePiece("E7", "E6");
-        GridObj.movePiece("E6", "E5");
-        GridObj.movePiece("E5", "E4");
-        GridObj.movePiece("E4", "E3");
-
-        GridObj.print();
-        GridObj.movePiece("E3", "E2");
-        GridObj.print();
-        GridObj.printCaptured();
-    }
 };
 class TestQueenPath {
 public:
@@ -215,6 +197,7 @@ public:
         GridObj.movePiece("D8", "A5");
         std::cout << "\tAssert: Not blocked." << std::endl;
         GridObj.movePiece("A5", "D2");
+
 
         GridObj.print();
     }
