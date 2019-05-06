@@ -7,7 +7,6 @@
 #include <string>
 #include <cassert>
 #include "conversions.h"
-#include "path.h"
 
 void updateGrid(int position1x, int position1y,
     int position2x, int position2y,

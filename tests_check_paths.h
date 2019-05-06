@@ -60,6 +60,23 @@ public:
 
         //GridObj.deleteAll();
     }
+    void testOvertake() {
+        Grid GridObj;
+        GridObj.initPieces();
+        GridObj.initGrid();
+        GridObj.fill();
+
+        GridObj.removePiecesGroup("Black", "Pawn");
+        GridObj.movePiece("A8", "A2");
+        GridObj.printCaptured();
+        GridObj.movePiece("A2", "B2");
+        GridObj.printCaptured();
+        GridObj.movePiece("B2", "B1");
+        GridObj.movePiece("B1", "A1");
+        GridObj.printCaptured();
+
+        GridObj.print();
+    }
 };
 class TestBishopPath {
 public:
@@ -97,6 +114,27 @@ public:
         std::cout << "\tAssert: Not blocked." << std::endl;
         GridObj.movePiece("A6", "C8");
         std::cout << "\tAssert: Not blocked." << std::endl;
+
+        GridObj.print();
+    }
+    void testOvertake() {
+        Grid GridObj;
+        GridObj.init();
+
+        GridObj.removePiecesGroup("Black", "Pawn");
+        GridObj.movePiece("C8", "A6");
+        GridObj.movePiece("A6", "E2");
+        GridObj.printCaptured();
+        GridObj.movePiece("E2", "D1");
+        GridObj.printCaptured();
+        GridObj.movePiece("D1", "C2");
+        GridObj.printCaptured();
+        GridObj.movePiece("C2", "B3");
+        GridObj.movePiece("B3", "D5");
+        GridObj.movePiece("D5", "H1");
+        GridObj.printCaptured();
+        GridObj.movePiece("D5", "G8");
+        GridObj.printCaptured();
 
         GridObj.print();
     }
@@ -156,6 +194,12 @@ public:
         GridObj.movePiece("E3", "E2");
         GridObj.print();
         GridObj.printCaptured();
+        GridObj.movePiece("E2", "E1");
+        GridObj.printCaptured();
+
+        GridObj.print();
+
+
     }
 };
 class TestQueenPath {
@@ -215,6 +259,43 @@ public:
         GridObj.movePiece("D8", "A5");
         std::cout << "\tAssert: Not blocked." << std::endl;
         GridObj.movePiece("A5", "D2");
+
+        GridObj.print();
+    }
+    void testOvertake() {
+        Grid GridObj;
+        GridObj.init();
+
+        //bishop
+        GridObj.movePiece("D8", "C8");
+        GridObj.removePiece("C8");
+        GridObj.movePiece("D8", "C8");
+        GridObj.removePiecesGroup("Black", "Pawn");
+        GridObj.movePiece("C8", "A6");
+        GridObj.movePiece("A6", "E2");
+        GridObj.movePiece("E2", "D1");
+        GridObj.movePiece("D1", "C2");
+        GridObj.movePiece("C2", "B3");
+        GridObj.movePiece("B3", "D5");
+        GridObj.movePiece("D5", "H1");
+        GridObj.movePiece("D5", "G8");
+        GridObj.restoreGrid();
+        std::cout << "Rook testing\n";
+        //rook
+        GridObj.removePiece("C8");
+        GridObj.removePiece("B8");
+        GridObj.removePiece("A8");
+        GridObj.movePiece("D8", "A8");
+
+        
+        GridObj.removePiecesGroup("Black", "Pawn");
+        GridObj.movePiece("A8", "A2");
+        GridObj.printCaptured();
+        GridObj.movePiece("A2", "B2");
+        GridObj.printCaptured();
+        GridObj.movePiece("B2", "B1");
+        GridObj.movePiece("B1", "A1");
+        GridObj.printCaptured();
 
         GridObj.print();
     }

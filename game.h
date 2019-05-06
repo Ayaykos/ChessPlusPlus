@@ -265,7 +265,7 @@ public:
     }
 };
 
-std::ostream & operator<<(std::ostream & os, Piece & piece) {
-    return os << piece.getFullTeam() << " " << piece.getTitle();
+std::ostream & operator<<(std::ostream & os, Piece* piece) {
+    return os << piece->getFullTeam() << " " << piece->getTitle();
 }
 #endif

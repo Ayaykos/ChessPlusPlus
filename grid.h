@@ -12,12 +12,15 @@ public:
     void initPieces();
     void initGrid();
     void fill();
+    void init();
     void print();
     void movePiece(std::string position1, std::string position2);
-    void removePiece(std::string position);
     void restoreGrid();
     //function only for testing
+    void removePiece(std::string position);
+    //function only for testing
     void removePiecesGroup(std::string team, std::string title);
+    bool checkTeamBlock(int p1x, int p1y, int p2x, int p2y);
     bool checkRookPath(int p1x, int p1y, int p2x, int p2y);
     bool checkBishopPath(int p1x, int p1y, int p2x, int p2y);
     bool checkQueenPath(int p1x, int p1y, int p2x, int p2y);
@@ -69,6 +72,11 @@ void Grid::fill() {
         }
     }
 }
+void Grid::init() {
+    this->initPieces();
+    this->initGrid();
+    this->fill();
+}
 void Grid::print() {
     std::cout << "  ";
     for (size_t i = 0; i < grid.size(); ++i) {
@@ -92,6 +100,7 @@ void Grid::print() {
         if (i == 7) std::cout << "  W";
         std::cout << "\n";
     }
+    std::cout << "\n";
     /*
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
@@ -122,6 +131,8 @@ void Grid::removePiece(std::string position) {
     grid[alphToNumX(position)][alphToNumY(position)] = nullptr;
 }
 void Grid::restoreGrid() {
+    CapturedPieces.first.clear();
+    CapturedPieces.second.clear();
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             grid[j][i] = nullptr;
@@ -187,60 +198,74 @@ void Grid::removePiecesGroup(std::string team, std::string title) {
         }
     }
 }
+bool Grid::checkTeamBlock(int p1x, int p1y, int p2x, int p2y) {
+    if (grid[p2x][p2y] != nullptr) {
+        if (grid[p2x][p2y]->getTeam() == grid[p1x][p1y]->getTeam()) {
+            std::cout << "\tBlocked by team member: " << grid[p2x][p2y] <<
+                " at " << numToAlph(p2x, p2y) << std::endl;
+            return false;
+        }
+        else {
+            std::cout << grid[p1x][p1y] << " overtook " <<
+                grid[p2x][p2y] << " at " << numToAlph(p2x, p2y) << std::endl;
+            grid[p2x][p2y]->getTeam() == 'W' ?
+                CapturedPieces.first.push_back(grid[p2x][p2y]) :
+                CapturedPieces.second.push_back(grid[p2x][p2y]);
 
+            return true;
+        }
+    }
+    return true;
+}
 //Path Functions
 bool Grid::checkRookPath(int p1x, int p1y, int p2x, int p2y) {
     //right
     if (abs(p2x - p1x) > 0 && p2x > p1x) {
-        for (int i = p1x + 1; i <= p2x; ++i) {
+        for (int i = p1x + 1; i < p2x; ++i) {
             if (grid[i][p1y] != nullptr) {
                 std::cout << "\tBlocked by: " <<
-                    grid[i][p1y]->getFullTeam() << " " <<
-                    grid[i][p1y]->getTitle() << " at " <<
+                    grid[i][p1y] << " at " <<
                     numToAlph(i, p1y) << "\n";
                 return false;
             }
         }
-        return true;
+        return checkTeamBlock(p1x,p1y,p2x,p2y);
     }
     //left
     else if (abs(p2x - p1x) > 0 && p1x > p2x) {
-        for (int i = p1x - 1; i >= p2x; --i) {
+        for (int i = p1x - 1; i > p2x; --i) {
             if (grid[i][p1y] != nullptr) {
                 std::cout << "\tBlocked by: " <<
-                    grid[i][p1y]->getFullTeam() << " " <<
-                    grid[i][p1y]->getTitle() << " at " <<
+                    grid[i][p1y] << " at " <<
                     numToAlph(i, p1y) << "\n";
                 return false;
             }
         }
-        return true;
+        return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
     //down
     else if (abs(p2y - p1y) > 0 && p2y > p1y) {
-        for (int i = p1y + 1; i <= p2y; ++i) {
+        for (int i = p1y + 1; i < p2y; ++i) {
             if (grid[p1x][i] != nullptr) {
                 std::cout << "\tBlocked by: " <<
-                    grid[p1x][i]->getFullTeam() << " " <<
-                    grid[p1x][i]->getTitle() << " at " <<
+                    grid[p1x][i] << " at " <<
                     numToAlph(p1x, i) << "\n";
                 return false;
             }
         }
-        return true;
+        return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
     //up
     else {
-        for (int i = p1y - 1; i >= p2y; --i) {
+        for (int i = p1y - 1; i > p2y; --i) {
             if (grid[p1x][i] != nullptr) {
                 std::cout << "\tBlocked by: " <<
-                    grid[p1x][i]->getFullTeam() << " " <<
-                    grid[p1x][i]->getTitle() << " at " <<
+                    grid[p1x][i] << " at " <<
                     numToAlph(p1x, i) << "\n";
                 return false;
             }
         }
-        return true;
+        return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
     std::cout << "error in checkRootPath" << "\n";
     assert(false);
@@ -250,54 +275,50 @@ bool Grid::checkBishopPath(int p1x, int p1y, int p2x, int p2y) {
 
     if ((abs(p2x - p1x) > 0 && p2x > p1x) &&
         (abs(p2y - p1y) > 0 && p2y > p1y)) {
-        for (int i = 0; i < abs(p1x - p2x); ++i) {
+        for (int i = 0; i < abs(p1x - p2x) - 1; ++i) {
             if (grid[p1x + i + 1][p1y + i + 1] != nullptr) {
                 std::cout << "\tBlocked by: " <<
-                    grid[p1x + i + 1][p1y + i + 1]->getFullTeam() << " " <<
-                    grid[p1x + i + 1][p1y + i + 1]->getTitle() << " at " <<
+                    grid[p1x + i + 1][p1y + i + 1] << " at " <<
                     numToAlph(p1x + i + 1, p1y + i + 1) << std::endl;
                 return false;
             }
         }
-        return true;
+        return checkTeamBlock(p1x,p1y,p2x,p2y);
     }
     else if ((abs(p2x - p1x) > 0 && p2x > p1x) &&
         (abs(p2y - p1y) > 0 && p1y > p2y)) {
-        for (int i = 0; i < abs(p1x - p2x); ++i) {
+        for (int i = 0; i < abs(p1x - p2x) - 1; ++i) {
             if (grid[p1x + i + 1][p1y - i - 1] != nullptr) {
                 std::cout << "\tBlocked by: " <<
-                    grid[p1x + i + 1][p1y - i - 1]->getFullTeam() << " " <<
-                    grid[p1x + i + 1][p1y - i - 1]->getTitle() << " at " <<
+                    grid[p1x + i + 1][p1y - i - 1] << " at " <<
                     numToAlph(p1x + i + 1, p1y - i - 1) << std::endl;
                 return false;
             }
         }
-        return true;
+        return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
     else if ((abs(p2x - p1x) > 0 && p1x > p2x) &&
         (abs(p2y - p1y) > 0 && p2y > p1y)) {
-        for (int i = 0; i < abs(p1x - p2x); ++i) {
+        for (int i = 0; i < abs(p1x - p2x) - 1; ++i) {
             if (grid[p1x - i - 1][p1y + i + 1] != nullptr) {
                 std::cout << "\tBlocked by: " <<
-                    grid[p1x - i - 1][p1y + i + 1]->getFullTeam() << " " <<
-                    grid[p1x - i - 1][p1y + i + 1]->getTitle() << " at " <<
+                    grid[p1x - i - 1][p1y + i + 1] << " at " <<
                     numToAlph(p1x - i - 1, p1y + i + 1) << std::endl;
                 return false;
             }
         }
-        return true;
+        return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
     else {
-        for (int i = 0; i < abs(p1x - p2x); ++i) {
+        for (int i = 0; i < abs(p1x - p2x) - 1; ++i) {
             if (grid[p1x - i - 1][p1y - i - 1] != nullptr) {
                 std::cout << "\tBlocked by: " <<
-                    grid[p1x - i - 1][p1y - i - 1]->getFullTeam() << " " <<
-                    grid[p1x - i - 1][p1y - i - 1]->getTitle() << " at " <<
+                    grid[p1x - i - 1][p1y - i - 1] << " at " <<
                     numToAlph(p1x - i - 1, p1y - i - 1) << std::endl;
                 return false;
             }
         }
-        return true;
+        return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
     std::cout << "error in checkBishopPath" << "\n";
     assert(false);
@@ -310,28 +331,7 @@ bool Grid::checkQueenPath(int p1x, int p1y, int p2x, int p2y) {
     return this->checkRookPath(p1x, p1y, p2x, p2y);
 }
 bool Grid::checkKingPath(int p1x, int p1y, int p2x, int p2y) {
-    if (grid[p2x][p2y] != nullptr) {
-        if (grid[p2x][p2y]->getTeam() == grid[p1x][p1y]->getTeam()) {
-            std::cout << "\tBlocked by team member: " <<
-                grid[p2x][p2y]->getFullTeam() << " " <<
-                grid[p2x][p2y]->getTitle() << " at " <<
-                numToAlph(p2x, p2y) << std::endl;
-            return false;
-        }
-        else {
-            std::cout << "\t" << grid[p2x][p2y]->getFullTeam() << " " <<
-                grid[p1x][p1y]->getTitle() << " overtook " << 
-                grid[p2x][p2y]->getFullTeam() << " " <<
-                grid[p2x][p2y]->getTitle() << " at " << 
-                numToAlph(p2x, p2y) << std::endl;
-            grid[p2x][p2y]->getTeam() == 'W' ? 
-                CapturedPieces.first.push_back(grid[p2x][p2y]) : 
-                CapturedPieces.second.push_back(grid[p2x][p2y]);
-
-            return true;
-        }
-    }
-    return true;
+    return checkTeamBlock(p1x, p1y, p2x, p2y);
 }
 //differentiate between blocks along the way and block at end
 //any piece blocks along the way are issue
@@ -340,15 +340,7 @@ bool Grid::checkKingPath(int p1x, int p1y, int p2x, int p2y) {
 //test for end of path team/not team
 bool Grid::checkMove(int p1x, int p1y, int p2x, int p2y) {
 
-    if (grid[p2x][p2y] != nullptr) {
-        if (grid[p1x][p1y]->getTeam() ==
-            grid[p2x][p2y]->getTeam()) {
-            std::cout << "\tBlocked by " << grid[p2x][p2y]->getFullTeam() << " "
-                << grid[p2x][p2y]->getTitle() << " in place on " <<
-                numToAlph(p2x, p2y) << "\n";
-            return false;
-        }
-    }
+
     if (grid[p1x][p1y]->getTitleChar() == 'R') {
         return this->checkRookPath(p1x, p1y, p2x, p2y);
     }
@@ -367,21 +359,21 @@ bool Grid::checkMove(int p1x, int p1y, int p2x, int p2y) {
 }
 void Grid::printCaptured() {
     if (CapturedPieces.first.empty()) {
-        std::cout << "Captured White: None.\n";
+        std::cout << "\t" << "Captured White: None.\n";
     }
     else {
-        std::cout << "Captured White:\n";
+        std::cout << "\t" << "Captured White:\n";
         for (size_t i = 0; i < CapturedPieces.first.size(); ++i) {
-            std::cout << *CapturedPieces.first[i] << "\n";
+            std::cout << "\t-" << CapturedPieces.first[i] << "\n";
         }
     }
     if (CapturedPieces.second.empty()) {
-        std::cout << "Captured Black: None.\n";
+        std::cout << "\t" << "Captured Black: None.\n";
     }
     else {
-        std::cout << "Captured Black:\n";
+        std::cout << "\t" << "Captured Black:\n";
         for (size_t i = 0; i < CapturedPieces.second.size(); ++i) {
-            std::cout << CapturedPieces.second[i] << "\n";
+            std::cout << "\t-" << CapturedPieces.second[i] << "\n";
         }
     }
 }

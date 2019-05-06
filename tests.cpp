@@ -32,12 +32,15 @@ public:
     void test() {
         //TestRookPath trp;
         //trp.test();
-        //TestBishopPath tbp;
+        //trp.testOvertake();
+        TestBishopPath tbp;
         //tbp.test();
-        TestKingPath tKp;
+        tbp.testOvertake();
+        //TestKingPath tKp;
         //tKp.test();
-        tKp.testOvertake();
+        //tKp.testOvertake();
         //TestQueenPath tqp;
+        //tqp.testOvertake();
         //tqp.test();
     }
 };
