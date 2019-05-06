@@ -20,11 +20,13 @@ public:
     void removePiece(std::string position);
     //function only for testing
     void removePiecesGroup(std::string team, std::string title);
+    void basicTakeOver(int p2x, int p2y);
     bool checkTeamBlock(int p1x, int p1y, int p2x, int p2y);
     bool checkRookPath(int p1x, int p1y, int p2x, int p2y);
     bool checkBishopPath(int p1x, int p1y, int p2x, int p2y);
     bool checkQueenPath(int p1x, int p1y, int p2x, int p2y);
-    bool checkMove(int p1x, int p1y, int p2x, int p2y);
+    bool checkPawnPath(int p1x, int p1y, int p2x, int p2y);
+    bool checkPath(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
     ~Grid();
 
@@ -110,15 +112,18 @@ void Grid::print() {
 }
 
 void Grid::movePiece(std::string position1, std::string position2) {
+    
     int x = alphToNumX(position1);
     int y = alphToNumY(position1);
     int newx = alphToNumX(position2);
     int newy = alphToNumY(position2);
 
     if (grid[x][y]->checkValidMove(newx, newy) == true) {
-        //CHECKMOVE NEEDS TO BE DONE BEFORE ->MOVE CHANGES XPOS & YPOS
-        if (this->checkMove(x, y, newx, newy) == true) {
+        //checkPath NEEDS TO BE DONE BEFORE ->MOVE CHANGES XPOS & YPOS
+        if (this->checkPath(x, y, newx, newy) == true) {
             grid[x][y]->move(newx, newy);
+            this->print();
+            std::cout << "x,y,nx,ny: " << x << " " << y << " " << newx << " " << newy << "\n";
             updateGrid(x, y, newx, newy, grid);
         }
         else {
@@ -196,6 +201,11 @@ void Grid::removePiecesGroup(std::string team, std::string title) {
             }
         }
     }
+}
+void Grid::basicTakeOver(int p2x, int p2y) {
+    grid[p2x][p2y]->getTeam() == 'W' ?
+        CapturedPieces.first.push_back(grid[p2x][p2y]) :
+        CapturedPieces.second.push_back(grid[p2x][p2y]);
 }
 bool Grid::checkTeamBlock(int p1x, int p1y, int p2x, int p2y) {
     if (grid[p2x][p2y] != nullptr) {
@@ -329,14 +339,95 @@ bool Grid::checkQueenPath(int p1x, int p1y, int p2x, int p2y) {
     }
     return this->checkRookPath(p1x, p1y, p2x, p2y);
 }
+bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
+    //give option to do en passant?
+
+    //moving diagonally
+    if (p2x != p1x) {
+        std::cout << "//moving diagonally\n";
+        //chosen move position is empty, enter enpassant possibility
+        if (grid[p2x][p2y] == nullptr) {
+            std::cout << "//chosen move position is empty, enter enpassant possibility\n";
+
+            //position 1 below/above chose position has a piece
+            if (grid[p2x][p1y] != nullptr) {
+                std::cout << "//position 1 below/above chose position has a piece\n";
+
+                //2nd piece is enemy
+                if (grid[p2x][p1y]->getTeam() != grid[p1x][p1y]->getTeam()) {
+                    std::cout << "//2nd piece is enemy\n";
+
+                    //2nd piece has moved more than once
+                    if (grid[p2x][p1y]->getMoveCount() > 1) {
+                        std::cout << "//2nd piece has moved more than once, failed en passant\n";
+                        //unsuccessful enpassant, wasn't opposites 1st move
+                        return false;
+                    }
+                    //include second if for seeing if this turn was immediate move
+                    std::cout << "//else successful en passant\n";
+                    //else successful en passant
+                    std::cout << "Valid move: " << grid[p1x][p1y]->getFullTeam()
+                        << " Pawn from " << numToAlph(p1x, p1y) <<
+                        " to " << numToAlph(p2x, p2y)
+                        << "\n";
+                    basicTakeOver(p2x, p1y);
+                    return true;
+                }
+                //2nd piece is team member, blocked path
+                std::cout << "//2nd piece is team member, blocked path\n";
+                return false;
+            }
+            //invalid move, impossible en passant, return false
+            std::cout << "//invalid move, impossible en passant, return false\n";
+            return false;
+        }
+        //regular possible overtake
+        //if 2nd piece isn't enemy
+        else if (grid[p2x][p2y]->getTeam() == grid[p1x][p1y]->getTeam()) {
+            std::cout << "//regular possibly overtake\n";
+            std::cout << "//2nd piece isn't enemy, blocked\n";
+            //blocked return false
+            return false;
+        }
+        //2nd piece is enemy, successful regular overtake
+        else {
+            std::cout << "//2nd piece is enemy, successful regular overtake\n";
+            std::cout << "Valid move: " << grid[p1x][p1y]->getFullTeam()
+                << " Pawn from " << numToAlph(p1x, p1y) <<
+                " to " << numToAlph(p2x, p2y)
+                << "\n";
+            basicTakeOver(p2x, p2y);
+            return true;
+        }
+    }
+    //moving straight
+    //nonempty position
+    if (grid[p2x][p2y] != nullptr) {
+        if (grid[p2x][p2y]->getTeam() == grid[p1x][p1y]->getTeam()) {
+            std::cout << "\tBlocked by team member: " << grid[p2x][p2y] <<
+                " at " << numToAlph(p2x, p2y) << std::endl;
+            return false;
+        }
+        else {
+            std::cout << "Invalid move: " << grid[p1x][p1y]->getFullTeam()
+                << " Pawn from " << numToAlph(p1x, p1y) <<
+                " to " << numToAlph(p2x, p2y)
+                << "\n";
+            return false;
+        }
+    }
+    std::cout << "Valid move: " << grid[p1x][p1y]->getFullTeam()
+        << " Pawn from " << numToAlph(p1x, p1y) <<
+        " to " << numToAlph(p2x, p2y)
+        << "\n";
+    return true;
+}
 //differentiate between blocks along the way and block at end
 //any piece blocks along the way are issue
 //piece at end depends on team or not
 
 //test for end of path team/not team
-bool Grid::checkMove(int p1x, int p1y, int p2x, int p2y) {
-
-
+bool Grid::checkPath(int p1x, int p1y, int p2x, int p2y) {
     if (grid[p1x][p1y]->getTitleChar() == 'R') {
         return this->checkRookPath(p1x, p1y, p2x, p2y);
     }
@@ -346,6 +437,9 @@ bool Grid::checkMove(int p1x, int p1y, int p2x, int p2y) {
     if (grid[p1x][p1y]->getTitleChar() == 'Q') {
         return this->checkQueenPath(p1x, p1y, p2x, p2y);
     }
+    if (grid[p1x][p1y]->getTitleChar() == 'P') {
+        return this->checkPawnPath(p1x, p1y, p2x, p2y);
+    }
     if (grid[p1x][p1y]->getTitleChar() == 'K') {
         //nullptr check already done??
         return this->checkTeamBlock(p1x, p1y, p2x, p2y);
@@ -354,7 +448,6 @@ bool Grid::checkMove(int p1x, int p1y, int p2x, int p2y) {
         //nullptr check already done??
         return this->checkTeamBlock(p1x, p1y, p2x, p2y);
     }
-
     return true;
 }
 void Grid::printCaptured() {

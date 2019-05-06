@@ -44,8 +44,12 @@ public:
         //TestQueenPath tqp;
         //tqp.testOvertake();
         //tqp.test();
-        TestKnightPath tkp;
-        tkp.test();
+        //TestKnightPath tkp;
+        //tkp.test();
+        TestPawnPath tpp;
+        //tpp.test();
+        //tpp.testOvertake();
+        tpp.testEP();
     }
 };
 class TestMisc {
@@ -59,8 +63,10 @@ public:
 int main() {
     //TestBasicMoves tbm;
     //tbm.test();
-    General g;
-    g.KingMoveCount();
+    TestCheckPaths tcp;
+    tcp.test();
+    //General g;
+    //g.KingMoveCount();
 
     return 0;
 }

@@ -12,8 +12,25 @@ void updateGrid(int position1x, int position1y,
     int position2x, int position2y,
     std::vector<std::vector<Piece*>> &grid) {
 
-    grid[position2x][position2y] = grid[position1x][position1y];
-    grid[position1x][position1y] = nullptr;
+    //en passant
+    if (grid[position2x][position1y] != nullptr) {
+        if (grid[position2x][position1y]->getTitle() == "Pawn" &&
+            grid[position1x][position1y]->getTitle() == "Pawn" &&
+            grid[position2x][position2y] == nullptr) {
+            grid[position2x][position2y] = grid[position1x][position1y];
+            grid[position1x][position1y] = nullptr;
+            grid[position2x][position1y] = nullptr;
+        }
+        else {
+            grid[position2x][position2y] = grid[position1x][position1y];
+            grid[position1x][position1y] = nullptr;
+        }
+    }
+    else {
+        grid[position2x][position2y] = grid[position1x][position1y];
+        grid[position1x][position1y] = nullptr;
+    }
+
 }
 
 void fillPieces(std::vector<std::vector<Piece*>> &Pieces, char team) {

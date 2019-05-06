@@ -224,10 +224,33 @@ public:
         status = 1, moveCount = 0;
     }
     bool checkValidMove(int newxpos, int newypos) override {
-        std::cout << "Didn't fix xpos ypos in checkValidPath." << std::endl;
+        if ((team == 'W' && newypos > ypos) ||
+            (team == 'B' && ypos > newypos)) {
+            std::cout << "Invalid move: " << this->getFullTeam()
+                << " Pawn from " << numToAlph(xpos, ypos) <<
+                " to " << numToAlph(newxpos, newypos)
+                << "\n";
+            return false;
+        }
+        if (newxpos != xpos) {
+            if ((abs(newxpos - xpos) > 1) || abs(newypos - ypos) > 1 || 
+                (newypos == ypos)) {
+                std::cout << "Invalid move: " << this->getFullTeam()
+                    << " Pawn from " << numToAlph(xpos, ypos) <<
+                    " to " << numToAlph(newxpos, newypos)
+                    << "\n";
+                return false;
+            }
+        }
+        if ((moveCount == 0 && abs(newypos - ypos) > 2) || 
+            (moveCount != 0 && abs(newypos - ypos) > 1)) {
+            std::cout << "Invalid move: " << this->getFullTeam()
+                << " Pawn from " << numToAlph(xpos, ypos) <<
+                " to " << numToAlph(newxpos, newypos)
+                << "\n";
+            return false;
+        }
 
-        xpos = newxpos;
-        ypos = newypos;
         return true;
     }
 };

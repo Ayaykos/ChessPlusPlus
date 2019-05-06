@@ -322,4 +322,139 @@ public:
 
     }
 };
+class TestPawnPath {
+public:
+    void test() {
+        Grid GridObj;
+        GridObj.init();
+
+        GridObj.movePiece("C7", "C6");
+        GridObj.movePiece("C6", "C5");
+        GridObj.movePiece("C5", "C3");
+        GridObj.movePiece("C5", "D5");
+        GridObj.movePiece("C5", "B5");
+        GridObj.movePiece("C5", "D4");
+        GridObj.movePiece("C5", "B4");
+        GridObj.movePiece("C5", "B3");
+        GridObj.movePiece("C5", "C3");
+        GridObj.movePiece("C5", "D3");
+        //backward
+        GridObj.movePiece("C5", "B6");
+        GridObj.movePiece("C5", "C6");
+        GridObj.movePiece("C5", "D6");
+        GridObj.movePiece("C5", "C7");
+
+        GridObj.print();
+        //newpawn
+        GridObj.movePiece("F7", "F5");
+        GridObj.movePiece("F5", "F3");
+        GridObj.movePiece("F5", "E3");
+        GridObj.movePiece("F5", "G3");
+        GridObj.movePiece("F5", "E4");
+        GridObj.movePiece("F5", "G4");
+        GridObj.movePiece("F5", "G5");
+        GridObj.movePiece("F5", "E5");
+        //backward
+        GridObj.movePiece("F5", "E6");
+        GridObj.movePiece("F5", "F6");
+        GridObj.movePiece("F5", "G6");
+        GridObj.movePiece("F5", "F7");
+
+        GridObj.print();
+
+        //team block
+        GridObj.movePiece("E7", "E6");
+        GridObj.movePiece("E6", "F5");
+        GridObj.movePiece("E6", "E5");
+        GridObj.movePiece("E5", "F5");
+        GridObj.movePiece("E5", "E4");
+        GridObj.movePiece("E4", "F5");
+
+
+        GridObj.movePiece("D7", "D6");
+        GridObj.movePiece("D6", "C5");
+        GridObj.movePiece("D6", "D5");
+        GridObj.movePiece("D5", "C5");
+        GridObj.movePiece("D5", "D4");
+        GridObj.movePiece("D4", "C5");
+
+        GridObj.print();
+    }
+    void testOvertake() {
+        Grid GridObj;
+        GridObj.init();
+
+        GridObj.movePiece("C7", "C6");
+        GridObj.movePiece("C6", "C5");
+        GridObj.movePiece("C5", "C4");
+        GridObj.movePiece("C4", "B2");
+        GridObj.movePiece("C4", "C2");
+        GridObj.movePiece("C4", "D2");
+        GridObj.movePiece("C4", "C3");
+        GridObj.movePiece("C3", "C2");
+        GridObj.movePiece("C3", "B1");
+        GridObj.movePiece("C3", "C1");
+        GridObj.movePiece("C3", "D1");
+        GridObj.movePiece("C3", "D2");
+        GridObj.movePiece("D2", "D1");
+        GridObj.movePiece("D2", "C2");
+        GridObj.movePiece("D2", "E2");
+        GridObj.movePiece("D2", "C3");
+        GridObj.movePiece("D2", "D3");
+        GridObj.movePiece("D2", "E3");
+        GridObj.movePiece("D2", "C1");
+
+        //opposite
+        GridObj.movePiece("F2", "F4");
+        GridObj.movePiece("F4", "F5");
+        GridObj.movePiece("F5", "E6");
+        GridObj.movePiece("F5", "G6");
+        GridObj.movePiece("F5", "E7");
+        GridObj.movePiece("F5", "F7");
+        GridObj.movePiece("F5", "G7");
+        GridObj.movePiece("F5", "F6");
+        GridObj.movePiece("F6", "F7");
+        GridObj.movePiece("F6", "E7");
+        GridObj.movePiece("E7", "D7");
+        GridObj.movePiece("E7", "E8");
+        GridObj.movePiece("E7", "F7");
+        GridObj.movePiece("E7", "D6");
+        GridObj.movePiece("E7", "E6");
+        GridObj.movePiece("E7", "F6");
+        GridObj.movePiece("E7", "F8");
+        GridObj.movePiece("F8", "F7");
+        GridObj.movePiece("F8", "G7");
+
+        GridObj.print();
+    }
+    void testEP() {
+        Grid GridObj;
+        GridObj.init();
+
+        GridObj.movePiece("F2", "E3");
+        GridObj.movePiece("F2", "G3");
+        GridObj.movePiece("F2", "F4");
+        GridObj.movePiece("F4", "E4");
+        GridObj.movePiece("F4", "E5");
+        GridObj.movePiece("F4", "G5");
+        GridObj.movePiece("F4", "G4");
+        GridObj.movePiece("F4", "F5");
+
+        GridObj.movePiece("F7", "F6");
+        GridObj.movePiece("F5", "E6");
+        GridObj.movePiece("F5", "F6");
+        GridObj.movePiece("F5", "G6");
+        GridObj.movePiece("F5", "E5");
+        GridObj.movePiece("F5", "G5");
+
+        GridObj.movePiece("E7", "E6");
+        GridObj.movePiece("E6", "E5");
+        GridObj.movePiece("F5", "E6");
+
+        GridObj.movePiece("G7", "G5");
+        GridObj.movePiece("F5", "G6");
+
+        GridObj.print();
+    }
+};
 #endif
