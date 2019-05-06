@@ -24,7 +24,6 @@ public:
     bool checkRookPath(int p1x, int p1y, int p2x, int p2y);
     bool checkBishopPath(int p1x, int p1y, int p2x, int p2y);
     bool checkQueenPath(int p1x, int p1y, int p2x, int p2y);
-    bool checkKingPath(int p1x, int p1y, int p2x, int p2y);
     bool checkMove(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
     ~Grid();
@@ -330,9 +329,6 @@ bool Grid::checkQueenPath(int p1x, int p1y, int p2x, int p2y) {
     }
     return this->checkRookPath(p1x, p1y, p2x, p2y);
 }
-bool Grid::checkKingPath(int p1x, int p1y, int p2x, int p2y) {
-    return checkTeamBlock(p1x, p1y, p2x, p2y);
-}
 //differentiate between blocks along the way and block at end
 //any piece blocks along the way are issue
 //piece at end depends on team or not
@@ -347,12 +343,16 @@ bool Grid::checkMove(int p1x, int p1y, int p2x, int p2y) {
     if (grid[p1x][p1y]->getTitleChar() == 'B') {
         return this->checkBishopPath(p1x, p1y, p2x, p2y);
     }
-    if (grid[p1x][p1y]->getTitleChar() == 'K') {
-        //nullptr check already done??
-        return this->checkKingPath(p1x, p1y, p2x, p2y);
-    }
     if (grid[p1x][p1y]->getTitleChar() == 'Q') {
         return this->checkQueenPath(p1x, p1y, p2x, p2y);
+    }
+    if (grid[p1x][p1y]->getTitleChar() == 'K') {
+        //nullptr check already done??
+        return this->checkTeamBlock(p1x, p1y, p2x, p2y);
+    }
+    if (grid[p1x][p1y]->getTitleChar() == 'k') {
+        //nullptr check already done??
+        return this->checkTeamBlock(p1x, p1y, p2x, p2y);
     }
 
     return true;

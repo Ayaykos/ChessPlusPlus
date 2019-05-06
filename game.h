@@ -41,7 +41,10 @@ public:
     //check valid move
     virtual bool checkValidMove(int newxpos, int newypos) = 0;
     //execute move
-    virtual void move(int newxpos, int newypos) = 0;
+    void move(int newxpos, int newypos) {
+        xpos = newxpos;
+        ypos = newypos;
+    }
     virtual ~Piece() {}
 protected:
     std::string title;
@@ -80,11 +83,6 @@ public:
             << "\n";
         return true;
     }
-    void move(int newxpos, int newypos) override {
-        xpos = newxpos;
-        ypos = newypos;
-    }
-
 };
 class Queen : public Piece {
 public:
@@ -117,11 +115,6 @@ public:
             << "\n";
         return true;
     }
-    void move(int newxpos, int newypos) override {
-        xpos = newxpos;
-        ypos = newypos;
-    }
-
 };
 class Rook : public Piece {
 public:
@@ -156,10 +149,6 @@ public:
 
         return true;
     }
-    void move(int newxpos, int newypos) override {
-        xpos = newxpos;
-        ypos = newypos;
-    }
 };
 class Bishop : public Piece {
 public:
@@ -191,10 +180,6 @@ public:
             << "\n";
         return true;
     }
-    void move(int newxpos, int newypos) override {
-        xpos = newxpos;
-        ypos = newypos;
-    }
 };
 class Knight : public Piece {
 public:
@@ -213,27 +198,20 @@ public:
         ypos = alphToNumY(position_in);
     }
     bool checkValidMove(int newxpos, int newypos) override {
-        std::cout << "Didn't fix xpos ypos in checkValidPath." << std::endl;
 
         if ((abs(newxpos - xpos) == 2 && abs(newypos - ypos) == 1) ||
             (abs(newxpos - xpos) == 1 && abs(newypos - ypos) == 2)) {
-            std::cout << "Invalid move: " << this->getFullTeam()
+            std::cout << "Valid move: " << this->getFullTeam()
                 << " Knight from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos, newypos)
                 << "\n";
-            xpos = newxpos;
-            ypos = newypos;
             return true;
         }
-        std::cout << "Valid move: " << this->getFullTeam()
+        std::cout << "Invalid move: " << this->getFullTeam()
             << " Knight from " << numToAlph(xpos, ypos) <<
             " to " << numToAlph(newxpos, newypos)
             << "\n";
         return false;
-    }
-    void move(int newxpos, int newypos) override {
-        xpos = newxpos;
-        ypos = newypos;
     }
 };
 class Pawn : public Piece {
@@ -258,10 +236,6 @@ public:
         xpos = newxpos;
         ypos = newypos;
         return true;
-    }
-    void move(int newxpos, int newypos) override {
-        xpos = newxpos;
-        ypos = newypos;
     }
 };
 

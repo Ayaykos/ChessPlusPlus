@@ -9,9 +9,7 @@ class TestRookPath {
 public:
     void test() {
         Grid GridObj;
-        GridObj.initPieces();
-        GridObj.initGrid();
-        GridObj.fill();
+        GridObj.init();
 
         GridObj.movePiece("A8", "A6");
         GridObj.movePiece("A8", "A5");
@@ -62,9 +60,7 @@ public:
     }
     void testOvertake() {
         Grid GridObj;
-        GridObj.initPieces();
-        GridObj.initGrid();
-        GridObj.fill();
+        GridObj.init();
 
         GridObj.removePiecesGroup("Black", "Pawn");
         GridObj.movePiece("A8", "A2");
@@ -82,9 +78,7 @@ class TestBishopPath {
 public:
     void test() {
         Grid GridObj;
-        GridObj.initPieces();
-        GridObj.initGrid();
-        GridObj.fill();
+        GridObj.init();
 
         GridObj.movePiece("C8", "B7");
         GridObj.movePiece("C8", "A6");
@@ -143,9 +137,7 @@ class TestKingPath {
 public:
     void test() {
         Grid GridObj;
-        GridObj.initPieces();
-        GridObj.initGrid();
-        GridObj.fill();
+        GridObj.init();
 
         GridObj.movePiece("E8", "D8");
         GridObj.movePiece("E8", "D7");
@@ -179,9 +171,7 @@ public:
     }
     void testOvertake() {
         Grid GridObj;
-        GridObj.initPieces();
-        GridObj.initGrid();
-        GridObj.fill();
+        GridObj.init();
 
         GridObj.removePiece("E7");
         GridObj.movePiece("E8", "E7");
@@ -196,19 +186,20 @@ public:
         GridObj.printCaptured();
         GridObj.movePiece("E2", "E1");
         GridObj.printCaptured();
+        GridObj.movePiece("E1", "D1");
+        GridObj.movePiece("D1", "C2");
+        GridObj.movePiece("C2", "D2");
+        GridObj.movePiece("D2", "C1");
+        GridObj.printCaptured();
 
         GridObj.print();
-
-
     }
 };
 class TestQueenPath {
 public:
     void test() {
         Grid GridObj;
-        GridObj.initPieces();
-        GridObj.initGrid();
-        GridObj.fill();
+        GridObj.init();
 
         //blocked
         GridObj.movePiece("D8", "C8");
@@ -298,6 +289,37 @@ public:
         GridObj.printCaptured();
 
         GridObj.print();
+    }
+};
+class TestKnightPath {
+public:
+    void test() {
+        Grid GridObj;
+        GridObj.init();
+        GridObj.movePiece("B8", "C6");
+        GridObj.movePiece("C6", "E7");
+        GridObj.movePiece("C6", "D4");
+        GridObj.movePiece("D4", "C2");
+        GridObj.printCaptured();
+        GridObj.movePiece("C2", "A1");
+        GridObj.printCaptured();
+        GridObj.movePiece("A1", "C2");
+        GridObj.movePiece("C2", "E1");
+        GridObj.printCaptured();
+
+        //white move
+        GridObj.movePiece("G1", "F3");
+        GridObj.movePiece("F3", "E5");
+        GridObj.movePiece("E5", "F7");
+        GridObj.printCaptured();
+        GridObj.movePiece("F7", "E5");
+        GridObj.movePiece("E5", "D7");
+        GridObj.printCaptured();
+
+        GridObj.print();
+    }
+    void testOvertake() {
+
     }
 };
 #endif

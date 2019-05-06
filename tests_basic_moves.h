@@ -62,10 +62,14 @@ public:
         GridObj.movePiece("B8", "A6");
         GridObj.movePiece("A6", "B8");
         GridObj.movePiece("B8", "C6");
+        GridObj.removePiece("D8");
         GridObj.movePiece("C6", "D8");
+        GridObj.removePiece("F7");
         GridObj.movePiece("D8", "F7");
+        GridObj.removePiece("H8");
         GridObj.movePiece("F7", "H8");
         GridObj.movePiece("H8", "G6");
+        GridObj.removePiece("F8");
         GridObj.movePiece("G6", "F8");
         GridObj.movePiece("F8", "E6");
         GridObj.movePiece("E6", "D4");

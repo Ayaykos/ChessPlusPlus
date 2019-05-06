@@ -10,6 +10,7 @@ using namespace std;
 class TestBasicMoves {
 public:
     void test() {
+        
         TestKingBasic testking;
         testking.test();
         TestRookBasic testrook;
@@ -33,15 +34,17 @@ public:
         //TestRookPath trp;
         //trp.test();
         //trp.testOvertake();
-        TestBishopPath tbp;
+        //TestBishopPath tbp;
         //tbp.test();
-        tbp.testOvertake();
+        //tbp.testOvertake();
         //TestKingPath tKp;
         //tKp.test();
         //tKp.testOvertake();
         //TestQueenPath tqp;
         //tqp.testOvertake();
         //tqp.test();
+        TestKnightPath tkp;
+        tkp.test();
     }
 };
 
