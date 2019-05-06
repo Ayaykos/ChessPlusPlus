@@ -32,6 +32,7 @@ public:
         return char(xpos + 65) + std::to_string(8 - ypos);
     }
     int getStatus() { return status; }
+    int getMoveCount() { return moveCount;  }
     void print_details() {
         std::cout << "Title: " << title << "\nTeam: " << team << 
             "\nStatus: " << status << "\nx,y: " << xpos << ", " 
@@ -44,6 +45,7 @@ public:
     void move(int newxpos, int newypos) {
         xpos = newxpos;
         ypos = newypos;
+        ++moveCount;
     }
     virtual ~Piece() {}
 protected:
@@ -51,6 +53,7 @@ protected:
     char team;
     int xpos, ypos;
     int status;
+    int moveCount;
 };
 
 class King : public Piece {
@@ -59,15 +62,14 @@ public:
         title = "King";
         team = team_in; 
         status = 1; 
-        xpos = 0; 
-        ypos = 0;
+        xpos = 0, ypos = 0, moveCount = 0;
     }
     King(char team_in, std::string position_in) {
         title = "King";
         team = team_in;
-        status = 1;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
+        status = 1, moveCount = 0;
     }
     bool checkValidMove(int newxpos, int newypos) override {
         if(abs(newxpos - xpos) > 1 || abs(newypos - ypos) > 1) {
@@ -90,15 +92,14 @@ public:
         title = "Queen";
         team = team_in;
         status = 1;
-        xpos = 0;
-        ypos = 0;
+        xpos = 0, ypos = 0, moveCount = 0;
     }
     Queen(char team_in, std::string position_in) {
         title = "Queen";
         team = team_in;
-        status = 1;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
+        status = 1, moveCount = 0;
     }
     bool checkValidMove(int newxpos, int newypos) override {
         if ((abs(newxpos - xpos) > 0 && abs(newypos - ypos) > 0) &&
@@ -121,16 +122,14 @@ public:
     Rook(char team_in) {
         title = "Rook";
         team = team_in;
-        status = 1;
-        xpos = 0;
-        ypos = 0;
+        status = 1, xpos = 0, ypos = 0, moveCount = 0;
     }
     Rook(char team_in, std::string position_in) {
         title = "Rook";
         team = team_in;
-        status = 1;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
+        status = 1, moveCount = 0;
     }
     bool checkValidMove(int newxpos, int newypos) override {
 
@@ -155,16 +154,14 @@ public:
     Bishop(char team_in) {
         title = "Bishop";
         team = team_in;
-        status = 1;
-        xpos = 0;
-        ypos = 0;
+        status = 1, xpos = 0, ypos = 0, moveCount = 0;
     }
     Bishop(char team_in, std::string position_in) {
         title = "Bishop";
         team = team_in;
-        status = 1;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
+        status = 1, moveCount = 0;
     }
     bool checkValidMove(int newxpos, int newypos) override {
         if (abs(newxpos - xpos) != abs(newypos - ypos)) {
@@ -186,16 +183,14 @@ public:
     Knight(char team_in) {
         title = "Knight";
         team = team_in;
-        status = 1;
-        xpos = 0;
-        ypos = 0;
+        status = 1, xpos = 0, ypos = 0, moveCount = 0;
     }
     Knight(char team_in, std::string position_in) {
         title = "Knight";
         team = team_in;
-        status = 1;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
+        status = 1, moveCount = 0;
     }
     bool checkValidMove(int newxpos, int newypos) override {
 
@@ -219,16 +214,14 @@ public:
     Pawn(char team_in) {
         title = "Pawn";
         team = team_in;
-        status = 1;
-        xpos = 0;
-        ypos = 0;
+        status = 1, xpos = 0, ypos = 0, moveCount = 0;
     }
     Pawn(char team_in, std::string position_in) {
         title = "Pawn";
         team = team_in;
-        status = 1;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
+        status = 1, moveCount = 0;
     }
     bool checkValidMove(int newxpos, int newypos) override {
         std::cout << "Didn't fix xpos ypos in checkValidPath." << std::endl;

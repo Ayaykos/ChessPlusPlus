@@ -5,6 +5,7 @@
 #include <sstream>
 #include "tests_basic_moves.h"
 #include "tests_check_paths.h"
+#include "tests_misc.h"
 using namespace std;
 
 class TestBasicMoves {
@@ -47,12 +48,19 @@ public:
         tkp.test();
     }
 };
+class TestMisc {
+public:
+    void test() {
+        TestMisc tm;
+        tm.test();
+    }
+};
 
 int main() {
     //TestBasicMoves tbm;
     //tbm.test();
-    TestCheckPaths tcp;
-    tcp.test();
+    General g;
+    g.KingMoveCount();
 
     return 0;
 }
