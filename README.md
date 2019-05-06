@@ -12,3 +12,7 @@ Working on a Chess spinoff, exploring where I can take this. Will incorporate pr
   - tests_basic_moves.h
   - tests_check_paths.h
   - tests_misc.h
+```
+g++ -Wall -Werror -g -pedantic --std=c++11 tests.cpp -o tests.exe
+./tests.exe
+```
