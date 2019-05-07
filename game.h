@@ -33,6 +33,8 @@ public:
     }
     int getStatus() { return status; }
     int getMoveCount() { return moveCount;  }
+    void initID(int id_in) { id = id_in; }
+    int getID() { return id;  }
     void print_details() {
         std::cout << "Title: " << title << "\nTeam: " << team << 
             "\nStatus: " << status << "\nx,y: " << xpos << ", " 
@@ -54,6 +56,7 @@ protected:
     int xpos, ypos;
     int status;
     int moveCount;
+    int id;
 };
 
 class King : public Piece {
@@ -62,14 +65,14 @@ public:
         title = "King";
         team = team_in; 
         status = 1; 
-        xpos = 0, ypos = 0, moveCount = 0;
+        xpos = 0, ypos = 0, moveCount = 0, id = -1;
     }
     King(char team_in, std::string position_in) {
         title = "King";
         team = team_in;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
-        status = 1, moveCount = 0;
+        status = 1, moveCount = 0, id = -1;
     }
     bool checkValidMove(int newxpos, int newypos) override {
         if(abs(newxpos - xpos) > 1 || abs(newypos - ypos) > 1) {
@@ -92,14 +95,14 @@ public:
         title = "Queen";
         team = team_in;
         status = 1;
-        xpos = 0, ypos = 0, moveCount = 0;
+        xpos = 0, ypos = 0, moveCount = 0, id = -1;
     }
     Queen(char team_in, std::string position_in) {
         title = "Queen";
         team = team_in;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
-        status = 1, moveCount = 0;
+        status = 1, moveCount = 0, id = -1;
     }
     bool checkValidMove(int newxpos, int newypos) override {
         if ((abs(newxpos - xpos) > 0 && abs(newypos - ypos) > 0) &&
@@ -122,14 +125,14 @@ public:
     Rook(char team_in) {
         title = "Rook";
         team = team_in;
-        status = 1, xpos = 0, ypos = 0, moveCount = 0;
+        status = 1, xpos = 0, ypos = 0, moveCount = 0, id = -1;
     }
     Rook(char team_in, std::string position_in) {
         title = "Rook";
         team = team_in;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
-        status = 1, moveCount = 0;
+        status = 1, moveCount = 0, id = -1;
     }
     bool checkValidMove(int newxpos, int newypos) override {
 
@@ -154,14 +157,14 @@ public:
     Bishop(char team_in) {
         title = "Bishop";
         team = team_in;
-        status = 1, xpos = 0, ypos = 0, moveCount = 0;
+        status = 1, xpos = 0, ypos = 0, moveCount = 0, id = -1;
     }
     Bishop(char team_in, std::string position_in) {
         title = "Bishop";
         team = team_in;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
-        status = 1, moveCount = 0;
+        status = 1, moveCount = 0, id = -1;
     }
     bool checkValidMove(int newxpos, int newypos) override {
         if (abs(newxpos - xpos) != abs(newypos - ypos)) {
@@ -183,14 +186,14 @@ public:
     Knight(char team_in) {
         title = "Knight";
         team = team_in;
-        status = 1, xpos = 0, ypos = 0, moveCount = 0;
+        status = 1, xpos = 0, ypos = 0, moveCount = 0, id = -1;
     }
     Knight(char team_in, std::string position_in) {
         title = "Knight";
         team = team_in;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
-        status = 1, moveCount = 0;
+        status = 1, moveCount = 0, id = -1;
     }
     bool checkValidMove(int newxpos, int newypos) override {
 
@@ -214,14 +217,14 @@ public:
     Pawn(char team_in) {
         title = "Pawn";
         team = team_in;
-        status = 1, xpos = 0, ypos = 0, moveCount = 0;
+        status = 1, xpos = 0, ypos = 0, moveCount = 0, id = -1;
     }
     Pawn(char team_in, std::string position_in) {
         title = "Pawn";
         team = team_in;
         xpos = alphToNumX(position_in);
         ypos = alphToNumY(position_in);
-        status = 1, moveCount = 0;
+        status = 1, moveCount = 0, id = -1;
     }
     bool checkValidMove(int newxpos, int newypos) override {
         if ((team == 'W' && newypos > ypos) ||
@@ -256,6 +259,9 @@ public:
 };
 
 std::ostream & operator<<(std::ostream & os, Piece* piece) {
+    if (piece == nullptr) {
+        return os << "null piece";
+    }
     return os << piece->getFullTeam() << " " << piece->getTitle();
 }
 #endif
