@@ -27,6 +27,7 @@ public:
     int indexHistory(int turn, int x, int y);
     std::string idToStr(int value);
     void printTurn(int turn);
+    void printTurnHistory();
     bool checkTeamBlock(int p1x, int p1y, int p2x, int p2y);
     bool checkRookPath(int p1x, int p1y, int p2x, int p2y);
     bool checkBishopPath(int p1x, int p1y, int p2x, int p2y);
@@ -313,6 +314,11 @@ void Grid::printTurn(int turn) {
         std::cout << "\n";
     }
     std::cout << "\n";
+}
+void Grid::printTurnHistory() {
+    for (int i = 0; i <= turnCount; ++i) {
+        this->printTurn(i);
+    }
 }
 bool Grid::checkTeamBlock(int p1x, int p1y, int p2x, int p2y) {
     if (grid[p2x][p2y] != nullptr) {

@@ -31,12 +31,8 @@ public:
             std::cout << "\n";
         }
         GridObj.movePiece("A7", "A6");
-        GridObj.printTurn(0);
         GridObj.movePiece("A6", "A5");
-        GridObj.printTurn(0);
-        GridObj.printTurn(1);
-        GridObj.printTurn(2);
-        GridObj.printTurn(3);
+        GridObj.printTurnHistory();
     }
 };
 
