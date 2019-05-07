@@ -454,7 +454,58 @@ public:
         GridObj.movePiece("G7", "G5");
         GridObj.movePiece("F5", "G6");
 
+
+        
+        GridObj.movePiece("D7", "D5");
+        GridObj.movePiece("D5", "D4");
+        GridObj.movePiece("D4", "D3");
+        GridObj.movePiece("E2", "E3");
+        GridObj.movePiece("E3", "D4");
+
+        std::cout << "---------\n";
+        GridObj.movePiece("B2", "B4");
+        GridObj.movePiece("A7", "A5");
+        GridObj.movePiece("A5", "A4");
+        GridObj.movePiece("B4", "A5");
+
+        //
+        GridObj.movePiece("B7", "B5");
+
+        GridObj.movePiece("C2", "C3");
+        GridObj.movePiece("C3", "C4");
+        GridObj.movePiece("C4", "C5");
         GridObj.print();
+
+        GridObj.movePiece("C5", "B6");
+
+        GridObj.print();
+    }
+    void testEPcapturedcheck() {
+        Grid GridObj;
+        GridObj.init();
+
+        GridObj.movePiece("D7", "D5");
+        GridObj.movePiece("D5", "D4");
+        GridObj.movePiece("E2", "E4");
+        GridObj.movePiece("D4", "E3");
+        GridObj.printCaptured();
+
+
+        GridObj.print();
+    }
+    void testEPbothpawns() {
+        Grid GridObj;
+        GridObj.init();
+
+        GridObj.removePiecesGroup("White", "Pawn");
+        GridObj.movePiece("D1", "G4");
+        GridObj.movePiece("F7", "F5");
+        GridObj.movePiece("F5", "F4");
+        GridObj.movePiece("F4", "G3");
+
+        GridObj.print();
+        
+        GridObj.restoreGrid();
     }
 };
 #endif

@@ -27,6 +27,8 @@ public:
     bool checkQueenPath(int p1x, int p1y, int p2x, int p2y);
     bool checkPawnPath(int p1x, int p1y, int p2x, int p2y);
     bool checkPath(int p1x, int p1y, int p2x, int p2y);
+    void validMovePrint(int p1x, int p1y, int p2x, int p2y);
+    void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
     ~Grid();
 
@@ -122,8 +124,6 @@ void Grid::movePiece(std::string position1, std::string position2) {
         //checkPath NEEDS TO BE DONE BEFORE ->MOVE CHANGES XPOS & YPOS
         if (this->checkPath(x, y, newx, newy) == true) {
             grid[x][y]->move(newx, newy);
-            this->print();
-            std::cout << "x,y,nx,ny: " << x << " " << y << " " << newx << " " << newy << "\n";
             updateGrid(x, y, newx, newy, grid);
         }
         else {
@@ -201,6 +201,14 @@ void Grid::removePiecesGroup(std::string team, std::string title) {
             }
         }
     }
+}
+void Grid::validMovePrint(int p1x, int p1y, int p2x, int p2y) {
+    std::cout << "Valid move: " << grid[p1x][p1y] << " from " << 
+        numToAlph(p1x, p1y) << " to " << numToAlph(p2x, p2y) << "\n";
+}
+void Grid::invalidMovePrint(int p1x, int p1y, int p2x, int p2y) {
+    std::cout << "Invalid move: " << grid[p1x][p1y] << " from " <<
+        numToAlph(p1x, p1y) << " to " << numToAlph(p2x, p2y) << "\n";
 }
 void Grid::basicTakeOver(int p2x, int p2y) {
     grid[p2x][p2y]->getTeam() == 'W' ?
@@ -344,58 +352,61 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
 
     //moving diagonally
     if (p2x != p1x) {
-        std::cout << "//moving diagonally\n";
         //chosen move position is empty, enter enpassant possibility
         if (grid[p2x][p2y] == nullptr) {
-            std::cout << "//chosen move position is empty, enter enpassant possibility\n";
-
             //position 1 below/above chose position has a piece
             if (grid[p2x][p1y] != nullptr) {
-                std::cout << "//position 1 below/above chose position has a piece\n";
-
                 //2nd piece is enemy
                 if (grid[p2x][p1y]->getTeam() != grid[p1x][p1y]->getTeam()) {
-                    std::cout << "//2nd piece is enemy\n";
-
-                    //2nd piece has moved more than once
-                    if (grid[p2x][p1y]->getMoveCount() > 1) {
-                        std::cout << "//2nd piece has moved more than once, failed en passant\n";
-                        //unsuccessful enpassant, wasn't opposites 1st move
+                    //2nd piece has moved more than once + check both pawns
+                    if (grid[p2x][p1y]->getTitle() != "Pawn") {
+                        std::cout << "Invalid move: " << grid[p1x][p1y]->getFullTeam()
+                            << " Pawn from " << numToAlph(p1x, p1y) <<
+                            " to " << numToAlph(p2x, p2y)
+                            << "\n\t//En Passant not possible - Enemy piece not a pawn.\n";
                         return false;
                     }
+                    else if (grid[p2x][p1y]->getMoveCount() > 1) {
+                        //unsuccessful enpassant, wasn't opposites 1st move
+                        std::cout << "Invalid move: " << grid[p1x][p1y]->getFullTeam()
+                            << " Pawn from " << numToAlph(p1x, p1y) <<
+                            " to " << numToAlph(p2x, p2y)
+                            << "\n\t//En Passant not possible - Enemy pawn moved more than once.\n";
+                        return false;
+                    }
+
                     //include second if for seeing if this turn was immediate move
-                    std::cout << "//else successful en passant\n";
                     //else successful en passant
-                    std::cout << "Valid move: " << grid[p1x][p1y]->getFullTeam()
-                        << " Pawn from " << numToAlph(p1x, p1y) <<
-                        " to " << numToAlph(p2x, p2y)
-                        << "\n";
+                    validMovePrint(p1x, p2x, p1y, p2y);
+                    std::cout << "En passant: " << grid[p1x][p1y] << " overtook " <<
+                        grid[p2x][p1y] << " at " << numToAlph(p2x, p1y) << std::endl;
                     basicTakeOver(p2x, p1y);
                     return true;
                 }
                 //2nd piece is team member, blocked path
-                std::cout << "//2nd piece is team member, blocked path\n";
+                invalidMovePrint(p1x, p1y, p2x, p2y);
                 return false;
             }
+            invalidMovePrint(p1x, p1y, p2x, p2y);
             //invalid move, impossible en passant, return false
-            std::cout << "//invalid move, impossible en passant, return false\n";
             return false;
         }
         //regular possible overtake
         //if 2nd piece isn't enemy
         else if (grid[p2x][p2y]->getTeam() == grid[p1x][p1y]->getTeam()) {
-            std::cout << "//regular possibly overtake\n";
-            std::cout << "//2nd piece isn't enemy, blocked\n";
             //blocked return false
+            std::cout << "\tBlocked by team member: " << grid[p2x][p2y] <<
+                " at " << numToAlph(p2x, p2y) << std::endl;
             return false;
         }
         //2nd piece is enemy, successful regular overtake
         else {
-            std::cout << "//2nd piece is enemy, successful regular overtake\n";
             std::cout << "Valid move: " << grid[p1x][p1y]->getFullTeam()
                 << " Pawn from " << numToAlph(p1x, p1y) <<
                 " to " << numToAlph(p2x, p2y)
                 << "\n";
+            std::cout << grid[p1x][p1y] << " overtook " <<
+                grid[p2x][p2y] << " at " << numToAlph(p2x, p2y) << std::endl;
             basicTakeOver(p2x, p2y);
             return true;
         }

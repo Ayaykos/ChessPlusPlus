@@ -49,7 +49,8 @@ public:
         TestPawnPath tpp;
         //tpp.test();
         //tpp.testOvertake();
-        tpp.testEP();
+        //tpp.testEP();
+        tpp.testEPbothpawns();
     }
 };
 class TestMisc {
