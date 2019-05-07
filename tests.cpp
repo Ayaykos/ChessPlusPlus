@@ -50,20 +50,20 @@ public:
         TestPawnPath tpp;
         //tpp.test();
         //tpp.testOvertake();
-        //tpp.testEP();
-        tpp.testEPbothpawns();
+        tpp.testEP();
+        //tpp.testEPbothpawns();
     }
 };
 
 int main() {
     //TestBasicMoves tbm;
     //tbm.test();
-    //TestCheckPaths tcp;
-    //tcp.test();
+    TestCheckPaths tcp;
+    tcp.test();
     //General g;
     //g.KingMoveCount();
-    GridTest gt;
+    //GridTest gt;
     //gt.testHistory();
-    gt.testID();
+    //gt.testID();
     return 0;
 }

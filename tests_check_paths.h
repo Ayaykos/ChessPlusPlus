@@ -463,6 +463,8 @@ public:
         GridObj.movePiece("E3", "D4");
 
         std::cout << "---------\n";
+        GridObj.printTurnHistory(1);
+
         GridObj.movePiece("B2", "B4");
         GridObj.movePiece("A7", "A5");
         GridObj.movePiece("A5", "A4");
@@ -478,7 +480,7 @@ public:
 
         GridObj.movePiece("C5", "B6");
 
-        GridObj.print();
+        GridObj.printTurnHistory(7);
     }
     void testEPcapturedcheck() {
         Grid GridObj;
@@ -503,7 +505,7 @@ public:
         GridObj.movePiece("F5", "F4");
         GridObj.movePiece("F4", "G3");
 
-        GridObj.print();
+        GridObj.printTurnHistory(1);
         
         GridObj.restoreGrid();
     }

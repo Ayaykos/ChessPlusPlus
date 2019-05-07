@@ -18,16 +18,12 @@ public:
     void updateGrid(int p1x, int p1y, int p2x, int p2y);
     void restoreGrid();
     int getTurnCount();
-    //function only for testing
-    void removePiece(std::string position);
-    //function only for testing
-    void removePiecesGroup(std::string team, std::string title);
     void basicTakeOver(int p2x, int p2y);
     void updateHistory();
-    int indexHistory(int turn, int x, int y);
+    int indexHistoryID(int turn, int x, int y);
     std::string idToStr(int value);
     void printTurn(int turn);
-    void printTurnHistory();
+    void printTurnHistory(int startTurn);
     bool checkTeamBlock(int p1x, int p1y, int p2x, int p2y);
     bool checkRookPath(int p1x, int p1y, int p2x, int p2y);
     bool checkBishopPath(int p1x, int p1y, int p2x, int p2y);
@@ -37,6 +33,9 @@ public:
     void validMovePrint(int p1x, int p1y, int p2x, int p2y);
     void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
+    //functions only for testing
+    void removePiece(std::string position);
+    void removePiecesGroup(std::string team, std::string title);
     ~Grid();
 
 private:
@@ -265,10 +264,8 @@ void Grid::updateHistory() {
     }
     moveHistory.push_back(newturn);
 }
-int Grid::indexHistory(int turn, int x, int y) {
+int Grid::indexHistoryID(int turn, int x, int y) {
     assert(int(moveHistory.size()) >= turn + 1);
-    //std::cout << "correct: " << grid[x][y] << "\n";
-    //std::cout << "answer: " << moveHistory[turn][(8 * y) + x] << "\n";
     return moveHistory[turn][(8 * y) + x];
 }
 std::string Grid::idToStr(int value) {
@@ -301,7 +298,7 @@ void Grid::printTurn(int turn) {
         std::cout << 8 - i << " ";
         for (size_t j = 0; j < grid.size(); ++j) {
             //std::cout << "|__";
-            val = indexHistory(turn, j, i);
+            val = indexHistoryID(turn, j, i);
             if (val != -1) {
                 std::cout << "|_"<< idToStr(val);
             }
@@ -315,8 +312,8 @@ void Grid::printTurn(int turn) {
     }
     std::cout << "\n";
 }
-void Grid::printTurnHistory() {
-    for (int i = 0; i <= turnCount; ++i) {
+void Grid::printTurnHistory(int startTurn) {
+    for (int i = startTurn; i <= turnCount; ++i) {
         this->printTurn(i);
     }
 }
@@ -468,18 +465,26 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
                         std::cout << "Invalid move: " << grid[p1x][p1y]->getFullTeam()
                             << " Pawn from " << numToAlph(p1x, p1y) <<
                             " to " << numToAlph(p2x, p2y)
-                            << "\n\t//En Passant not possible - Enemy piece not a pawn.\n";
+                            << "\n\t//En Passant invalid - Enemy piece not a pawn.\n";
                         return false;
                     }
-                    else if (grid[p2x][p1y]->getMoveCount() > 1) {
+                    if (grid[p2x][p1y]->getMoveCount() > 1) {
                         //unsuccessful enpassant, wasn't opposites 1st move
                         std::cout << "Invalid move: " << grid[p1x][p1y]->getFullTeam()
                             << " Pawn from " << numToAlph(p1x, p1y) <<
                             " to " << numToAlph(p2x, p2y)
-                            << "\n\t//En Passant not possible - Enemy pawn moved more than once.\n";
+                            << "\n\t//En Passant invalid - Enemy pawn moved more than once.\n";
                         return false;
                     }
-
+                    if (indexHistoryID(turnCount - 1, p2x, p1y) 
+                        == grid[p2x][p1y]->getID()) {
+                        //turn was not immediate move
+                        std::cout << "Invalid move: " << grid[p1x][p1y]->getFullTeam()
+                            << " Pawn from " << numToAlph(p1x, p1y) <<
+                            " to " << numToAlph(p2x, p2y)
+                            << "\n\t//En Passant invalid - Overtake must be immediate.\n";
+                        return false;
+                    }
                     //include second if for seeing if this turn was immediate move
                     //else successful en passant
                     validMovePrint(p1x, p2x, p1y, p2y);

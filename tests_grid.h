@@ -14,7 +14,7 @@ public:
 
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
-                GridObj.indexHistory(0, j, i);
+                GridObj.indexHistoryID(0, j, i);
             }
         }
     }
@@ -32,7 +32,12 @@ public:
         }
         GridObj.movePiece("A7", "A6");
         GridObj.movePiece("A6", "A5");
-        GridObj.printTurnHistory();
+        GridObj.printTurnHistory(0);
+
+        if (GridObj.indexHistoryID(GridObj.getTurnCount() - 1, 0, 0)
+            == GridObj[numToAlph(0, 0)]->getID()) {
+            std::cout << "success\n";
+        }
     }
 };
 
