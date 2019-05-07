@@ -24,7 +24,9 @@ public:
     void removePiecesGroup(std::string team, std::string title);
     void basicTakeOver(int p2x, int p2y);
     void updateHistory();
-    void indexHistory(int turn, int x, int y);
+    int indexHistory(int turn, int x, int y);
+    std::string idToStr(int value);
+    void printTurn(int turn);
     bool checkTeamBlock(int p1x, int p1y, int p2x, int p2y);
     bool checkRookPath(int p1x, int p1y, int p2x, int p2y);
     bool checkBishopPath(int p1x, int p1y, int p2x, int p2y);
@@ -42,7 +44,7 @@ private:
     std::vector<std::vector<Piece*>> BlackPieces;
     std::pair<std::vector<Piece*>, 
         std::vector<Piece*>>CapturedPieces;
-    std::vector<std::vector<char>> moveHistory;
+    std::vector<std::vector<int>> moveHistory;
     int turnCount;
 };
 
@@ -85,6 +87,8 @@ void Grid::init() {
     this->initPieces();
     this->initGrid();
     this->fill();
+    turnCount = 0;
+    this->updateHistory();
 }
 void Grid::print() {
     std::cout << "  ";
@@ -131,6 +135,7 @@ bool Grid::movePiece(std::string position1, std::string position2) {
         if (this->checkPath(x, y, newx, newy) == true) {
             grid[x][y]->move(newx, newy);
             updateGrid(x, y, newx, newy);
+            updateHistory();
             ++turnCount;
             return true;
         }
@@ -248,41 +253,66 @@ void Grid::basicTakeOver(int p2x, int p2y) {
         CapturedPieces.second.push_back(grid[p2x][p2y]);
 }
 void Grid::updateHistory() {
-    std::vector<char> newturn;
+    std::vector<int> newturn;
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             if (grid[j][i] != nullptr) {
-                if (grid[j][i]->getTeam() == 'B'){
-                    if (grid[j][i]->getTitleChar() == 'K') {
-                        newturn.push_back('1');
-                    }
-                    else if (grid[j][i]->getTitleChar() == 'Q') {
-                        newturn.push_back('2');
-                    }
-                    else if (grid[j][i]->getTitleChar() == 'R') {
-                        newturn.push_back('3');
-                    }
-                    else if (grid[j][i]->getTitleChar() == 'B') {
-                        newturn.push_back('4');
-                    }
-                    else if (grid[j][i]->getTitleChar() == 'k') {
-                        newturn.push_back('5');
-                    }
-                    else newturn.push_back('6');
-                }
-                else newturn.push_back(grid[j][i]->getTitleChar());
+                newturn.push_back(grid[j][i]->getID());
             }
-            else newturn.push_back('0');
+            else newturn.push_back(-1);
         }
     }
     moveHistory.push_back(newturn);
 }
-void Grid::indexHistory(int turn, int x, int y) {
+int Grid::indexHistory(int turn, int x, int y) {
     assert(int(moveHistory.size()) >= turn + 1);
-    std::cout << "correct: " << grid[x][y] << "\n";
-    std::cout << "answer: " << moveHistory[turn][(8 * y) + x] << "\n";
-    
+    //std::cout << "correct: " << grid[x][y] << "\n";
+    //std::cout << "answer: " << moveHistory[turn][(8 * y) + x] << "\n";
+    return moveHistory[turn][(8 * y) + x];
+}
+std::string Grid::idToStr(int value) {
+    std::string converted = "";
+    int tempVal = value;
+    if (value > 15) tempVal = value - 15;
+    if (tempVal == 0) converted += "K";
+    else if (tempVal == 1) converted += "Q";
+    else if (tempVal == 2 || tempVal == 3) converted += "R";
+    else if (tempVal == 4 || tempVal == 5) converted += "B";
+    else if (tempVal == 6 || tempVal == 7) converted += "k";
+    else converted += "P";
 
+    if (value > 15) converted += '.';
+    else converted += "_";
+    return converted;
+    //std::cout << "correct: " << grid[x][y] << "\n";
+    //std::cout << "answer: " << moveHistory[turn][(8 * y) + x] << "\n";
+    //if (value;
+}
+void Grid::printTurn(int turn) {
+
+    int val;
+    std::cout << "Turn: " << turn << "\n  ";
+    for (size_t i = 0; i < grid.size(); ++i) {
+        std::cout << "__" << char(i + 65) << "_";
+    }
+    std::cout << "\n";
+    for (size_t i = 0; i < grid.size(); ++i) {
+        std::cout << 8 - i << " ";
+        for (size_t j = 0; j < grid.size(); ++j) {
+            //std::cout << "|__";
+            val = indexHistory(turn, j, i);
+            if (val != -1) {
+                std::cout << "|_"<< idToStr(val);
+            }
+            else {
+                std::cout << "|___";
+            }
+        }
+        if (i == 0) std::cout << "  B";
+        if (i == 7) std::cout << "  W";
+        std::cout << "\n";
+    }
+    std::cout << "\n";
 }
 bool Grid::checkTeamBlock(int p1x, int p1y, int p2x, int p2y) {
     if (grid[p2x][p2y] != nullptr) {
