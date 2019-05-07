@@ -47,10 +47,10 @@ public:
         //tqp.test();
         //TestKnightPath tkp;
         //tkp.test();
-        TestPawnPath tpp;
+        //TestPawnPath tpp;
         //tpp.test();
         //tpp.testOvertake();
-        tpp.testEP();
+        //tpp.testEP();
         //tpp.testEPbothpawns();
     }
 };
@@ -58,12 +58,12 @@ public:
 int main() {
     //TestBasicMoves tbm;
     //tbm.test();
-    TestCheckPaths tcp;
-    tcp.test();
+    //TestCheckPaths tcp;
+    //tcp.test();
     //General g;
     //g.KingMoveCount();
-    //GridTest gt;
+    GridTest gt;
     //gt.testHistory();
-    //gt.testID();
+    gt.testID();
     return 0;
 }

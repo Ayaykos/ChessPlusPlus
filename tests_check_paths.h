@@ -36,6 +36,7 @@ public:
         std::cout << "\tAssert: Not blocked." << std::endl;
 
         GridObj.movePiece("A8", "A2");
+        GridObj.movePiece("A2", "A8");
         GridObj.removePiece("B8");
         GridObj.movePiece("A8", "B8");
         std::cout << "\tAssert: Not blocked." << std::endl;
@@ -49,6 +50,7 @@ public:
         GridObj.movePiece("B8", "B2");
         GridObj.removePiece("B7");
         GridObj.movePiece("B8", "B2");
+        GridObj.movePiece("B2", "B8");
         GridObj.movePiece("B8", "B3");
         std::cout << "\tAssert: Not blocked." << std::endl;
 

@@ -45,6 +45,7 @@ private:
     std::pair<std::vector<Piece*>, 
         std::vector<Piece*>>CapturedPieces;
     std::vector<std::vector<int>> moveHistory;
+    std::vector<std::string> moveDescriptionHistory;
     int turnCount;
 };
 
@@ -89,6 +90,7 @@ void Grid::init() {
     this->fill();
     turnCount = 0;
     this->updateHistory();
+    moveDescriptionHistory.push_back("Starting Position\n");
 }
 void Grid::print() {
     std::cout << "  ";
@@ -132,11 +134,18 @@ bool Grid::movePiece(std::string position1, std::string position2) {
 
     if (grid[x][y]->checkValidMove(newx, newy) == true) {
         //checkPath NEEDS TO BE DONE BEFORE ->MOVE CHANGES XPOS & YPOS
+
         if (this->checkPath(x, y, newx, newy) == true) {
+            std::ostringstream oss;
+            oss << grid[x][y] << " moved from " << numToAlph(x, y) <<
+                " to " << numToAlph(newx, newy) << "\n";
+            std::cout << oss.str();
+            moveDescriptionHistory.push_back(oss.str());
             grid[x][y]->move(newx, newy);
             updateGrid(x, y, newx, newy);
             updateHistory();
             ++turnCount;
+
             return true;
         }
         return false;
@@ -289,7 +298,8 @@ std::string Grid::idToStr(int value) {
 void Grid::printTurn(int turn) {
 
     int val;
-    std::cout << "Turn: " << turn << "\n  ";
+    std::cout << "Turn " << turn << ": " 
+        << moveDescriptionHistory[turn] << "  ";
     for (size_t i = 0; i < grid.size(); ++i) {
         std::cout << "__" << char(i + 65) << "_";
     }
@@ -537,10 +547,10 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
             return false;
         }
     }
-    std::cout << "Valid move: " << grid[p1x][p1y]->getFullTeam()
-        << " Pawn from " << numToAlph(p1x, p1y) <<
-        " to " << numToAlph(p2x, p2y)
-        << "\n";
+    std::string output = "Valid move: " + grid[p1x][p1y]->getFullTeam()
+        + " Pawn from " + numToAlph(p1x, p1y) +
+        " to " + numToAlph(p2x, p2y) + "\n";
+    std::cout << output;
     return true;
 }
 //differentiate between blocks along the way and block at end
