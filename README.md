@@ -14,6 +14,6 @@ Working on a Chess spinoff, exploring where I can take this. Will incorporate pr
   - tests_grid.h
   - tests_misc.h
 ```
-g++ -Wall -Werror -g -pedantic --std=c++11 tests.cpp -o tests.exe
+g++ tests.cpp -o tests.exe
 ./tests.exe
 ```
