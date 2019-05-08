@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <cassert>
+#include <algorithm>
 #include "conversions.h"
 
 void fillPieces(std::vector<std::vector<Piece*>> &Pieces, char team) {
@@ -110,11 +111,121 @@ void deletePieces(std::vector<std::vector<Piece*>>Pieces) {
         }
     }
 }
+void deletePromotedPieces(std::pair<std::vector<Piece*>,
+    std::vector<Piece*>>PiecePair) {
+    for (size_t i = 0; i < PiecePair.first.size(); ++i) {
+        delete PiecePair.first[i];
+    }
+    for (size_t i = 0; i < PiecePair.second.size(); ++i) {
+        delete PiecePair.second[i];
+    }
+}
 void printPieces(std::vector<std::vector<Piece*>>Pieces) {
     for (size_t i = 0; i < Pieces.size(); ++i) {
         for (size_t j = 0; j < Pieces[i].size(); ++j) {
             Pieces[i][j]->print_details();
         }
     }
+}
+std::string promoteInput() {
+    std::string in;
+    bool validInput = false;
+    while (validInput == false) {
+        std::cout << "\nChoose piece to promote pawn to: ";
+        std::cin >> in;
+        if (in.size() <= 0) {
+            std::cout << "Error. Re-enter.";
+            continue;
+        }
+        if (toupper(in[0]) == 'Q') {
+            if (in.size() > 1) {
+                for (auto & i : in) i = toupper(i);
+                if (in.size() != 5 || in != "QUEEN") {
+                    std::cout << "Error. Re-enter.";
+                    continue;
+                }
+                return "Queen";
+                validInput = true;
+            }
+            else {
+                return "Queen";
+                validInput = true;
+            }
+            continue;
+        }
+        else if (toupper(in[0]) == 'R') {
+            if (in.size() > 1) {
+                for (auto & i : in) i = toupper(i);
+                if (in.size() != 4 || in != "ROOK") {
+                    std::cout << "Error. Re-enter.";
+                    continue;
+                }
+                return "Rook";
+                validInput = true;
+            }
+            else {
+                return "Rook";
+                validInput = true;
+            }
+            continue;
+        }
+        else if (toupper(in[0]) == 'B') {
+            if (in.size() > 1) {
+                for (auto & i : in) i = toupper(i);
+                if (in.size() != 6 || in != "BISHOP") {
+                    std::cout << "Error. Re-enter.";
+                    continue;
+                }
+                return "Bishop";
+                validInput = true;
+            }
+            else {
+                return "Bishop";
+                validInput = true;
+            }     
+            continue;
+        }
+        else if (toupper(in[0]) == 'K') {
+            if (in.size() > 1) {
+                for (auto & i : in) i = toupper(i);
+                if (in == "KING") {
+                    std::cout << "Cannot promote to King.";
+                    continue;
+                }
+                if (in.size() != 6 || in != "KNIGHT") {
+                    std::cout << "Error. Re-enter.";
+                    continue;
+                }
+                return "Knight";
+                validInput = true;
+            }
+            else {
+                return "Knight";
+                validInput = true;
+            }      
+            continue;
+        }
+        else if (toupper(in[0]) == 'P') {
+            if (in.size() > 1) {
+                for (auto & i : in) i = toupper(i);
+                if (in == "PAWN") {
+                    std::cout << "Must promote to non-pawn piece.";
+                    continue;
+                }
+                std::cout << "Error. Re-enter.";
+                continue;
+            }
+            else {
+                std::cout << "Must promote to non-pawn piece.";
+            }
+            continue;
+        }
+        else {
+            std::cout << "Error. Re-enter.";
+        }
+    }
+    std::cout << "Error in promoteInput\n";
+    assert(false);
+    return "error";
 }
 #endif

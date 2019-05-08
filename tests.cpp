@@ -60,10 +60,11 @@ int main() {
     //tbm.test();
     //TestCheckPaths tcp;
     //tcp.test();
-    //General g;
+    General g;
     //g.KingMoveCount();
-    GridTest gt;
+    //GridTest gt;
     //gt.testHistory();
-    gt.testID();
+    //gt.testID();
+    g.promoteInputTest();
     return 0;
 }

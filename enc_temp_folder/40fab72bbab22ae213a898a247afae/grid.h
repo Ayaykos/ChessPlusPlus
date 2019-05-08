@@ -160,8 +160,7 @@ void Grid::updateGrid(int p1x, int p1y, int p2x, int p2y) {
     if (grid[p2x][p1y] != nullptr) {
         if (grid[p2x][p1y]->getTitle() == "Pawn" &&
             grid[p1x][p1y]->getTitle() == "Pawn" &&
-            grid[p2x][p2y] == nullptr && 
-            grid[p2x][p1y]->getTeam() != grid[p1x][p1y]->getTeam()) {
+            grid[p2x][p2y] == nullptr) {
             grid[p2x][p2y] = grid[p1x][p1y];
             grid[p1x][p1y] = nullptr;
             grid[p2x][p1y] = nullptr;

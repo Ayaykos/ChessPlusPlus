@@ -20,6 +20,20 @@ public:
 
         GridObj.print();
     }
+    void promoteInputTest() {
+        Grid GridObj;
+        GridObj.init();
+        GridObj.removePiecesGroup("Black", "Pawn");
+        GridObj.removePiecesGroup("Black", "Bishop");
+        GridObj.movePiece("C2", "C4");
+        GridObj.movePiece("C4", "C5");
+        GridObj.movePiece("C5", "C6");
+        GridObj.movePiece("C6", "C7");
+        GridObj.movePiece("C7", "C8");
+
+        GridObj.print();
+        //promoteInput();
+    }
 };
 
 #endif
