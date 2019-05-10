@@ -11,6 +11,7 @@ Working on a Chess spinoff, exploring where I can take this. Will incorporate pr
 - tests.cpp  *//test suite - currently only calling from here during testing (main driver empty)*
   - tests_basic_moves.h
   - tests_check_paths.h
+  - tests_checkmate.h
   - tests_grid.h
   - tests_misc.h
 ```
