@@ -7,6 +7,7 @@
 #include "tests_check_paths.h"
 #include "tests_misc.h"
 #include "tests_grid.h"
+#include "tests_checkmate.h"
 using namespace std;
 
 class TestBasicMoves {
@@ -54,17 +55,43 @@ public:
         //tpp.testEPbothpawns();
     }
 };
+class TestGrid {
+public:
+    void test() {
+        GridTest gt;
+        gt.testHistory();
+        gt.testID();
+    }
+};
+class TestCheckMate {
+public:
+    void test() {
+        testCheckMate tcm;
+        //tcm.testKnight();
+        //tcm.testPawn();
+        //tcm.testRook();
+        //tcm.testRookBlock();
+        //tcm.testBishopBlock();
+        //tcm.testQueenRook();
+        //tcm.testQueenBishop();
+        //tcm.testQueenBishopBlock();
+        tcm.testQueenRookBlock();
+        
+    }
+};
 
 int main() {
     //TestBasicMoves tbm;
     //tbm.test();
     //TestCheckPaths tcp;
     //tcp.test();
-    General g;
+    //General g;
     //g.KingMoveCount();
-    //GridTest gt;
-    //gt.testHistory();
-    //gt.testID();
-    g.promoteInputTest();
+    //TestGrid tg;
+    //tg.test();
+    //g.promoteInputTest();
+    TestCheckMate tcm;
+    tcm.test();
+
     return 0;
 }

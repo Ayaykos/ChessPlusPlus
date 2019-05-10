@@ -32,6 +32,16 @@ public:
         GridObj.movePiece("C7", "C8");
 
         GridObj.print();
+        GridObj.restoreGrid();
+        GridObj.removePiecesGroup("White", "Pawn");
+        GridObj.removePiecesGroup("White", "Bishop");        
+        GridObj.movePiece("C7", "C5");
+        GridObj.movePiece("C5", "C4");
+        GridObj.movePiece("C4", "C3");
+        GridObj.movePiece("C3", "C2");
+        GridObj.movePiece("C2", "C1");
+
+        GridObj.print();
         //promoteInput();
     }
 };

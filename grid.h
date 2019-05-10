@@ -31,6 +31,7 @@ public:
     bool checkPawnPath(int p1x, int p1y, int p2x, int p2y);
     bool checkPath(int p1x, int p1y, int p2x, int p2y);
     void pawnPromote(int p1x, int p1y, int p2x, int p2y);
+    bool check(std::string kingPosition, char kingTeam);
     void validMovePrint(int p1x, int p1y, int p2x, int p2y);
     void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
@@ -630,6 +631,24 @@ bool Grid::checkPath(int p1x, int p1y, int p2x, int p2y) {
         return this->checkTeamBlock(p1x, p1y, p2x, p2y);
     }
     return true;
+}
+bool Grid::check(std::string kingPosition, char kingTeam) {
+    /*
+    if (checkHorse(grid, kingPosition, kingTeam) || 
+        checkPawn(grid, kingPosition, kingTeam) || 
+        checkRook(grid, kingPosition, kingTeam, 'R') ||
+        checkBishop(grid, kingPosition, kingTeam, 'B') ||
+        checkQueen(grid, kingPosition, kingTeam)) {
+        std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] <<
+            " in check at " << kingPosition << "\n";
+        return true;
+    }*/
+    if (checkQueen(grid, kingPosition, kingTeam)) {
+        std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] <<
+            " in check at " << kingPosition << "\n";
+        return true;
+    }
+    return false;
 }
 void Grid::printCaptured() {
     if (CapturedPieces.first.empty()) {
