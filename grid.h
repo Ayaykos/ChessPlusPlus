@@ -31,12 +31,13 @@ public:
     bool checkPawnPath(int p1x, int p1y, int p2x, int p2y);
     bool checkPath(int p1x, int p1y, int p2x, int p2y);
     void pawnPromote(int p1x, int p1y, int p2x, int p2y);
-    bool check();
+    void check();
     bool checkMate();
     void validMovePrint(int p1x, int p1y, int p2x, int p2y);
     void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
     //functions only for testing
+    void movePieceTest(std::string position1, std::string position2);
     void removePiece(std::string position);
     void removePiecesGroup(std::string team, std::string title);
     ~Grid();
@@ -177,6 +178,26 @@ bool Grid::movePiece(std::string position1, std::string position2) {
         return false;
     }
     return false;
+}
+void Grid::movePieceTest(std::string position1, std::string position2) {
+    int p1x = alphToNumX(position1);
+    int p1y = alphToNumY(position1);
+    int p2x = alphToNumX(position2);
+    int p2y = alphToNumY(position2);
+    grid[p2x][p2y] = grid[p1x][p1y];
+    grid[p1x][p1y] = nullptr;
+    if (checkHelper(grid, whiteKingPos, 'W')) whiteKingCheck = true;
+    else {
+        if (whiteKingCheck) {
+            whiteKingCheck = false;
+        }
+    }
+    if (checkHelper(grid, blackKingPos, 'B')) blackKingCheck = true;
+    else {
+        if (blackKingCheck) {
+            blackKingCheck = false;
+        }
+    }
 }
 void Grid::updateGrid(int p1x, int p1y, int p2x, int p2y) {
     //en passant
@@ -669,24 +690,39 @@ bool Grid::checkPath(int p1x, int p1y, int p2x, int p2y) {
     }
     return true;
 }
-bool Grid::check() {
+void Grid::check() {
     //both kings can be in check
     if (checkHelper(grid,whiteKingPos,'W')) {
+        whiteKingCheck = true;
         std::cout << grid[alphToNumX(whiteKingPos)][alphToNumY(whiteKingPos)] 
             << " in check at " << whiteKingPos << "\n";
     }
+    else {
+        if (whiteKingCheck) {
+            whiteKingCheck = false;
+        }
+    }
     if (checkHelper(grid, blackKingPos, 'B')) {
+        blackKingCheck = true;
         std::cout << grid[alphToNumX(blackKingPos)][alphToNumY(blackKingPos)]
             << " in check at " << blackKingPos << "\n";
+    }
+    else {
+        if (blackKingCheck) {
+            blackKingCheck = false;
+        }
     }
 }
 bool Grid::checkMate() {
     if (checkKingCheckMate(grid, whiteKingPos, 'W')) {
         std::cout << "White King Checkmate. Black Wins!\n";
+        return true;
     }
     if (checkKingCheckMate(grid, blackKingPos, 'B')) {
         std::cout << "Black King Checkmate. White Wins!\n";
+        return true;
     }
+    return false;
 }
 void Grid::printCaptured() {
     if (CapturedPieces.first.empty()) {

@@ -79,19 +79,26 @@ public:
         
     }
 };
+class TestMisc {
+public:
+    void test() {
+        General g;
+        //g.KingMoveCount();
+        //g.promoteInputTest();
+        g.movePieceTest();
+    }
+};
 
 int main() {
     //TestBasicMoves tbm;
     //tbm.test();
     //TestCheckPaths tcp;
     //tcp.test();
-    //General g;
-    //g.KingMoveCount();
     //TestGrid tg;
     //tg.test();
-    //g.promoteInputTest();
-    TestCheckMate tcm;
-    tcm.test();
-
+    //TestCheckMate tcm;
+    //tcm.test();
+    TestMisc tm;
+    tm.test();
     return 0;
 }

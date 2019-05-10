@@ -44,6 +44,14 @@ public:
         GridObj.print();
         //promoteInput();
     }
+    void movePieceTest() {
+        Grid GridObj;
+        GridObj.init();
+        GridObj.movePieceTest("A7", "A5");
+        GridObj.print();
+
+    }
 };
+
 
 #endif

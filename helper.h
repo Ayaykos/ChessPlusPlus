@@ -231,52 +231,68 @@ std::string promoteInput() {
 bool checkKnight(std::vector<std::vector<Piece*>>grid, 
     std::string kingLocation, char kingTeam) {
     int p1x = alphToNumX(kingLocation), p1y = alphToNumY(kingLocation);
-    if (grid[p1x - 1][p1y - 2] != nullptr) {
-        if (grid[p1x - 1][p1y - 2]->getTeam() != kingTeam &&
-            grid[p1x - 1][p1y - 2]->getTitleChar() == 'k') {
-            return true;
+    if (p1x - 1 >= 0 && p1y - 2 >= 0) {
+        if (grid[p1x - 1][p1y - 2] != nullptr) {
+            if (grid[p1x - 1][p1y - 2]->getTeam() != kingTeam &&
+                grid[p1x - 1][p1y - 2]->getTitleChar() == 'k') {
+                return true;
+            }
         }
     }
-    else if (grid[p1x + 1][p1y - 2] != nullptr) {
-        if (grid[p1x + 1][p1y - 2]->getTeam() != kingTeam &&
-            grid[p1x + 1][p1y - 2]->getTitleChar() == 'k') {
-            return true;
+    if (p1x + 1 < 8 && p1y - 2 >= 0) {
+        if (grid[p1x + 1][p1y - 2] != nullptr) {
+            if (grid[p1x + 1][p1y - 2]->getTeam() != kingTeam &&
+                grid[p1x + 1][p1y - 2]->getTitleChar() == 'k') {
+                return true;
+            }
         }
     }
-    else if (grid[p1x + 2][p1y - 1] != nullptr) {
-        if (grid[p1x + 2][p1y - 1]->getTeam() != kingTeam &&
-            grid[p1x + 2][p1y - 1]->getTitleChar() == 'k') {
-            return true;
+    if (p1x + 2 < 8 && p1y - 1 >= 0) {
+        if (grid[p1x + 2][p1y - 1] != nullptr) {
+            if (grid[p1x + 2][p1y - 1]->getTeam() != kingTeam &&
+                grid[p1x + 2][p1y - 1]->getTitleChar() == 'k') {
+                return true;
+            }
         }
     }
-    else if (grid[p1x + 2][p1y + 1] != nullptr) {
-        if (grid[p1x + 2][p1y + 1]->getTeam() != kingTeam &&
-            grid[p1x + 2][p1y + 1]->getTitleChar() == 'k') {
-            return true;
+    if (p1x + 2 < 8 && p1y + 1 < 8) {
+        if (grid[p1x + 2][p1y + 1] != nullptr) {
+            if (grid[p1x + 2][p1y + 1]->getTeam() != kingTeam &&
+                grid[p1x + 2][p1y + 1]->getTitleChar() == 'k') {
+                return true;
+            }
         }
     }
-    else if (grid[p1x + 1][p1y + 2] != nullptr) {
-        if (grid[p1x + 1][p1y + 2]->getTeam() != kingTeam &&
-            grid[p1x + 1][p1y + 2]->getTitleChar() == 'k') {
-            return true;
+    if (p1x + 1 < 8 && p1y + 2 < 8) {
+        if (grid[p1x + 1][p1y + 2] != nullptr) {
+            if (grid[p1x + 1][p1y + 2]->getTeam() != kingTeam &&
+                grid[p1x + 1][p1y + 2]->getTitleChar() == 'k') {
+                return true;
+            }
         }
     }
-    else if (grid[p1x - 1][p1y + 2] != nullptr) {
-        if (grid[p1x - 1][p1y + 2]->getTeam() != kingTeam &&
-            grid[p1x - 1][p1y + 2]->getTitleChar() == 'k') {
-            return true;
+    if (p1x - 1 >= 0 && p1y + 2 < 8) {
+        if (grid[p1x - 1][p1y + 2] != nullptr) {
+            if (grid[p1x - 1][p1y + 2]->getTeam() != kingTeam &&
+                grid[p1x - 1][p1y + 2]->getTitleChar() == 'k') {
+                return true;
+            }
         }
     }
-    else if (grid[p1x - 2][p1y - 1] != nullptr) {
-        if (grid[p1x - 2][p1y - 1]->getTeam() != kingTeam &&
-            grid[p1x - 2][p1y - 1]->getTitleChar() == 'k') {
-            return true;
+    if (p1x - 2 >= 0 && p1y - 1 >= 0) {
+        if (grid[p1x - 2][p1y - 1] != nullptr) {
+            if (grid[p1x - 2][p1y - 1]->getTeam() != kingTeam &&
+                grid[p1x - 2][p1y - 1]->getTitleChar() == 'k') {
+                return true;
+            }
         }
     }
-    else if (grid[p1x - 2][p1y + 1] != nullptr) {
-        if (grid[p1x - 2][p1y + 1]->getTeam() != kingTeam &&
-            grid[p1x - 2][p1y + 1]->getTitleChar() == 'k') {
-            return true;
+    if (p1x - 2 >= 0 && p1y + 1 < 8) {
+        if (grid[p1x - 2][p1y + 1] != nullptr) {
+            if (grid[p1x - 2][p1y + 1]->getTeam() != kingTeam &&
+                grid[p1x - 2][p1y + 1]->getTitleChar() == 'k') {
+                return true;
+            }
         }
     }
     return false;
@@ -286,30 +302,38 @@ bool checkPawn(std::vector<std::vector<Piece*>>grid,
     int p1x = alphToNumX(kingLocation), p1y = alphToNumY(kingLocation);
     
     if (kingTeam == 'W') {
-        if (grid[p1x - 1][p1y - 1] != nullptr) {
-            if (grid[p1x - 1][p1y - 1]->getTeam() != kingTeam &&
-                grid[p1x - 1][p1y - 1]->getTitleChar() == 'P') {
-                return true;
+        if (p1x - 1 >= 0 && p1y - 1 >= 0) {
+            if (grid[p1x - 1][p1y - 1] != nullptr) {
+                if (grid[p1x - 1][p1y - 1]->getTeam() != kingTeam &&
+                    grid[p1x - 1][p1y - 1]->getTitleChar() == 'P') {
+                    return true;
+                }
             }
         }
-        if (grid[p1x + 1][p1y - 1] != nullptr) {
-            if (grid[p1x + 1][p1y - 1]->getTeam() != kingTeam &&
-                grid[p1x + 1][p1y - 1]->getTitleChar() == 'P') {
-                return true;
+        if (p1x + 1 < 8 && p1y - 1 >= 0) {
+            if (grid[p1x + 1][p1y - 1] != nullptr) {
+                if (grid[p1x + 1][p1y - 1]->getTeam() != kingTeam &&
+                    grid[p1x + 1][p1y - 1]->getTitleChar() == 'P') {
+                    return true;
+                }
             }
         }
     }
     else {
-        if (grid[p1x - 1][p1y + 1] != nullptr) {
-            if (grid[p1x - 1][p1y + 1]->getTeam() != kingTeam &&
-                grid[p1x - 1][p1y + 1]->getTitleChar() == 'P') {
-                return true;
+        if (p1x - 1 >= 0 && p1y + 1 < 8) {
+            if (grid[p1x - 1][p1y + 1] != nullptr) {
+                if (grid[p1x - 1][p1y + 1]->getTeam() != kingTeam &&
+                    grid[p1x - 1][p1y + 1]->getTitleChar() == 'P') {
+                    return true;
+                }
             }
         }
-        if (grid[p1x + 1][p1y + 1] != nullptr) {
-            if (grid[p1x + 1][p1y + 1]->getTeam() != kingTeam &&
-                grid[p1x + 1][p1y + 1]->getTitleChar() == 'P') {
-                return true;
+        if (p1x + 1 < 8 && p1y + 1 < 8) {
+            if (grid[p1x + 1][p1y + 1] != nullptr) {
+                if (grid[p1x + 1][p1y + 1]->getTeam() != kingTeam &&
+                    grid[p1x + 1][p1y + 1]->getTitleChar() == 'P') {
+                    return true;
+                }
             }
         }
     }
