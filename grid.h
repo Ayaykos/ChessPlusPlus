@@ -37,6 +37,7 @@ public:
     void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
     //functions only for testing
+    void init(std::string fileName);
     void movePieceTest(std::string position1, std::string position2);
     void removePiece(std::string position);
     void removePiecesGroup(std::string team, std::string title);
@@ -94,6 +95,17 @@ void Grid::fill() {
 }
 void Grid::init() {
     this->initPieces();
+    this->initGrid();
+    this->fill();
+    turnCount = 0;
+    this->updateHistory();
+    moveDescriptionHistory.push_back("Starting Position\n");
+    whiteKingPos = "E1", blackKingPos = "E8";
+    whiteKingCheck = false, blackKingCheck = false;
+}
+void Grid::init(std::string fileName) {
+    fillPieces(fileName, WhitePieces, 'W');
+    fillPieces(fileName, BlackPieces, 'B');       
     this->initGrid();
     this->fill();
     turnCount = 0;

@@ -85,7 +85,8 @@ public:
         General g;
         //g.KingMoveCount();
         //g.promoteInputTest();
-        g.movePieceTest();
+        //g.movePieceTest();
+        g.fileInputTest();
     }
 };
 

@@ -2,6 +2,7 @@
 #define HELPER_H
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <string>
@@ -87,6 +88,112 @@ void fillPieces(std::vector<std::vector<Piece*>> &Pieces, char team) {
             Piece *pawn = new Pawn(team, std::string() + char(i + 65) + "7");
             pawn->initID(i + 24);
             pawns.push_back(pawn);
+        }
+    }
+    Pieces.push_back(kings);
+    Pieces.push_back(queens);
+    Pieces.push_back(rooks);
+    Pieces.push_back(bishops);
+    Pieces.push_back(knights);
+    Pieces.push_back(pawns);
+    kings.clear();
+    queens.clear();
+    rooks.clear();
+    bishops.clear();
+    knights.clear();
+    pawns.clear();
+}
+void fillPieces(std::string fileName, 
+    std::vector<std::vector<Piece*>> &Pieces, char team) {
+    assert(Pieces.empty());
+    std::ifstream fin;
+    fin.open(fileName);
+    if (!fin.is_open()) {
+        std::cout << "Error opening " << fileName << std::endl;
+    }
+    char titleChar;
+    std::vector<Piece*> kings;
+    std::vector<Piece*> queens;
+    std::vector<Piece*> rooks;
+    std::vector<Piece*> bishops;
+    std::vector<Piece*> knights;
+    std::vector<Piece*> pawns;
+
+    int rookCountW = 0, bishopCountW = 0, knightCountW = 0, pawnCountW = 0;
+    int rookCountB = 0, bishopCountB = 0, knightCountB = 0, pawnCountB = 0;
+
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            fin >> titleChar;
+            if (titleChar == 'K') {
+                Piece *king = new King('W', numToAlph(j, i));
+                king->initID(0);
+                kings.push_back(king);
+            }
+            else if (titleChar == 'k') {
+                Piece *king = new King('B', numToAlph(j, i));
+                king->initID(16);
+                kings.push_back(king);
+            }
+            else if (titleChar == 'Q') {
+                Piece *queen = new Queen('W', numToAlph(j, i));
+                queen->initID(1);
+                queens.push_back(queen);
+            }     
+            else if (titleChar == 'q') {
+                Piece *queen = new Queen('B', numToAlph(j, i));
+                queen->initID(17);
+                queens.push_back(queen);
+            }
+            else if (titleChar == 'R') {
+                Piece *rook = new Rook('W', numToAlph(j, i));
+                rook->initID(2 + rookCountW);
+                ++rookCountW;
+                rooks.push_back(rook);
+            }
+            else if (titleChar == 'r') {
+                Piece *rook = new Rook('B', numToAlph(j, i));
+                rook->initID(18 + rookCountB);
+                ++rookCountB;
+                rooks.push_back(rook);
+            }
+            else if (titleChar == 'B') {
+                Piece *bishop = new Bishop('W', numToAlph(j, i));
+                bishop->initID(4 + bishopCountW);
+                ++bishopCountW;
+                bishops.push_back(bishop);
+            }
+            else if (titleChar == 'b') {
+                Piece *bishop = new Bishop('B', numToAlph(j, i));
+                bishop->initID(20 + bishopCountB);
+                ++bishopCountB;
+                bishops.push_back(bishop);
+            }
+            else if (titleChar == 'N') {
+                Piece *knight = new Knight('W', numToAlph(j, i));
+                knight->initID(6 + knightCountW);
+                ++knightCountW;
+                knights.push_back(knight);
+            }
+            else if (titleChar == 'n') {
+                Piece *knight = new Knight('B', numToAlph(j, i));
+                knight->initID(22 + knightCountB);
+                ++knightCountB;
+                knights.push_back(knight);
+            }
+            else if (titleChar == 'P') {
+                Piece *pawn = new Pawn('W' , numToAlph(j, i));
+                pawn->initID(8 + pawnCountW);
+                ++pawnCountW;
+                pawns.push_back(pawn);
+            }
+            else if (titleChar == 'p') {
+                Piece *pawn = new Pawn('B', numToAlph(j, i));
+                pawn->initID(24 + pawnCountB);
+                ++pawnCountB;
+                pawns.push_back(pawn);
+            }
+            //std::cout << titleChar << " at " << numToAlph(j,i) << "\n";
         }
     }
     Pieces.push_back(kings);

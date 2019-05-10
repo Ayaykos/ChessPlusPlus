@@ -47,9 +47,14 @@ public:
     void movePieceTest() {
         Grid GridObj;
         GridObj.init();
-        GridObj.movePieceTest("A7", "A5");
+        GridObj.movePieceTest("A7", "B3");
         GridObj.print();
 
+    }
+    void fileInputTest() {
+        Grid GridObj;
+        GridObj.init("grid.in");
+        GridObj.print();
     }
 };
 
