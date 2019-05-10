@@ -31,7 +31,8 @@ public:
     bool checkPawnPath(int p1x, int p1y, int p2x, int p2y);
     bool checkPath(int p1x, int p1y, int p2x, int p2y);
     void pawnPromote(int p1x, int p1y, int p2x, int p2y);
-    bool check(std::string kingPosition, char kingTeam);
+    bool check();
+    bool checkMate();
     void validMovePrint(int p1x, int p1y, int p2x, int p2y);
     void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
@@ -51,6 +52,8 @@ private:
     std::vector<std::vector<int>> moveHistory;
     std::vector<std::string> moveDescriptionHistory;
     int turnCount;
+    std::string whiteKingPos, blackKingPos;
+    bool whiteKingCheck, blackKingCheck;
 };
 
 
@@ -95,6 +98,8 @@ void Grid::init() {
     turnCount = 0;
     this->updateHistory();
     moveDescriptionHistory.push_back("Starting Position\n");
+    whiteKingPos = "E1", blackKingPos = "E8";
+    whiteKingCheck = false, blackKingCheck = false;
 }
 void Grid::print() {
     std::cout << "  ";
@@ -135,15 +140,32 @@ bool Grid::movePiece(std::string position1, std::string position2) {
     int y = alphToNumY(position1);
     int newx = alphToNumX(position2);
     int newy = alphToNumY(position2);
-
+    if (whiteKingCheck) {
+        if (grid[x][y]->getTeam() == 'W' && 
+            grid[x][y]->getTitleChar() != 'K') {
+            std::cout << "Must move King - in check.\n";
+            return false;
+        }
+    }
+    if (blackKingCheck) {
+        if (grid[x][y]->getTeam() == 'B' &&
+            grid[x][y]->getTitleChar() != 'K') {
+            std::cout << "Must move King - in check.\n";
+            return false;
+        }
+    }
     if (grid[x][y]->checkValidMove(newx, newy) == true) {
         //checkPath NEEDS TO BE DONE BEFORE ->MOVE CHANGES XPOS & YPOS
 
         if (this->checkPath(x, y, newx, newy) == true) {
             std::ostringstream oss;
-            oss << grid[x][y] << " moved from " << numToAlph(x, y) <<
-                " to " << numToAlph(newx, newy) << "\n";
+            oss << grid[x][y] << " moved from " << position1 <<
+                " to " << position2 << "\n";
             std::cout << oss.str();
+            if (grid[x][y]->getTitleChar() == 'K') {
+                grid[x][y]->getTeam() == 'W' ?
+                    whiteKingPos = position2 : blackKingPos = position2;
+            }
             moveDescriptionHistory.push_back(oss.str());
             grid[x][y]->move(newx, newy);
             updateGrid(x, y, newx, newy);
@@ -624,7 +646,22 @@ bool Grid::checkPath(int p1x, int p1y, int p2x, int p2y) {
     }
     if (grid[p1x][p1y]->getTitleChar() == 'K') {
         //nullptr check already done??
-        return this->checkTeamBlock(p1x, p1y, p2x, p2y);
+        if (this->checkTeamBlock(p1x, p1y, p2x, p2y)) {
+            if (grid[p1x][p1y]->getTeam() == 'W' && whiteKingCheck) {
+                if (checkHelper(grid, numToAlph(p2x, p2y), 'W')) {
+                    std::cout << "King must be moved out of check position.\n";
+                    return false;
+                }
+            }
+            if (grid[p1x][p1y]->getTeam() == 'B' && blackKingCheck) {
+                if (checkHelper(grid, numToAlph(p2x, p2y), 'B')) {
+                    std::cout << "King must be moved out of check position.\n";
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
     if (grid[p1x][p1y]->getTitleChar() == 'k') {
         //nullptr check already done??
@@ -632,23 +669,24 @@ bool Grid::checkPath(int p1x, int p1y, int p2x, int p2y) {
     }
     return true;
 }
-bool Grid::check(std::string kingPosition, char kingTeam) {
-    /*
-    if (checkHorse(grid, kingPosition, kingTeam) || 
-        checkPawn(grid, kingPosition, kingTeam) || 
-        checkRook(grid, kingPosition, kingTeam, 'R') ||
-        checkBishop(grid, kingPosition, kingTeam, 'B') ||
-        checkQueen(grid, kingPosition, kingTeam)) {
-        std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] <<
-            " in check at " << kingPosition << "\n";
-        return true;
-    }*/
-    if (checkQueen(grid, kingPosition, kingTeam)) {
-        std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] <<
-            " in check at " << kingPosition << "\n";
-        return true;
+bool Grid::check() {
+    //both kings can be in check
+    if (checkHelper(grid,whiteKingPos,'W')) {
+        std::cout << grid[alphToNumX(whiteKingPos)][alphToNumY(whiteKingPos)] 
+            << " in check at " << whiteKingPos << "\n";
     }
-    return false;
+    if (checkHelper(grid, blackKingPos, 'B')) {
+        std::cout << grid[alphToNumX(blackKingPos)][alphToNumY(blackKingPos)]
+            << " in check at " << blackKingPos << "\n";
+    }
+}
+bool Grid::checkMate() {
+    if (checkKingCheckMate(grid, whiteKingPos, 'W')) {
+        std::cout << "White King Checkmate. Black Wins!\n";
+    }
+    if (checkKingCheckMate(grid, blackKingPos, 'B')) {
+        std::cout << "Black King Checkmate. White Wins!\n";
+    }
 }
 void Grid::printCaptured() {
     if (CapturedPieces.first.empty()) {

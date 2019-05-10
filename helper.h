@@ -228,7 +228,7 @@ std::string promoteInput() {
     assert(false);
     return "error";
 }
-bool checkHorse(std::vector<std::vector<Piece*>>grid, 
+bool checkKnight(std::vector<std::vector<Piece*>>grid, 
     std::string kingLocation, char kingTeam) {
     int p1x = alphToNumX(kingLocation), p1y = alphToNumY(kingLocation);
     if (grid[p1x - 1][p1y - 2] != nullptr) {
@@ -351,8 +351,6 @@ bool checkRook(std::vector<std::vector<Piece*>>grid,
 }
 bool checkBishop(std::vector<std::vector<Piece*>>grid,
     std::string kingLocation, char kingTeam, char bishop) {
-
-    //didnt do block
     int p1x = alphToNumX(kingLocation), p1y = alphToNumY(kingLocation);
     for (int i = 1; (p1x + i < 8) && (p1y + i < 8); ++i) {
         if (grid[p1x + i][p1y + i] != nullptr) {
@@ -401,4 +399,32 @@ bool checkQueen(std::vector<std::vector<Piece*>>grid,
     return (checkRook(grid, kingLocation, kingTeam, 'Q') ||
         checkBishop(grid, kingLocation, kingTeam, 'Q'));
 }
+bool checkHelper(std::vector<std::vector<Piece*>>grid, 
+    std::string kingPosition, char kingTeam) {
+    if (checkKnight(grid, kingPosition, kingTeam) ||
+        checkPawn(grid, kingPosition, kingTeam) ||
+        checkRook(grid, kingPosition, kingTeam, 'R') ||
+        checkBishop(grid, kingPosition, kingTeam, 'B') ||
+        checkQueen(grid, kingPosition, kingTeam)) {
+        /*
+        std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] <<
+            " in check at " << kingPosition << "\n";*/
+        return true;
+    }
+    return false;
+}
+bool checkKingCheckMate(std::vector<std::vector<Piece*>>grid,
+    std::string kingPosition, char kingTeam) {
+    int x = alphToNumX(kingPosition), y = alphToNumY(kingPosition);
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            if (!checkHelper(grid, 
+                numToAlph((x - 1) + j, (y - 1) + i), kingTeam)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 #endif
