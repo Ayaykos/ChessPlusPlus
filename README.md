@@ -2,9 +2,11 @@
 
 Working on a Chess spinoff, exploring where I can take this. Will incorporate proper GUI and interactive interface.
 
+Core Chess game is currently complete excluding a draw technicality (impossible checkmate).
+
 ```
-g++ tests.cpp -o tests.exe
-./tests.exe
+g++ game.cpp -o game.exe
+./game.exe
 ```
 - game.cpp  *//main driver*
   - game.h  *//Piece classes/subclasses*
