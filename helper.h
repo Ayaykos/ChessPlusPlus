@@ -545,6 +545,16 @@ bool checkHelper(std::vector<std::vector<Piece*>>grid,
     }
     return false;
 }
+bool checkTeam(std::vector<std::vector<Piece*>>grid, int x, int y, char kingTeam) {
+    if (x > 0 && x < 8 && y > 0 && y < 8) {
+        if (grid[x][y] != nullptr) {
+            if (grid[x][y]->getTeam() == kingTeam) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 bool checkKingCheckMate(std::vector<std::vector<Piece*>>grid,
     std::string kingPosition, char kingTeam) {
     int x = alphToNumX(kingPosition), y = alphToNumY(kingPosition);
@@ -552,6 +562,10 @@ bool checkKingCheckMate(std::vector<std::vector<Piece*>>grid,
         for (int j = 0; j < 3; ++j) {
             if ((x - 1) + j > 7 || (x - 1) + j < 0 ||
                 (y - 1) + i > 7 || (y - 1) + i < 0) continue;
+            if ((x - 1) + j == x || (y - 1) + i == y) continue;
+            if (checkTeam(grid, (x - 1) + j, (y - 1) + j, kingTeam)) {
+                continue;
+            }
             if (!checkHelper(grid, 
                 numToAlph((x - 1) + j, (y - 1) + i), kingTeam)) {
                 return false;

@@ -2,6 +2,7 @@
 #define GRID_H
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include "game.h"
 #include "helper.h"
@@ -34,9 +35,11 @@ public:
     void pawnPromote(int p1x, int p1y, int p2x, int p2y);
     void check();
     bool checkMate();
+    bool gameEnded();
     void validMovePrint(int p1x, int p1y, int p2x, int p2y);
     void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
+    std::string printTurnDescription(int turn);
     //functions only for testing
     void init(std::string fileName);
     void movePieceTest(std::string position1, std::string position2);
@@ -57,6 +60,7 @@ private:
     int turnCount;
     std::string whiteKingPos, blackKingPos;
     bool whiteKingCheck, blackKingCheck;
+    bool endReached;
 };
 
 
@@ -102,7 +106,7 @@ void Grid::init() {
     this->updateHistory();
     moveDescriptionHistory.push_back("Starting Position\n");
     whiteKingPos = "E1", blackKingPos = "E8";
-    whiteKingCheck = false, blackKingCheck = false;
+    whiteKingCheck = false, blackKingCheck = false, endReached = false;
 }
 void Grid::init(std::string fileName) {
     
@@ -117,7 +121,7 @@ void Grid::init(std::string fileName) {
     turnCount = 0;
     this->updateHistory();
     moveDescriptionHistory.push_back("Starting Position\n");
-    whiteKingCheck = false, blackKingCheck = false;
+    whiteKingCheck = false, blackKingCheck = false, endReached = false;
     if (!this->checkMate()) {
         this->check();
     }
@@ -743,11 +747,17 @@ void Grid::check() {
 }
 bool Grid::checkMate() {
     if (checkKingCheckMate(grid, whiteKingPos, 'W')) {
-        std::cout << "White King Checkmate. Black Wins!\n";
+        endReached = true;
+        this->check();
+        if (whiteKingCheck) std::cout << "White King Checkmate. Black Wins!\n";
+        else std::cout << "White King Stalemate. Draw!\n";
         return true;
     }
     if (checkKingCheckMate(grid, blackKingPos, 'B')) {
-        std::cout << "Black King Checkmate. White Wins!\n";
+        endReached = true;
+        this->check();
+        if (blackKingCheck) std::cout << "Black King Checkmate. Black Wins!\n";
+        else std::cout << "Black King Stalemate. Draw!\n";
         return true;
     }
     return false;
@@ -771,6 +781,12 @@ void Grid::printCaptured() {
             std::cout << "\t-" << CapturedPieces.second[i] << "\n";
         }
     }
+}
+bool Grid::gameEnded() {
+    return endReached;
+}
+std::string Grid::printTurnDescription(int turn) {
+    return moveDescriptionHistory[turn];
 }
 Grid::~Grid() {
     deletePieces(WhitePieces);

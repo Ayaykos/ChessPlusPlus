@@ -14,6 +14,14 @@ public:
         Grid GridObj2;
         GridObj2.init("D1H8cm2.in");
         GridObj2.print();
+        Grid GridObj3;
+        GridObj3.init("E1E8cm3.in");
+        GridObj3.print();
+    }
+    void staleMate() {
+        Grid GridObj;
+        GridObj.init("E8H1sm1.in");
+        GridObj.print();
     }
 };
 class testCheckMate {
