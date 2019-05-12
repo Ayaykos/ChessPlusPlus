@@ -5,6 +5,17 @@
 #include "grid.h"
 #include <vector>
 
+class testCheckMateFile {
+public:
+    void test() {
+        Grid GridObj;
+        GridObj.init("E1E4cm1.in");
+        GridObj.print();
+        Grid GridObj2;
+        GridObj2.init("D1H8cm2.in");
+        GridObj2.print();
+    }
+};
 class testCheckMate {
 public:
     void testKnight() {

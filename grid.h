@@ -1,6 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "game.h"
 #include "helper.h"
@@ -104,15 +105,22 @@ void Grid::init() {
     whiteKingCheck = false, blackKingCheck = false;
 }
 void Grid::init(std::string fileName) {
+    
     fillPieces(fileName, WhitePieces, 'W');
-    fillPieces(fileName, BlackPieces, 'B');       
+    fillPieces(fileName,BlackPieces, 'B');      
+    whiteKingPos = char(fileName[0]);
+    whiteKingPos += char(fileName[1]);
+    blackKingPos = char(fileName[2]);
+    blackKingPos += char(fileName[3]);
     this->initGrid();
     this->fill();
     turnCount = 0;
     this->updateHistory();
     moveDescriptionHistory.push_back("Starting Position\n");
-    whiteKingPos = "E1", blackKingPos = "E8";
     whiteKingCheck = false, blackKingCheck = false;
+    if (!this->checkMate()) {
+        this->check();
+    }
 }
 void Grid::print() {
     std::cout << "  ";
@@ -184,7 +192,11 @@ bool Grid::movePiece(std::string position1, std::string position2) {
             updateGrid(x, y, newx, newy);
             updateHistory();
             ++turnCount;
-
+            if (!this->checkMate()) {
+                this->check();
+            }
+            else {
+            }
             return true;
         }
         return false;
@@ -657,6 +669,10 @@ void Grid::pawnPromote(int p1x, int p1y, int p2x, int p2y) {
     }
 }
 bool Grid::checkPath(int p1x, int p1y, int p2x, int p2y) {
+    if (p1x == p2x && p1y == p2y) {
+        std::cout << "Unmoved piece.\n";
+        return false;
+    }
     if (grid[p1x][p1y]->getTitleChar() == 'R') {
         return this->checkRookPath(p1x, p1y, p2x, p2y);
     }

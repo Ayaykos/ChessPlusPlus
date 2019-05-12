@@ -49,11 +49,11 @@ public:
         GridObj.init();
         GridObj.movePieceTest("A7", "B3");
         GridObj.print();
-
     }
     void fileInputTest() {
         Grid GridObj;
-        GridObj.init("grid.in");
+        GridObj.init("cm1.in");
+
         GridObj.print();
     }
 };

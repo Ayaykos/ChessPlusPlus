@@ -76,7 +76,13 @@ public:
         //tcm.testQueenBishop();
         //tcm.testQueenBishopBlock();
         tcm.testQueenRookBlock();
-        
+    }
+};
+class TestCheckMateFile {
+public:
+    void test() {
+        testCheckMateFile tcmf;
+        tcmf.test();
     }
 };
 class TestMisc {
@@ -99,7 +105,9 @@ int main() {
     //tg.test();
     //TestCheckMate tcm;
     //tcm.test();
-    TestMisc tm;
-    tm.test();
+    TestCheckMateFile tcmf;
+    tcmf.test();
+    //TestMisc tm;
+    //tm.test();
     return 0;
 }

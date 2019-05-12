@@ -103,7 +103,7 @@ void fillPieces(std::vector<std::vector<Piece*>> &Pieces, char team) {
     knights.clear();
     pawns.clear();
 }
-void fillPieces(std::string fileName, 
+void fillPieces(std::string fileName,
     std::vector<std::vector<Piece*>> &Pieces, char team) {
     assert(Pieces.empty());
     std::ifstream fin;
@@ -532,14 +532,15 @@ bool checkQueen(std::vector<std::vector<Piece*>>grid,
 }
 bool checkHelper(std::vector<std::vector<Piece*>>grid, 
     std::string kingPosition, char kingTeam) {
+
     if (checkKnight(grid, kingPosition, kingTeam) ||
         checkPawn(grid, kingPosition, kingTeam) ||
         checkRook(grid, kingPosition, kingTeam, 'R') ||
         checkBishop(grid, kingPosition, kingTeam, 'B') ||
         checkQueen(grid, kingPosition, kingTeam)) {
         /*
-        std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] <<
-            " in check at " << kingPosition << "\n";*/
+        std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] 
+        << " in check at " << kingPosition << "\n";*/
         return true;
     }
     return false;
@@ -549,6 +550,8 @@ bool checkKingCheckMate(std::vector<std::vector<Piece*>>grid,
     int x = alphToNumX(kingPosition), y = alphToNumY(kingPosition);
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
+            if ((x - 1) + j > 7 || (x - 1) + j < 0 ||
+                (y - 1) + i > 7 || (y - 1) + i < 0) continue;
             if (!checkHelper(grid, 
                 numToAlph((x - 1) + j, (y - 1) + i), kingTeam)) {
                 return false;
