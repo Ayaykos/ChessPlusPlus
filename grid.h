@@ -112,10 +112,10 @@ void Grid::init(std::string fileName) {
     
     fillPieces(fileName, WhitePieces, 'W');
     fillPieces(fileName,BlackPieces, 'B');      
-    whiteKingPos = char(fileName[0]);
-    whiteKingPos += char(fileName[1]);
-    blackKingPos = char(fileName[2]);
-    blackKingPos += char(fileName[3]);
+    whiteKingPos = char(fileName[11]);
+    whiteKingPos += char(fileName[12]);
+    blackKingPos = char(fileName[13]);
+    blackKingPos += char(fileName[14]);
     this->initGrid();
     this->fill();
     turnCount = 0;

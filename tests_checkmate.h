@@ -9,18 +9,18 @@ class testCheckMateFile {
 public:
     void test() {
         Grid GridObj;
-        GridObj.init("E1E4cm1.in");
+        GridObj.init("GridInputs/E1E4cm1.in");
         GridObj.print();
         Grid GridObj2;
-        GridObj2.init("D1H8cm2.in");
+        GridObj2.init("GridInputs/D1H8cm2.in");
         GridObj2.print();
         Grid GridObj3;
-        GridObj3.init("E1E8cm3.in");
+        GridObj3.init("GridInputs/E1E8cm3.in");
         GridObj3.print();
     }
     void staleMate() {
         Grid GridObj;
-        GridObj.init("E8H1sm1.in");
+        GridObj.init("GridInputs/E8H1sm1.in");
         GridObj.print();
     }
 };
