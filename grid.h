@@ -362,7 +362,7 @@ int Grid::indexHistoryID(int turn, int x, int y) {
 std::string Grid::idToStr(int value) {
     std::string converted = "";
     int tempVal = value;
-    if (value > 15) tempVal = value - 15;
+    if (value > 15) tempVal = value - 16;
     if (tempVal == 0) converted += "K";
     else if (tempVal == 1) converted += "Q";
     else if (tempVal == 2 || tempVal == 3) converted += "R";

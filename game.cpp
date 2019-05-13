@@ -209,6 +209,10 @@ bool checkValidInput(Grid &grid, string position, bool &cancelled) {
         cancelled = true;
         return false;
     }
+    if (position.size() != 2) {
+        cout << "Invalid input.\n\n";
+        return false;
+    }
     if (toupper(position[0]) < 'A' ||
         toupper(position[0]) > 'H' || 
         position[1] < '1' || position[1] > '8') {
