@@ -19,12 +19,12 @@ public:
     bool movePiece(std::string position1, std::string position2);
     void updateGrid(int p1x, int p1y, int p2x, int p2y);
     void restoreGrid();
-    int getTurnCount();
+    int getMoveCount();
     void basicTakeOver(int p2x, int p2y);
     void updateHistory();
-    int indexHistoryID(int turn, int x, int y);
+    int indexHistoryID(int moveNum, int x, int y);
     std::string idToStr(int value);
-    void printTurn(int turn);
+    void printMove(int moveNum);
     void printTurnHistory(int startTurn);
     bool checkTeamBlock(int p1x, int p1y, int p2x, int p2y);
     bool checkRookPath(int p1x, int p1y, int p2x, int p2y);
@@ -40,7 +40,7 @@ public:
     void validMovePrint(int p1x, int p1y, int p2x, int p2y);
     void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
-    std::string printTurnDescription(int turn);
+    std::string printMoveDescription(int moveNum);
     //functions only for testing
     void init(std::string fileName);
     void movePieceTest(std::string position1, std::string position2);
@@ -58,7 +58,7 @@ private:
         std::vector<Piece*>> PromotedPieces;
     std::vector<std::vector<int>> moveHistory;
     std::vector<std::string> moveDescriptionHistory;
-    int turnCount;
+    int moveCount;
     std::string whiteKingPos, blackKingPos;
     bool whiteKingCheck, blackKingCheck;
     bool endReached;
@@ -104,7 +104,7 @@ void Grid::init() {
     this->initPieces();
     this->initGrid();
     this->fill();
-    turnCount = 0;
+    moveCount = 0;
     this->updateHistory();
     moveDescriptionHistory.push_back("Starting Position\n");
     whiteKingPos = "E1", blackKingPos = "E8";
@@ -121,7 +121,7 @@ void Grid::init(std::string fileName) {
     blackKingPos += char(fileName[14]);
     this->initGrid();
     this->fill();
-    turnCount = 0;
+    moveCount = 0;
     this->updateHistory();
     moveDescriptionHistory.push_back("Starting Position\n");
     whiteKingCheck = false, blackKingCheck = false, endReached = false;
@@ -199,7 +199,7 @@ bool Grid::movePiece(std::string position1, std::string position2) {
             grid[x][y]->move(newx, newy);
             updateGrid(x, y, newx, newy);
             updateHistory();
-            ++turnCount;
+            ++moveCount;
             if (!this->checkMate()) {
                 this->check();
             }
@@ -310,8 +310,8 @@ void Grid::restoreGrid() {
     }
     this->fill();
 }
-int Grid::getTurnCount() {
-    return turnCount;
+int Grid::getMoveCount() {
+    return moveCount;
 }
 //function only for testing
 void Grid::removePiece(std::string position) {
@@ -355,9 +355,9 @@ void Grid::updateHistory() {
     }
     moveHistory.push_back(newturn);
 }
-int Grid::indexHistoryID(int turn, int x, int y) {
-    assert(int(moveHistory.size()) >= turn + 1);
-    return moveHistory[turn][(8 * y) + x];
+int Grid::indexHistoryID(int moveNum, int x, int y) {
+    assert(int(moveHistory.size()) >= moveNum + 1);
+    return moveHistory[moveNum][(8 * y) + x];
 }
 std::string Grid::idToStr(int value) {
     std::string converted = "";
@@ -373,15 +373,12 @@ std::string Grid::idToStr(int value) {
     if (value > 15) converted += '.';
     else converted += "_";
     return converted;
-    //std::cout << "correct: " << grid[x][y] << "\n";
-    //std::cout << "answer: " << moveHistory[turn][(8 * y) + x] << "\n";
-    //if (value;
 }
-void Grid::printTurn(int turn) {
+void Grid::printMove(int moveNum) {
 
     int val;
-    std::cout << "Turn " << turn << ": " 
-        << moveDescriptionHistory[turn] << "  ";
+    std::cout << "Move " << moveNum << ": "
+        << moveDescriptionHistory[moveNum] << "  ";
     for (size_t i = 0; i < grid.size(); ++i) {
         std::cout << "__" << char(i + 65) << "_";
     }
@@ -390,7 +387,7 @@ void Grid::printTurn(int turn) {
         std::cout << 8 - i << " ";
         for (size_t j = 0; j < grid.size(); ++j) {
             //std::cout << "|__";
-            val = indexHistoryID(turn, j, i);
+            val = indexHistoryID(moveNum, j, i);
             if (val != -1) {
                 std::cout << "|_"<< idToStr(val);
             }
@@ -405,8 +402,8 @@ void Grid::printTurn(int turn) {
     std::cout << "\n";
 }
 void Grid::printTurnHistory(int startTurn) {
-    for (int i = startTurn; i <= turnCount; ++i) {
-        this->printTurn(i);
+    for (int i = startTurn; i <= moveCount; ++i) {
+        this->printMove(i);
     }
 }
 bool Grid::checkTeamBlock(int p1x, int p1y, int p2x, int p2y) {
@@ -568,7 +565,7 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
                             << "\n\t//En Passant invalid - Enemy pawn moved more than once.\n";
                         return false;
                     }
-                    if (indexHistoryID(turnCount - 1, p2x, p1y) 
+                    if (indexHistoryID(moveCount - 1, p2x, p1y) 
                         == grid[p2x][p1y]->getID()) {
                         //turn was not immediate move
                         std::cout << "Invalid move: " << grid[p1x][p1y]->getFullTeam()
@@ -800,8 +797,8 @@ void Grid::printCaptured() {
 }
 bool Grid::gameEnded() { return endReached; }
 int Grid::getWinner() { return winner;  }
-std::string Grid::printTurnDescription(int turn) {
-    return moveDescriptionHistory[turn];
+std::string Grid::printMoveDescription(int moveNum) {
+    return moveDescriptionHistory[moveNum];
 }
 Grid::~Grid() {
     deletePieces(WhitePieces);

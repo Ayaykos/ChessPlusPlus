@@ -47,7 +47,6 @@ void mainCycle(bool &play, string p1_name, string p2_name) {
     int turn = 0;
     bool gameEnded = false, drawReached = false;
     grid.print();
-    //bool drawFail = false;
 
     while (!gameEnded) {
 
@@ -57,7 +56,7 @@ void mainCycle(bool &play, string p1_name, string p2_name) {
             gameEnded = true;
             continue;
         }
-        ++turn;
+        //++turn;
         gameEnded = grid.gameEnded();
         if (gameEnded) {
             printResult(grid, p1_name, p2_name);
@@ -73,14 +72,14 @@ void mainCycle(bool &play, string p1_name, string p2_name) {
             gameEnded = true;
             continue;
         }
-        ++turn;
+        //++turn;
         gameEnded = grid.gameEnded();
         if (gameEnded) {
             printResult(grid, p1_name, p2_name);
             continue;
         }
         grid.print();
-        //++turn;
+        ++turn;
     }
     int option = 0;
     while (option != 3 && option != 4) {

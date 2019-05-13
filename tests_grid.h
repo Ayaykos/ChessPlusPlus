@@ -34,7 +34,7 @@ public:
         GridObj.movePiece("A6", "A5");
         GridObj.printTurnHistory(0);
 
-        if (GridObj.indexHistoryID(GridObj.getTurnCount() - 1, 0, 0)
+        if (GridObj.indexHistoryID(GridObj.getMoveCount() - 1, 0, 0)
             == GridObj[numToAlph(0, 0)]->getID()) {
             std::cout << "success\n";
         }
