@@ -10,31 +10,40 @@ bool checkValidInput(Grid &grid, string position, bool &cancelled);
 void printResult(Grid &grid, string p1_name, string p2_name);
 void helpOptions(Grid &grid);
 bool playerMove(Grid &grid, string other_name, bool &drawReached, char team);
+void mainCycle(bool &play, string p1_name, string p2_name);
 class gameDraw {};
 class cancelMove {};
 
 int main() {
 
-    Grid grid;
-    grid.init();
-    string p1_name, p2_name;
-    int turn = 0;
-    bool gameEnded = false, drawReached = false;
-    
+    bool play = true;
     cout << "Welcome to ChessPlusPlus!\n";
     cout << "Type 'help' at anytime for assistance.\n\n";
+    string p1_name, p2_name;
     cout << "Player 1's name (White): ";
-    cin >> p1_name;
+    getline(cin, p1_name);
     cout << "Player 2's name (Black): ";
-    cin >> p2_name;
+    getline(cin, p2_name);
     cout << "\n";
+
+    while (play) {
+        mainCycle(play, p1_name,p2_name);
+    }
+
+    return 0;
+}
+void mainCycle(bool &play, string p1_name, string p2_name) {
+    Grid grid;
+    grid.init();
+    int turn = 0;
+    bool gameEnded = false, drawReached = false;
     grid.print();
     //bool drawFail = false;
 
     while (!gameEnded) {
 
-        cout << p1_name << "'s turn.\n";
-        while(!playerMove(grid, p2_name, drawReached, 'W')){}
+        cout << p1_name << "'s turn. (Turn " << turn + 1 << ")\n";
+        while (!playerMove(grid, p2_name, drawReached, 'W')) {}
         if (drawReached) {
             gameEnded = true;
             continue;
@@ -48,9 +57,9 @@ int main() {
         grid.print();
 
         /////////////////////////////////////////////////////////////
-        
-        cout << "\n" << p2_name << "'s turn.\n";
-        while (!playerMove(grid, p1_name, drawReached, 'B')) {}    
+
+        cout << "\n" << p2_name << "'s turn. (Turn " << turn + 1 << ")\n";
+        while (!playerMove(grid, p1_name, drawReached, 'B')) {}
         if (drawReached) {
             gameEnded = true;
             continue;
@@ -63,9 +72,31 @@ int main() {
         }
         grid.print();
     }
-
-    
-    return 0;
+    int option = 0;
+    while (option != 3 && option != 4) {
+        while (option < 1 || option > 4) {
+            cout << "\nMenu:\n";
+            cout << "1: Print move history\n";
+            cout << "2: Print captured pieces\n";
+            cout << "3: Play again\n";
+            cout << "4: Quit\n";
+            cin >> option;
+        }
+        if (option == 1) {
+            grid.printTurnHistory(0);
+            option = 0;
+        }
+        else if (option == 2) {
+            grid.printCaptured();
+            option = 0;
+            cout << "\n";
+        }
+        else if (option == 3) break;
+        else {
+            cout << "\nThanks for playing!\n";
+            play = false;
+        }
+    }
 }
 
 bool playerMove(Grid &grid, string other_name, bool &drawReached, char team) {
@@ -152,12 +183,13 @@ void helpOptions(Grid &grid) {
     int option = 0;
     while (option < 1 || option > 5) {
         cout << "\nOptions:\n";
-        cout << "1: Cancel move (can also type cancel anytime)\n";
+        cout << "1: Cancel move (can also type cancel during gameplay)\n";
         cout << "2: Print move history\n";
         cout << "3: Print captured pieces\n4: Draw game\n";
         cout << "5: Return to game\n";
         cin >> option;
     }
+    cout << "\n";
     if (option == 1) throw cancelMove();
     else if (option == 2) grid.printTurnHistory(0);
     else if (option == 3) {
