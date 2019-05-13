@@ -17,16 +17,25 @@ class cancelMove {};
 int main() {
 
     bool play = true;
-    cout << "Welcome to ChessPlusPlus!\n";
-    cout << "Type 'help' at anytime for assistance.\n\n";
+    cout << "Welcome to ChessPlusPlus!\n\n";
     string p1_name, p2_name;
+    
     cout << "Player 1's name (White): ";
     getline(cin, p1_name);
     cout << "Player 2's name (Black): ";
     getline(cin, p2_name);
+    while (p2_name == p1_name) {
+        cout << "Names must be different.\n";
+        cout << "Player 1's name (White): ";
+        getline(cin, p1_name);
+        cout << "Player 2's name (Black): ";
+        getline(cin, p2_name);
+    }
     cout << "\n";
 
     while (play) {
+        cout << "Game started! Enter alphanumerical positions (\"A1\").\n";
+        cout << "Type 'help' at anytime for assistance.\n\n";
         mainCycle(play, p1_name,p2_name);
     }
 
@@ -71,6 +80,7 @@ void mainCycle(bool &play, string p1_name, string p2_name) {
             continue;
         }
         grid.print();
+        //++turn;
     }
     int option = 0;
     while (option != 3 && option != 4) {
