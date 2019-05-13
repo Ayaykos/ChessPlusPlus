@@ -82,10 +82,10 @@ public:
                 << "\n";
             return false;
         }
-        std::cout << "Valid move: " << this->getFullTeam()
+        /*std::cout << "Valid move: " << this->getFullTeam()
             << " King from " << numToAlph(xpos, ypos) <<
             " to " << numToAlph(newxpos, newypos)
-            << "\n";
+            << "\n";*/
         return true;
     }
 };
@@ -113,10 +113,10 @@ public:
                 << "\n";
             return false;
         }
-        std::cout << "Valid move: " << this->getFullTeam()
+        /*std::cout << "Valid move: " << this->getFullTeam()
             << " Queen from " << numToAlph(xpos, ypos) <<
             " to " << numToAlph(newxpos, newypos)
-            << "\n";
+            << "\n";*/
         return true;
     }
 };
@@ -144,10 +144,10 @@ public:
             return false;
         }
         
-        std::cout << "Valid move: " << this->getFullTeam()
+        /*std::cout << "Valid move: " << this->getFullTeam()
             << " Rook from " << numToAlph(xpos,ypos) << 
             " to " << numToAlph(newxpos, newypos)
-            << "\n";
+            << "\n";*/
 
         return true;
     }
@@ -174,10 +174,10 @@ public:
                 << "\n";
             return false;
         }
-        std::cout << "Valid move: " << this->getFullTeam()
+        /*std::cout << "Valid move: " << this->getFullTeam()
             << " Bishop from " << numToAlph(xpos, ypos) <<
             " to " << numToAlph(newxpos, newypos)
-            << "\n";
+            << "\n";*/
         return true;
     }
 };
@@ -199,10 +199,10 @@ public:
 
         if ((abs(newxpos - xpos) == 2 && abs(newypos - ypos) == 1) ||
             (abs(newxpos - xpos) == 1 && abs(newypos - ypos) == 2)) {
-            std::cout << "Valid move: " << this->getFullTeam()
+            /*std::cout << "Valid move: " << this->getFullTeam()
                 << " Knight from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos, newypos)
-                << "\n";
+                << "\n";*/
             return true;
         }
         std::cout << "Invalid move: " << this->getFullTeam()

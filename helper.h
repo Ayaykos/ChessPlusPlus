@@ -540,7 +540,7 @@ bool checkHelper(std::vector<std::vector<Piece*>>grid,
         checkQueen(grid, kingPosition, kingTeam)) {
         /*
         std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] 
-        << " in check at " << kingPosition << "\n";*/
+        << " in Check at " << kingPosition << "\n";*/
         return true;
     }
     return false;

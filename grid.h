@@ -36,6 +36,7 @@ public:
     void check();
     bool checkMate();
     bool gameEnded();
+    int getWinner();
     void validMovePrint(int p1x, int p1y, int p2x, int p2y);
     void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
@@ -61,6 +62,7 @@ private:
     std::string whiteKingPos, blackKingPos;
     bool whiteKingCheck, blackKingCheck;
     bool endReached;
+    int winner;
 };
 
 
@@ -107,6 +109,7 @@ void Grid::init() {
     moveDescriptionHistory.push_back("Starting Position\n");
     whiteKingPos = "E1", blackKingPos = "E8";
     whiteKingCheck = false, blackKingCheck = false, endReached = false;
+    winner = 0;
 }
 void Grid::init(std::string fileName) {
     
@@ -125,6 +128,7 @@ void Grid::init(std::string fileName) {
     if (!this->checkMate()) {
         this->check();
     }
+    winner = 0;
 }
 void Grid::print() {
     std::cout << "  ";
@@ -168,14 +172,14 @@ bool Grid::movePiece(std::string position1, std::string position2) {
     if (whiteKingCheck) {
         if (grid[x][y]->getTeam() == 'W' && 
             grid[x][y]->getTitleChar() != 'K') {
-            std::cout << "Must move King - in check.\n";
+            std::cout << "Must move King - in Check.\n";
             return false;
         }
     }
     if (blackKingCheck) {
         if (grid[x][y]->getTeam() == 'B' &&
             grid[x][y]->getTitleChar() != 'K') {
-            std::cout << "Must move King - in check.\n";
+            std::cout << "Must move King - in Check.\n";
             return false;
         }
     }
@@ -599,10 +603,10 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
         }
         //2nd piece is enemy, successful regular overtake
         else {
-            std::cout << "Valid move: " << grid[p1x][p1y]->getFullTeam()
+            /*std::cout << "Valid move: " << grid[p1x][p1y]->getFullTeam()
                 << " Pawn from " << numToAlph(p1x, p1y) <<
                 " to " << numToAlph(p2x, p2y)
-                << "\n";
+                << "\n";*/
             std::cout << grid[p1x][p1y] << " overtook " <<
                 grid[p2x][p2y] << " at " << numToAlph(p2x, p2y) << std::endl;
             basicTakeOver(p2x, p2y);
@@ -625,10 +629,11 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
             return false;
         }
     }
+    /*
     std::string output = "Valid move: " + grid[p1x][p1y]->getFullTeam()
         + " Pawn from " + numToAlph(p1x, p1y) +
         " to " + numToAlph(p2x, p2y) + "\n";
-    std::cout << output;
+    std::cout << output;*/
     return true;
 }
 void Grid::pawnPromote(int p1x, int p1y, int p2x, int p2y) {
@@ -723,11 +728,11 @@ bool Grid::checkPath(int p1x, int p1y, int p2x, int p2y) {
     return true;
 }
 void Grid::check() {
-    //both kings can be in check
+    //both kings can be in Check
     if (checkHelper(grid,whiteKingPos,'W')) {
         whiteKingCheck = true;
         std::cout << grid[alphToNumX(whiteKingPos)][alphToNumY(whiteKingPos)] 
-            << " in check at " << whiteKingPos << "\n";
+            << " in Check at " << whiteKingPos << "\n";
     }
     else {
         if (whiteKingCheck) {
@@ -737,7 +742,7 @@ void Grid::check() {
     if (checkHelper(grid, blackKingPos, 'B')) {
         blackKingCheck = true;
         std::cout << grid[alphToNumX(blackKingPos)][alphToNumY(blackKingPos)]
-            << " in check at " << blackKingPos << "\n";
+            << " in Check at " << blackKingPos << "\n";
     }
     else {
         if (blackKingCheck) {
@@ -749,42 +754,52 @@ bool Grid::checkMate() {
     if (checkKingCheckMate(grid, whiteKingPos, 'W')) {
         endReached = true;
         this->check();
-        if (whiteKingCheck) std::cout << "White King Checkmate. Black Wins!\n";
-        else std::cout << "White King Stalemate. Draw!\n";
+        if (whiteKingCheck) {
+            //std::cout << "White King Checkmate.";
+            winner = 1;
+        }
+        else {
+            winner = 3;
+            //std::cout << "White King Stalemate. Draw!\n";
+        }
         return true;
     }
     if (checkKingCheckMate(grid, blackKingPos, 'B')) {
         endReached = true;
         this->check();
-        if (blackKingCheck) std::cout << "Black King Checkmate. Black Wins!\n";
-        else std::cout << "Black King Stalemate. Draw!\n";
+        if (blackKingCheck) {
+            //std::cout << "Black King Checkmate.";
+            winner = 2;
+        }
+        else {
+            winner = 4;
+        } //std::cout << "Black King Stalemate. Draw!\n";
         return true;
     }
     return false;
 }
 void Grid::printCaptured() {
     if (CapturedPieces.first.empty()) {
-        std::cout << "\t" << "Captured White: None.\n";
+        std::cout << "Captured by Black: None.\n";
     }
     else {
-        std::cout << "\t" << "Captured White:\n";
+        std::cout << "Captured by Black:\n";
         for (size_t i = 0; i < CapturedPieces.first.size(); ++i) {
-            std::cout << "\t-" << CapturedPieces.first[i] << "\n";
+            std::cout << "\t" << CapturedPieces.first[i] << "\n";
         }
     }
     if (CapturedPieces.second.empty()) {
-        std::cout << "\t" << "Captured Black: None.\n";
+        std::cout << "Captured by White: None.\n";
     }
     else {
-        std::cout << "\t" << "Captured Black:\n";
+        std::cout << "Captured by White:\n";
         for (size_t i = 0; i < CapturedPieces.second.size(); ++i) {
-            std::cout << "\t-" << CapturedPieces.second[i] << "\n";
+            std::cout << "\t" << CapturedPieces.second[i] << "\n";
         }
     }
 }
-bool Grid::gameEnded() {
-    return endReached;
-}
+bool Grid::gameEnded() { return endReached; }
+int Grid::getWinner() { return winner;  }
 std::string Grid::printTurnDescription(int turn) {
     return moveDescriptionHistory[turn];
 }
