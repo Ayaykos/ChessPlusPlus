@@ -18,8 +18,7 @@ int main() {
 
     bool play = true;
     cout << "Welcome to ChessPlusPlus!\n\n";
-    string p1_name, p2_name;
-    
+    string p1_name, p2_name, garbage;
     cout << "Player 1's name (White): ";
     getline(cin, p1_name);
     cout << "Player 2's name (Black): ";
@@ -30,12 +29,14 @@ int main() {
         getline(cin, p1_name);
         cout << "Player 2's name (Black): ";
         getline(cin, p2_name);
+        cout << "\n";
     }
-    cout << "\n";
-
     while (play) {
-        cout << "Game started! Enter alphanumerical positions (\"A1\").\n";
+        cout << "Enter alphanumerical positions (\"A1\").\n";
         cout << "Type 'help' at anytime for assistance.\n\n";
+        cout << "ENTER to start game.";
+        getline(cin,garbage);
+        cout << "\n";
         mainCycle(play, p1_name,p2_name);
     }
 
