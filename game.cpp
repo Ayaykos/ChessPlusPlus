@@ -157,8 +157,8 @@ void inputMove(Grid &grid, string &position_1, string &position_2, char team) {
             cout << "Move " << grid[position_1]->getTitle() << " to? ";
             cin >> position_2;
         }
-        
     }
+    cout << "\n";
 
 }
 bool checkMove(Grid &grid, string &position_1, char team){
