@@ -17,26 +17,38 @@ class cancelMove {};
 int main() {
 
     bool play = true;
-    cout << "Welcome to ChessPlusPlus!\n\n";
+    std::cout << "Welcome to ChessPlusPlus!\n\n";
     string p1_name, p2_name, garbage;
-    cout << "Player 1's name (White): ";
-    getline(cin, p1_name);
-    cout << "Player 2's name (Black): ";
-    getline(cin, p2_name);
-    while (p2_name == p1_name) {
-        cout << "Names must be different.\n";
-        cout << "Player 1's name (White): ";
-        getline(cin, p1_name);
-        cout << "Player 2's name (Black): ";
-        getline(cin, p2_name);
-        cout << "\n";
+
+    bool nameSuccess = false;
+    while (!nameSuccess) {
+        std::cout << "Player 1's name (White): ";
+        getline(std::cin, p1_name);
+        if (p1_name == "") {
+            std::cout << "Name must be at least 1 character.\n";
+            continue;
+        }
+        while (p2_name == "" || p1_name == p2_name){
+            std::cout << "Player 2's name (Black): ";
+            getline(std::cin, p2_name);
+            if (p2_name == "") {
+                std::cout << "Name must be at least 1 character.\n";
+                continue;
+            }
+            if (p1_name == p2_name) {
+                std::cout << "Names must be different.\n";
+                continue;
+            }
+        }
+        std::cout << "\n";
+        nameSuccess = true;
     }
     while (play) {
-        cout << "Enter alphanumerical positions (\"A1\").\n";
-        cout << "Type 'help' at anytime for assistance.\n\n";
-        cout << "ENTER to start game.";
-        getline(cin,garbage);
-        cout << "\n";
+        std::cout << "\nEnter alphanumerical positions (\"A1\").\n";
+        std::cout << "Type 'help' at anytime during gameplay for assistance.\n\n";
+        std::cout << "ENTER to start game.";
+        getline(std::cin,garbage);
+        std::cout << "\n";
         mainCycle(play, p1_name,p2_name);
     }
 
@@ -51,7 +63,7 @@ void mainCycle(bool &play, string p1_name, string p2_name) {
 
     while (!gameEnded) {
 
-        cout << p1_name << "'s turn. (Turn " << turn + 1 << ")\n";
+        std::cout << p1_name << "'s turn. (Turn " << turn + 1 << ")\n";
         while (!playerMove(grid, p2_name, drawReached, 'W')) {}
         if (drawReached) {
             gameEnded = true;
@@ -67,7 +79,7 @@ void mainCycle(bool &play, string p1_name, string p2_name) {
 
         /////////////////////////////////////////////////////////////
 
-        cout << "\n" << p2_name << "'s turn. (Turn " << turn + 1 << ")\n";
+        std::cout << "\n" << p2_name << "'s turn. (Turn " << turn + 1 << ")\n";
         while (!playerMove(grid, p1_name, drawReached, 'B')) {}
         if (drawReached) {
             gameEnded = true;
@@ -85,12 +97,12 @@ void mainCycle(bool &play, string p1_name, string p2_name) {
     int option = 0;
     while (option != 3 && option != 4) {
         while (option < 1 || option > 4) {
-            cout << "\nMenu:\n";
-            cout << "1: Print move history\n";
-            cout << "2: Print captured pieces\n";
-            cout << "3: Play again\n";
-            cout << "4: Quit\n";
-            cin >> option;
+            std::cout << "\nMenu:\n";
+            std::cout << "1: Print move history\n";
+            std::cout << "2: Print captured pieces\n";
+            std::cout << "3: Play again\n";
+            std::cout << "4: Quit\n";
+            std::cin >> option;
         }
         if (option == 1) {
             grid.printTurnHistory(0);
@@ -99,11 +111,11 @@ void mainCycle(bool &play, string p1_name, string p2_name) {
         else if (option == 2) {
             grid.printCaptured();
             option = 0;
-            cout << "\n";
+            std::cout << "\n";
         }
         else if (option == 3) break;
         else {
-            cout << "\nThanks for playing!\n";
+            std::cout << "\nThanks for playing!\n";
             play = false;
         }
     }
@@ -114,21 +126,21 @@ bool playerMove(Grid &grid, string other_name, bool &drawReached, char team) {
     try {
         inputMove(grid, position_1, position_2, team);
         while (!grid.movePiece(position_1, position_2)) {
-            cout << "\n";
+            std::cout << "\n";
             inputMove(grid, position_1, position_2, team);
         }
     }
     catch (gameDraw) {
         char response;
-        cout << other_name << ", confirm draw game?(y/n) ";
-        cin >> response;
+        std::cout << other_name << ", confirm draw game?(y/n) ";
+        std::cin >> response;
         if (toupper(response) == 'Y') {
-            cout << "Game Draw!\n";
+            std::cout << "Game Draw!\n";
             drawReached = true;
             return true;
         }
         else {
-            cout << "Oops! Game continues.\n\n";
+            std::cout << "Oops! Game continues.\n\n";
             return false;
         }
     }
@@ -139,13 +151,13 @@ bool playerMove(Grid &grid, string other_name, bool &drawReached, char team) {
 }
 
 void printResult(Grid &grid, string p1_name, string p2_name) {
-    if (grid.getWinner() == 1) cout << "\nWhite King Checkmate. "
+    if (grid.getWinner() == 1) std::cout << "\nWhite King Checkmate. "
         << p2_name << " wins!\n";
-    else if (grid.getWinner() == 2) cout << "\nBlack King Checkmate. "
+    else if (grid.getWinner() == 2) std::cout << "\nBlack King Checkmate. "
         << p1_name << " wins!\n";
-    else if (grid.getWinner() == 3) cout <<
+    else if (grid.getWinner() == 3) std::cout <<
         "\nWhite King Stalemate. Draw!\n";
-    else if (grid.getWinner() == 4) cout <<
+    else if (grid.getWinner() == 4) std::cout <<
         "\nBlack King Stalemate. Draw!\n";
     grid.print();
 }
@@ -153,60 +165,61 @@ void inputMove(Grid &grid, string &position_1, string &position_2, char team) {
     bool cancelled = true;
     while (cancelled) {
         cancelled = false;
-        cout << "Move which piece? ";
-        cin >> position_1;
+        std::cout << "Move which piece? ";
+        std::cin >> position_1;
         while (!checkMove(grid, position_1, team)) {
-            cout << "Move which piece? ";
-            cin >> position_1;
+            std::cout << "Move which piece? ";
+            std::cin >> position_1;
         }
-        cout << "Move " << grid[position_1]->getTitle() << " to? ";
-        cin >> position_2;
+        std::cout << "Move " << grid[position_1]->getTitle() << " to? ";
+        std::cin >> position_2;
 
         while (!checkValidInput(grid, position_2, cancelled)) {
             if (cancelled == true) break;
-            cout << "Move " << grid[position_1]->getTitle() << " to? ";
-            cin >> position_2;
+            std::cout << "Move " << grid[position_1]->getTitle() << " to? ";
+            std::cin >> position_2;
         }
     }
-    cout << "\n";
+    std::cout << "\n";
 
 }
 bool checkMove(Grid &grid, string &position_1, char team){
     bool cancelled = false;
     while (!checkValidInput(grid, position_1, cancelled)) {
-        cout << "Move which piece? ";
-        cin >> position_1;
+        std::cout << "Move which piece? ";
+        std::cin >> position_1;
     }
     if (grid[position_1] == nullptr) {
-        cout << "No piece exists at specified position.\n\n";
+        std::cout << "No piece exists at specified position.\n\n";
         return false;
     }
     if (grid[position_1]->getTeam() != team) {
-        cout << "Choose a ";
-        team == 'W' ? cout << "White" : cout << "Black";
-        cout << " piece.\n\n";
+        std::cout << "Choose a ";
+        team == 'W' ? std::cout << "White" : std::cout << "Black";
+        std::cout << " piece.\n\n";
         return false;
     }
     return true;
 }
 void helpOptions(Grid &grid) {
-    int option = 0;
-    while (option < 1 || option > 5) {
-        cout << "\nOptions:\n";
-        cout << "1: Cancel move (can also type cancel during gameplay)\n";
-        cout << "2: Print move history\n";
-        cout << "3: Print captured pieces\n4: Draw game\n";
-        cout << "5: Return to game\n";
-        cin >> option;
+    std::string option = "0";
+    while (option[0] < '1' || option[0] > '5') {
+        std::cout << "\nOptions:\n";
+        std::cout << "1: Cancel move (can also type cancel during gameplay)\n";
+        std::cout << "2: Print move history\n";
+        std::cout << "3: Print captured pieces\n4: Draw game\n";
+        std::cout << "5: Return to game\n";
+        std::cin >> option;
+        if (option.size() > 1) option = '0';
     }
-    cout << "\n";
-    if (option == 1) throw cancelMove();
-    else if (option == 2) grid.printTurnHistory(0);
-    else if (option == 3) {
+    std::cout << "\n";
+    if (option == "1") throw cancelMove();
+    else if (option == "2") grid.printTurnHistory(0);
+    else if (option == "3") {
         grid.printCaptured();
-        cout << "\n";
+        std::cout << "\n";
     }
-    else if (option == 4) throw gameDraw();
+    else if (option == "4") throw gameDraw();
 }
 bool checkValidInput(Grid &grid, string position, bool &cancelled) {
     string temp = position;
@@ -220,13 +233,13 @@ bool checkValidInput(Grid &grid, string position, bool &cancelled) {
         return false;
     }
     if (position.size() != 2) {
-        cout << "Invalid input.\n\n";
+        std::cout << "Invalid input.\n\n";
         return false;
     }
     if (toupper(position[0]) < 'A' ||
         toupper(position[0]) > 'H' || 
         position[1] < '1' || position[1] > '8') {
-        cout << "Invalid input.\n\n";
+        std::cout << "Invalid input.\n\n";
         return false;
     }
     return true;
