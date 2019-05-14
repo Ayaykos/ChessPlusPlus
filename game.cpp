@@ -94,26 +94,28 @@ void mainCycle(bool &play, string p1_name, string p2_name) {
         grid.print();
         ++turn;
     }
-    int option = 0;
-    while (option != 3 && option != 4) {
-        while (option < 1 || option > 4) {
+    string option = "0";
+    while (option[0] != '3' && option[0] != '4') {
+        while (option[0] < '1' || option[0] > '4') {
             std::cout << "\nMenu:\n";
             std::cout << "1: Print move history\n";
             std::cout << "2: Print captured pieces\n";
             std::cout << "3: Play again\n";
             std::cout << "4: Quit\n";
             std::cin >> option;
+            if (option.size() > 1) option = "0";
+            
         }
-        if (option == 1) {
+        if (option[0] == '1') {
             grid.printTurnHistory(0);
-            option = 0;
+            option = "0";
         }
-        else if (option == 2) {
+        else if (option[0] == '2') {
             grid.printCaptured();
-            option = 0;
+            option = "0";
             std::cout << "\n";
         }
-        else if (option == 3) break;
+        else if (option[0] == '3') break;
         else {
             std::cout << "\nThanks for playing!\n";
             play = false;

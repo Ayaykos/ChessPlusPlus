@@ -76,7 +76,7 @@ public:
     }
     bool checkValidMove(int newxpos, int newypos) override {
         if(abs(newxpos - xpos) > 1 || abs(newypos - ypos) > 1) {
-            std::cout << "Invalid move: " << this->getFullTeam() 
+            std::cout << "\tInvalid move: " << this->getFullTeam() 
                 << " King from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos,newypos)
                 << "\n";
@@ -107,7 +107,7 @@ public:
     bool checkValidMove(int newxpos, int newypos) override {
         if ((abs(newxpos - xpos) > 0 && abs(newypos - ypos) > 0) &&
             (abs(newxpos - xpos) != abs(newypos - ypos))) {
-            std::cout << "Invalid move: " << this->getFullTeam()
+            std::cout << "\tInvalid move: " << this->getFullTeam()
                 << " Queen from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos, newypos)
                 << "\n";
@@ -137,7 +137,7 @@ public:
     bool checkValidMove(int newxpos, int newypos) override {
 
         if (abs(newxpos - xpos) > 0 && abs(newypos - ypos) > 0) {
-            std::cout << "Invalid move: " << this->getFullTeam()
+            std::cout << "\tInvalid move: " << this->getFullTeam()
                 << " Rook from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos, newypos)
                 << "\n";
@@ -168,7 +168,7 @@ public:
     }
     bool checkValidMove(int newxpos, int newypos) override {
         if (abs(newxpos - xpos) != abs(newypos - ypos)) {
-            std::cout << "Invalid move: " << this->getFullTeam()
+            std::cout << "\tInvalid move: " << this->getFullTeam()
                 << " Bishop from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos, newypos)
                 << "\n";
@@ -205,7 +205,7 @@ public:
                 << "\n";*/
             return true;
         }
-        std::cout << "Invalid move: " << this->getFullTeam()
+        std::cout << "\tInvalid move: " << this->getFullTeam()
             << " Knight from " << numToAlph(xpos, ypos) <<
             " to " << numToAlph(newxpos, newypos)
             << "\n";
@@ -229,7 +229,7 @@ public:
     bool checkValidMove(int newxpos, int newypos) override {
         if ((team == 'W' && newypos > ypos) ||
             (team == 'B' && ypos > newypos)) {
-            std::cout << "Invalid move: " << this->getFullTeam()
+            std::cout << "\tInvalid move: " << this->getFullTeam()
                 << " Pawn from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos, newypos)
                 << "\n";
@@ -238,7 +238,7 @@ public:
         if (newxpos != xpos) {
             if ((abs(newxpos - xpos) > 1) || abs(newypos - ypos) > 1 || 
                 (newypos == ypos)) {
-                std::cout << "Invalid move: " << this->getFullTeam()
+                std::cout << "\tInvalid move: " << this->getFullTeam()
                     << " Pawn from " << numToAlph(xpos, ypos) <<
                     " to " << numToAlph(newxpos, newypos)
                     << "\n";
@@ -247,7 +247,7 @@ public:
         }
         if ((moveCount == 0 && abs(newypos - ypos) > 2) || 
             (moveCount != 0 && abs(newypos - ypos) > 1)) {
-            std::cout << "Invalid move: " << this->getFullTeam()
+            std::cout << "\tInvalid move: " << this->getFullTeam()
                 << " Pawn from " << numToAlph(xpos, ypos) <<
                 " to " << numToAlph(newxpos, newypos)
                 << "\n";

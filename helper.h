@@ -452,29 +452,49 @@ bool checkRook(std::vector<std::vector<Piece*>>grid,
 
     for (int x = p1x + 1; x < 8; ++x) {
         if (grid[x][p1y] != nullptr) {
-            if (grid[x][p1y]->getTeam() == kingTeam) break;
-            if (grid[x][p1y]->getTitleChar() != rook) break;
+            if (grid[x][p1y]->getTeam() == kingTeam) {
+                if (grid[x][p1y]->getTitleChar() != 'K') {
+                    break;
+                }
+                else continue;
+            }
+            else if (grid[x][p1y]->getTitleChar() != rook) break;
             return true;
         }
     }
     for (int x = p1x - 1; x >= 0; --x) {
         if (grid[x][p1y] != nullptr) {
-            if (grid[x][p1y]->getTeam() == kingTeam) break;
-            if (grid[x][p1y]->getTitleChar() != rook) break;
+            if (grid[x][p1y]->getTeam() == kingTeam) {
+                if (grid[x][p1y]->getTitleChar() != 'K') {
+                    break;
+                }
+                else continue;
+            }
+            else if (grid[x][p1y]->getTitleChar() != rook) break;
             return true;
         }
     }
     for (int y = p1y + 1; y < 8; ++y) {
         if (grid[p1x][y] != nullptr) {
-            if (grid[p1x][y]->getTeam() == kingTeam) break;
-            if (grid[p1x][y]->getTitleChar() != rook) break;
+            if (grid[p1x][y]->getTeam() == kingTeam) {
+                if (grid[p1x][y]->getTitleChar() != 'K') {
+                    break;
+                }
+                else continue;
+            }
+            else if (grid[p1x][y]->getTitleChar() != rook) break;
             return true;
         }
     }
     for (int y = p1y - 1; y >= 0; --y) {
         if (grid[p1x][y] != nullptr) {
-            if (grid[p1x][y]->getTeam() == kingTeam) break;
-            if (grid[p1x][y]->getTitleChar() != rook) break;
+            if (grid[p1x][y]->getTeam() == kingTeam) {
+                if (grid[p1x][y]->getTitleChar() != 'K') {
+                    break;
+                }
+                else continue;
+            }
+            else if (grid[p1x][y]->getTitleChar() != rook) break;
             return true;
         }
     }
@@ -485,7 +505,12 @@ bool checkBishop(std::vector<std::vector<Piece*>>grid,
     int p1x = alphToNumX(kingLocation), p1y = alphToNumY(kingLocation);
     for (int i = 1; (p1x + i < 8) && (p1y + i < 8); ++i) {
         if (grid[p1x + i][p1y + i] != nullptr) {
-            if (grid[p1x + i][p1y + i]->getTeam() == kingTeam) break;
+            if (grid[p1x + i][p1y + i]->getTeam() == kingTeam) {
+                if (grid[p1x + i][p1y + i]->getTitleChar() != 'K') {
+                    break;
+                }
+                else continue;
+            }
             if (grid[p1x + i][p1y + i]->getTitleChar() != bishop) break;
             if (grid[p1x + i][p1y + i]->getTeam() != kingTeam &&
                 grid[p1x + i][p1y + i]->getTitleChar() == bishop) {
@@ -495,7 +520,12 @@ bool checkBishop(std::vector<std::vector<Piece*>>grid,
     }
     for (int i = 1; (p1x + i < 8) && (p1y - i >= 0); ++i) {
         if (grid[p1x + i][p1y - i] != nullptr) {
-            if (grid[p1x + i][p1y - i]->getTeam() == kingTeam) break;
+            if (grid[p1x + i][p1y - i]->getTeam() == kingTeam) {
+                if (grid[p1x + i][p1y - i]->getTitleChar() != 'K') {
+                    break;
+                }
+                else continue;
+            }
             if (grid[p1x + i][p1y - i]->getTitleChar() != bishop) break;
             if (grid[p1x + i][p1y - i]->getTeam() != kingTeam &&
                 grid[p1x + i][p1y - i]->getTitleChar() == bishop) {
@@ -505,7 +535,12 @@ bool checkBishop(std::vector<std::vector<Piece*>>grid,
     }
     for (int i = 1; (p1x - i >= 0) && (p1y + i < 8); ++i) {
         if (grid[p1x - i][p1y + i] != nullptr) {
-            if (grid[p1x - i][p1y + i]->getTeam() == kingTeam) break;
+            if (grid[p1x - i][p1y + i]->getTeam() == kingTeam) {
+                if (grid[p1x - i][p1y + i]->getTitleChar() != 'K') {
+                    break;
+                }
+                else continue;
+            }
             if (grid[p1x - i][p1y + i]->getTitleChar() != bishop) break;
             if (grid[p1x - i][p1y + i]->getTeam() != kingTeam &&
                 grid[p1x - i][p1y + i]->getTitleChar() == bishop) {
@@ -515,7 +550,12 @@ bool checkBishop(std::vector<std::vector<Piece*>>grid,
     }
     for (int i = 1; (p1x - i >= 0) && (p1y - i >= 0); ++i) {
         if (grid[p1x - i][p1y - i] != nullptr) {
-            if (grid[p1x - i][p1y - i]->getTeam() == kingTeam) break;
+            if (grid[p1x - i][p1y - i]->getTeam() == kingTeam) {
+                if (grid[p1x - i][p1y - i]->getTitleChar() != 'K') {
+                    break;
+                }
+                else continue;
+            }
             if (grid[p1x - i][p1y - i]->getTitleChar() != bishop) break;
             if (grid[p1x - i][p1y - i]->getTeam() != kingTeam &&
                 grid[p1x - i][p1y - i]->getTitleChar() == bishop) {
@@ -532,17 +572,24 @@ bool checkQueen(std::vector<std::vector<Piece*>>grid,
 }
 bool checkHelper(std::vector<std::vector<Piece*>>grid, 
     std::string kingPosition, char kingTeam) {
-
+    
     if (checkKnight(grid, kingPosition, kingTeam) ||
         checkPawn(grid, kingPosition, kingTeam) ||
         checkRook(grid, kingPosition, kingTeam, 'R') ||
         checkBishop(grid, kingPosition, kingTeam, 'B') ||
         checkQueen(grid, kingPosition, kingTeam)) {
-        /*
-        std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] 
-        << " in Check at " << kingPosition << "\n";*/
+        
+        //std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] 
+        //<< " in Check at " << kingPosition << "\n";
         return true;
     }
+    
+    /*if (checkQueen(grid, kingPosition, kingTeam)) {
+
+        //std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] 
+        //<< " in Check at " << kingPosition << "\n";
+        return true;
+    }*/
     return false;
 }
 bool checkTeam(std::vector<std::vector<Piece*>>grid, int x, int y, char kingTeam) {
@@ -558,21 +605,24 @@ bool checkTeam(std::vector<std::vector<Piece*>>grid, int x, int y, char kingTeam
 bool checkKingCheckMate(std::vector<std::vector<Piece*>>grid,
     std::string kingPosition, char kingTeam) {
     int x = alphToNumX(kingPosition), y = alphToNumY(kingPosition);
+    bool foundEnemy = false;
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
             if ((x - 1) + j > 7 || (x - 1) + j < 0 ||
                 (y - 1) + i > 7 || (y - 1) + i < 0) continue;
-            if ((x - 1) + j == x || (y - 1) + i == y) continue;
-            if (checkTeam(grid, (x - 1) + j, (y - 1) + j, kingTeam)) {
+            if ((x - 1) + j == x && (y - 1) + i == y) continue;
+            if (checkTeam(grid, (x - 1) + j, (y - 1) + i, kingTeam)) {
                 continue;
             }
+            foundEnemy = true;
             if (!checkHelper(grid, 
                 numToAlph((x - 1) + j, (y - 1) + i), kingTeam)) {
                 return false;
             }
         }
     }
-    return true;
+    if(foundEnemy) return true;
+    return false;
 }
 
 #endif

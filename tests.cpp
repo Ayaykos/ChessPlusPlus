@@ -82,8 +82,8 @@ class TestCheckMateFile {
 public:
     void test() {
         testCheckMateFile tcmf;
-        tcmf.test();
-        //tcmf.staleMate();
+        //tcmf.test();
+        tcmf.staleMate();
     }
 };
 class TestMisc {

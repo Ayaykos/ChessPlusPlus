@@ -8,6 +8,7 @@
 class testCheckMateFile {
 public:
     void test() {
+        /*
         Grid GridObj;
         GridObj.init("GridInputs/E1E4cm1.in");
         GridObj.print();
@@ -16,12 +17,22 @@ public:
         GridObj2.print();
         Grid GridObj3;
         GridObj3.init("GridInputs/E1E8cm3.in");
-        GridObj3.print();
+        GridObj3.print();*/
+        Grid GridObj4;
+        GridObj4.init("GridInputs/E2E8cm4.in");
+        GridObj4.print();
     }
     void staleMate() {
+        /*
         Grid GridObj;
         GridObj.init("GridInputs/E8H1sm1.in");
         GridObj.print();
+        Grid GridObj2;
+        GridObj2.init("GridInputs/E1E8sm2.in");
+        GridObj2.print();*/
+        Grid GridObj3;
+        GridObj3.init("GridInputs/E1E8sm3.in");
+        GridObj3.print();
     }
 };
 class testCheckMate {

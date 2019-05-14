@@ -20,4 +20,10 @@ std::string alphToNum(std::string position_in) {
         std::to_string((8 - (int(position_in[1]) - 48)));
 }
 
+std::string alphaNumUpper(std::string position_in) {
+    std::string temp = "";
+    temp += toupper(position_in[0]);
+    return temp + position_in[1];
+}
+
 #endif
