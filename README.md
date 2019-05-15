@@ -23,7 +23,7 @@ g++ game.cpp -o game.exe
   - tests_checkmate.h
   - tests_grid.h
   - tests_misc.h
-  ___
+___
   Gridprint naming convention:
 
    |     |A  |B  |C  |D  |E  |F  |G  |H  |
