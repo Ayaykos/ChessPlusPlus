@@ -2,7 +2,10 @@
 
 Working on a Chess spinoff, exploring where I can take this. Will incorporate proper GUI and interactive interface.
 
-Core Chess game is currently complete excluding a draw technicality (impossible checkmate).
+Core Chess game nearly complete, currently working on finishing: 
+- castling
+- chceking for possible elimation of threat during checkmate
+- draw technicality - impossible checkmate
 
 ```
 g++ game.cpp -o game.exe
