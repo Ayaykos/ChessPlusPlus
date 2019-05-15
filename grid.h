@@ -25,7 +25,7 @@ public:
     int indexHistoryID(int moveNum, int x, int y);
     std::string idToStr(int value);
     void printMove(int moveNum);
-    void printTurnHistory(int startTurn);
+    void printTurnHistory(int startMove);
     bool checkTeamBlock(int p1x, int p1y, int p2x, int p2y);
     bool checkRookPath(int p1x, int p1y, int p2x, int p2y);
     bool checkBishopPath(int p1x, int p1y, int p2x, int p2y);
@@ -41,7 +41,7 @@ public:
     void invalidMovePrint(int p1x, int p1y, int p2x, int p2y);
     void printCaptured();
     std::string printMoveDescription(int moveNum);
-    //functions only for testing
+    //Functions only for testing
     void init(std::string fileName);
     void movePieceTest(std::string position1, std::string position2);
     void removePiece(std::string position);
@@ -65,16 +65,19 @@ private:
     int winner;
 };
 
-
+//Lookup operator using Grid instance
 Piece* Grid::operator[](std::string lookup) {
     int x = alphToNumX(lookup);
     int y = alphToNumY(lookup);
     return grid[x][y];
 }
+//Initialize vectors of references to Black/White Piece instances
+//Initializes Pieces to have default inital positions at start of game (Move 0)
 void Grid::initPieces() {
     fillPieces(WhitePieces, 'W');
     fillPieces(BlackPieces, 'B');
 }
+//Initialize grid (2D vector of references to Piece instances) values to nullptr
 void Grid::initGrid() {
     std::vector<Piece*> minigrid;
     for (int i = 0; i < 8; ++i) {
@@ -86,13 +89,17 @@ void Grid::initGrid() {
         minigrid.clear();
     }
 }
+//Fill 2D grid vector with references to Black/White pieces instances
+//in their correct default positions at start of game (Move 0)
 void Grid::fill() {
+    //Fill with White pieces at respective positions
     for (size_t i = 0; i < WhitePieces.size(); ++i) {
         for (size_t j = 0; j < WhitePieces[i].size(); ++j) {
             grid[WhitePieces[i][j]->getXPos()][WhitePieces[i][j]->getYPos()] =
                 WhitePieces[i][j];
         }
     }
+    //Fill with Black pieces at respective positions
     for (size_t i = 0; i < BlackPieces.size(); ++i) {
         for (size_t j = 0; j < BlackPieces[i].size(); ++j) {
             grid[BlackPieces[i][j]->getXPos()][BlackPieces[i][j]->getYPos()] =
@@ -100,6 +107,8 @@ void Grid::fill() {
         }
     }
 }
+//Cumulative initialization of Grid class
+//initializing pieces, grid, default values, etc 
 void Grid::init() {
     this->initPieces();
     this->initGrid();
@@ -111,8 +120,8 @@ void Grid::init() {
     whiteKingCheck = false, blackKingCheck = false, endReached = false;
     winner = 0;
 }
+//Cumulative initialization of Grid class through input file with custom positions
 void Grid::init(std::string fileName) {
-    
     fillPieces(fileName, WhitePieces, 'W');
     fillPieces(fileName,BlackPieces, 'B');      
     whiteKingPos = char(fileName[11]);
@@ -130,6 +139,7 @@ void Grid::init(std::string fileName) {
         this->check();
     }
 }
+//Print grid vector with newest update of Pieces
 void Grid::print() {
     std::cout << "  ";
     for (size_t i = 0; i < grid.size(); ++i) {
@@ -139,7 +149,6 @@ void Grid::print() {
     for (size_t i = 0; i < grid.size(); ++i) {
         std::cout << 8 - i << " ";
         for (size_t j = 0; j < grid.size(); ++j) {
-            //std::cout << "|__";
             if (grid[j][i] != nullptr) {
                 std::cout << "|_" << grid[j][i]->getTitleChar();
                 grid[j][i]->getTeam() == 'W' ? std::cout << "_" :
@@ -154,21 +163,17 @@ void Grid::print() {
         std::cout << "\n";
     }
     std::cout << "\n";
-    /*
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            std::cout << grid[i][j] << " ";
-        }
-        std::cout << "\n";
-    }*/
 }
-
+//Move piece from position1 to position2
+//Return true if successful, false otherwise
+//Handles updates to grid and other elements if successful
 bool Grid::movePiece(std::string position1, std::string position2) {
-    
     int x = alphToNumX(position1);
     int y = alphToNumY(position1);
     int newx = alphToNumX(position2);
     int newy = alphToNumY(position2);
+
+    //If King of respective team in check, check if king is being moved out
     if (whiteKingCheck) {
         if (grid[x][y]->getTeam() == 'W' && 
             grid[x][y]->getTitleChar() != 'K') {
@@ -183,9 +188,10 @@ bool Grid::movePiece(std::string position1, std::string position2) {
             return false;
         }
     }
-    if (grid[x][y]->checkValidMove(newx, newy) == true) {
-        //checkPath NEEDS TO BE DONE BEFORE ->MOVE CHANGES XPOS & YPOS
 
+    //Check if move is valid
+    if (grid[x][y]->checkValidMove(newx, newy) == true) {
+        //Check if path allows move
         if (this->checkPath(x, y, newx, newy) == true) {
             std::ostringstream oss;
             oss << grid[x][y] << " moved from " << alphaNumUpper(position1) <<
@@ -200,6 +206,7 @@ bool Grid::movePiece(std::string position1, std::string position2) {
             updateGrid(x, y, newx, newy);
             updateHistory();
             ++moveCount;
+            //Check if new move caused Check/Checkmate
             if (!this->checkMate()) {
                 this->check();
             }
@@ -211,6 +218,8 @@ bool Grid::movePiece(std::string position1, std::string position2) {
     }
     return false;
 }
+//Move any piece to any specified position without checking for validity move
+//Only for testing
 void Grid::movePieceTest(std::string position1, std::string position2) {
     int p1x = alphToNumX(position1);
     int p1y = alphToNumY(position1);
@@ -231,8 +240,9 @@ void Grid::movePieceTest(std::string position1, std::string position2) {
         }
     }
 }
+//Updates grid upon successful move
 void Grid::updateGrid(int p1x, int p1y, int p2x, int p2y) {
-    //en passant
+    //En Passant
     if (grid[p2x][p1y] != nullptr) {
         if (grid[p2x][p1y]->getTitle() == "Pawn" &&
             grid[p1x][p1y]->getTitle() == "Pawn" &&
@@ -243,18 +253,20 @@ void Grid::updateGrid(int p1x, int p1y, int p2x, int p2y) {
             grid[p2x][p1y] = nullptr;
         }
     }
+    //Pawn promotion
     if (grid[p1x][p1y]->getTitle() == "Pawn" && 
         ((grid[p1x][p1y]->getTeam() == 'B' && p2y == 7) || 
             (grid[p1x][p1y]->getTeam() == 'W' && p2y == 0))) {
-        //std::cout << "CHECK UPDATE GRID TO MAKE SURE" << std::endl;
         grid[p1x][p1y] = nullptr;
     }
+    //Regular
     else {
         grid[p2x][p2y] = grid[p1x][p1y];
         grid[p1x][p1y] = nullptr;
     }
 
 }
+//Restores Grid instance to default
 void Grid::restoreGrid() {
     CapturedPieces.first.clear();
     CapturedPieces.second.clear();
@@ -310,14 +322,15 @@ void Grid::restoreGrid() {
     }
     this->fill();
 }
+//Returns number of moves occured so far in game
 int Grid::getMoveCount() {
     return moveCount;
 }
-//function only for testing
+//Removes piece at specified position, only for testing
 void Grid::removePiece(std::string position) {
     grid[alphToNumX(position)][alphToNumY(position)] = nullptr;
 }
-//function only for testing
+//Removes group of pieces by team and title, only for testing
 void Grid::removePiecesGroup(std::string team, std::string title) {
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
@@ -330,19 +343,24 @@ void Grid::removePiecesGroup(std::string team, std::string title) {
         }
     }
 }
+//Print valid move confirmation output
 void Grid::validMovePrint(int p1x, int p1y, int p2x, int p2y) {
     std::cout << "Valid move: " << grid[p1x][p1y] << " from " << 
         numToAlph(p1x, p1y) << " to " << numToAlph(p2x, p2y) << "\n";
 }
+//Print Invalid move confirmation output
 void Grid::invalidMovePrint(int p1x, int p1y, int p2x, int p2y) {
     std::cout << "\tInvalid move: " << grid[p1x][p1y] << " from " <<
         numToAlph(p1x, p1y) << " to " << numToAlph(p2x, p2y) << "\n";
 }
+//Updates Black/White CapturedPieces vector of Pieces 
+//after successful simple overtake
 void Grid::basicTakeOver(int p2x, int p2y) {
     grid[p2x][p2y]->getTeam() == 'W' ?
         CapturedPieces.first.push_back(grid[p2x][p2y]) :
         CapturedPieces.second.push_back(grid[p2x][p2y]);
 }
+//Add grid positioning of current turn to moveHistory vector
 void Grid::updateHistory() {
     std::vector<int> newturn;
     for (int i = 0; i < 8; ++i) {
@@ -355,11 +373,18 @@ void Grid::updateHistory() {
     }
     moveHistory.push_back(newturn);
 }
+//Return ID of piece at specified location of specified move number
 int Grid::indexHistoryID(int moveNum, int x, int y) {
     assert(int(moveHistory.size()) >= moveNum + 1);
     return moveHistory[moveNum][(8 * y) + x];
 }
+//Converts Piece ID to standard printed string form
 std::string Grid::idToStr(int value) {
+    //String/ID convention:
+    //White pieces: K/0, Q/1, R/2, R/3, B/4, B/5, k/6, k/7
+                  //P/8, P/9, P/10, P/11, P/12, P/13, P/14, P/15
+    //Black pieces: K./16, Q./17, R./18, R./19, B./20, B./21, k./22, k./23
+                  //P./24, P./25, P./26, P./27, P./28, P./29, P./30, P./31
     std::string converted = "";
     int tempVal = value;
     if (value > 15) tempVal = value - 16;
@@ -374,8 +399,8 @@ std::string Grid::idToStr(int value) {
     else converted += "_";
     return converted;
 }
+//Print positioning of grid at specified move number
 void Grid::printMove(int moveNum) {
-
     int val;
     std::cout << "Move " << moveNum << ": "
         << moveDescriptionHistory[moveNum] << "  ";
@@ -386,7 +411,6 @@ void Grid::printMove(int moveNum) {
     for (size_t i = 0; i < grid.size(); ++i) {
         std::cout << 8 - i << " ";
         for (size_t j = 0; j < grid.size(); ++j) {
-            //std::cout << "|__";
             val = indexHistoryID(moveNum, j, i);
             if (val != -1) {
                 std::cout << "|_"<< idToStr(val);
@@ -401,33 +425,38 @@ void Grid::printMove(int moveNum) {
     }
     std::cout << "\n";
 }
-void Grid::printTurnHistory(int startTurn) {
-    for (int i = startTurn; i <= moveCount; ++i) {
+//Print all moves starting from specified start move until last move
+void Grid::printTurnHistory(int startMove) {
+    for (int i = startMove; i <= moveCount; ++i) {
         this->printMove(i);
     }
 }
+
+//Path Functions
+
+//Check if team member present at desired move position
 bool Grid::checkTeamBlock(int p1x, int p1y, int p2x, int p2y) {
+    //If piece exists at desired move position
     if (grid[p2x][p2y] != nullptr) {
+        //If piece is team member, move blocked
         if (grid[p2x][p2y]->getTeam() == grid[p1x][p1y]->getTeam()) {
             std::cout << "\tBlocked by team member: " << grid[p2x][p2y] <<
                 " at " << numToAlph(p2x, p2y) << std::endl;
             return false;
         }
+        //Else, successful basic piece capture
         else {
             std::cout << grid[p1x][p1y] << " overtook " <<
                 grid[p2x][p2y] << " at " << numToAlph(p2x, p2y) << std::endl;
-            grid[p2x][p2y]->getTeam() == 'W' ?
-                CapturedPieces.first.push_back(grid[p2x][p2y]) :
-                CapturedPieces.second.push_back(grid[p2x][p2y]);
-
+            basicTakeOver(p2x, p2y);
             return true;
         }
     }
     return true;
 }
-//Path Functions
+//Check for collisions on path of Rook
 bool Grid::checkRookPath(int p1x, int p1y, int p2x, int p2y) {
-    //right
+    //Moving Right
     if (abs(p2x - p1x) > 0 && p2x > p1x) {
         for (int i = p1x + 1; i < p2x; ++i) {
             if (grid[i][p1y] != nullptr) {
@@ -439,7 +468,7 @@ bool Grid::checkRookPath(int p1x, int p1y, int p2x, int p2y) {
         }
         return checkTeamBlock(p1x,p1y,p2x,p2y);
     }
-    //left
+    //Moving Left
     else if (abs(p2x - p1x) > 0 && p1x > p2x) {
         for (int i = p1x - 1; i > p2x; --i) {
             if (grid[i][p1y] != nullptr) {
@@ -451,7 +480,7 @@ bool Grid::checkRookPath(int p1x, int p1y, int p2x, int p2y) {
         }
         return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
-    //down
+    //Moving Down
     else if (abs(p2y - p1y) > 0 && p2y > p1y) {
         for (int i = p1y + 1; i < p2y; ++i) {
             if (grid[p1x][i] != nullptr) {
@@ -463,7 +492,7 @@ bool Grid::checkRookPath(int p1x, int p1y, int p2x, int p2y) {
         }
         return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
-    //up
+    //Moving Up
     else {
         for (int i = p1y - 1; i > p2y; --i) {
             if (grid[p1x][i] != nullptr) {
@@ -479,8 +508,10 @@ bool Grid::checkRookPath(int p1x, int p1y, int p2x, int p2y) {
     assert(false);
     return false;
 }
+//Check for collisions along path of Bishop
 bool Grid::checkBishopPath(int p1x, int p1y, int p2x, int p2y) {
 
+    //Moving Down, Right
     if ((abs(p2x - p1x) > 0 && p2x > p1x) &&
         (abs(p2y - p1y) > 0 && p2y > p1y)) {
         for (int i = 0; i < abs(p1x - p2x) - 1; ++i) {
@@ -493,6 +524,7 @@ bool Grid::checkBishopPath(int p1x, int p1y, int p2x, int p2y) {
         }
         return checkTeamBlock(p1x,p1y,p2x,p2y);
     }
+    //Moving Up, Right
     else if ((abs(p2x - p1x) > 0 && p2x > p1x) &&
         (abs(p2y - p1y) > 0 && p1y > p2y)) {
         for (int i = 0; i < abs(p1x - p2x) - 1; ++i) {
@@ -505,6 +537,7 @@ bool Grid::checkBishopPath(int p1x, int p1y, int p2x, int p2y) {
         }
         return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
+    //Moving Down, Left
     else if ((abs(p2x - p1x) > 0 && p1x > p2x) &&
         (abs(p2y - p1y) > 0 && p2y > p1y)) {
         for (int i = 0; i < abs(p1x - p2x) - 1; ++i) {
@@ -517,6 +550,7 @@ bool Grid::checkBishopPath(int p1x, int p1y, int p2x, int p2y) {
         }
         return checkTeamBlock(p1x, p1y, p2x, p2y);
     }
+    //Moving Up, Left
     else {
         for (int i = 0; i < abs(p1x - p2x) - 1; ++i) {
             if (grid[p1x - i - 1][p1y - i - 1] != nullptr) {
@@ -532,20 +566,24 @@ bool Grid::checkBishopPath(int p1x, int p1y, int p2x, int p2y) {
     assert(false);
     return false;
 }
+//Check for collisions along path of Queen
 bool Grid::checkQueenPath(int p1x, int p1y, int p2x, int p2y) {
+    //If moving along bishop path
     if (abs(p2x - p1x) > 0 && abs(p2y - p1y) > 0) {
         return this->checkBishopPath(p1x, p1y, p2x, p2y);
     }
+    //If moving along rook path
     return this->checkRookPath(p1x, p1y, p2x, p2y);
 }
+//Check for collisions along path of Pawn, En Passant
 bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
     //give option to do en passant?
 
-    //moving diagonally
+    //Moving diagonally
     if (p2x != p1x) {
-        //chosen move position is empty, enter enpassant possibility
+        //Chosen move position is empty, enter enpassant possibility
         if (grid[p2x][p2y] == nullptr) {
-            //position 1 below/above chose position has a piece
+            //Position 1 below/above chose position has a piece
             if (grid[p2x][p1y] != nullptr) {
                 //2nd piece is enemy
                 if (grid[p2x][p1y]->getTeam() != grid[p1x][p1y]->getTeam()) {
@@ -558,7 +596,7 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
                         return false;
                     }
                     if (grid[p2x][p1y]->getMoveCount() > 1) {
-                        //unsuccessful enpassant, wasn't opposites 1st move
+                        //Unsuccessful enpassant, wasn't opposites 1st move
                         std::cout << "\tInvalid move: " << grid[p1x][p1y]->getFullTeam()
                             << " Pawn from " << numToAlph(p1x, p1y) <<
                             " to " << numToAlph(p2x, p2y)
@@ -567,15 +605,14 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
                     }
                     if (indexHistoryID(moveCount - 1, p2x, p1y) 
                         == grid[p2x][p1y]->getID()) {
-                        //turn was not immediate move
+                        //Turn was not immediate move
                         std::cout << "\tInvalid move: " << grid[p1x][p1y]->getFullTeam()
                             << " Pawn from " << numToAlph(p1x, p1y) <<
                             " to " << numToAlph(p2x, p2y)
                             << "\n\t//En Passant invalid - Overtake must be immediate.\n";
                         return false;
                     }
-                    //include second if for seeing if this turn was immediate move
-                    //else successful en passant
+                    //Else successful en passant
                     validMovePrint(p1x, p2x, p1y, p2y);
                     std::cout << "En passant: " << grid[p1x][p1y] << " overtook " <<
                         grid[p2x][p1y] << " at " << numToAlph(p2x, p1y) << std::endl;
@@ -587,13 +624,13 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
                 return false;
             }
             invalidMovePrint(p1x, p1y, p2x, p2y);
-            //invalid move, impossible en passant, return false
+            //Invalid move, impossible en passant, return false
             return false;
         }
-        //regular possible overtake
-        //if 2nd piece isn't enemy
+        //Regular possible overtake
+        //If 2nd piece isn't enemy
         else if (grid[p2x][p2y]->getTeam() == grid[p1x][p1y]->getTeam()) {
-            //blocked return false
+            //Blocked return false
             std::cout << "\tBlocked by team member: " << grid[p2x][p2y] <<
                 " at " << numToAlph(p2x, p2y) << std::endl;
             return false;
@@ -610,8 +647,7 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
             return true;
         }
     }
-    //moving straight
-    //nonempty position
+    //Moving straight onto nonempty position
     if (grid[p2x][p2y] != nullptr) {
         if (grid[p2x][p2y]->getTeam() == grid[p1x][p1y]->getTeam()) {
             std::cout << "\tBlocked by team member: " << grid[p2x][p2y] <<
@@ -631,8 +667,11 @@ bool Grid::checkPawnPath(int p1x, int p1y, int p2x, int p2y) {
         + " Pawn from " + numToAlph(p1x, p1y) +
         " to " + numToAlph(p2x, p2y) + "\n";
     std::cout << output;*/
+
+    //Moving straight into empty position
     return true;
 }
+//Promote pawn after having reached opposite end
 void Grid::pawnPromote(int p1x, int p1y, int p2x, int p2y) {
     std::cout << "Pawn promotion on " << numToAlph(p2x, p2y);
     
@@ -674,6 +713,7 @@ void Grid::pawnPromote(int p1x, int p1y, int p2x, int p2y) {
         assert(false);
     }
 }
+//Cumulative path checking function using piece specific functions
 bool Grid::checkPath(int p1x, int p1y, int p2x, int p2y) {
     if (p1x == p2x && p1y == p2y) {
         std::cout << "\tUnmoved piece.\n";
@@ -724,8 +764,10 @@ bool Grid::checkPath(int p1x, int p1y, int p2x, int p2y) {
     }
     return true;
 }
+//Check if either King in Check
 void Grid::check() {
     //both kings can be in Check
+
     if (checkHelper(grid,whiteKingPos,'W')) {
         whiteKingCheck = true;
         std::cout << grid[alphToNumX(whiteKingPos)][alphToNumY(whiteKingPos)] 
@@ -747,6 +789,7 @@ void Grid::check() {
         }
     }
 }
+//Check if either King Checkmated
 bool Grid::checkMate() {
     if (checkKingCheckMate(grid, whiteKingPos, 'W')) {
         endReached = true;
@@ -775,6 +818,7 @@ bool Grid::checkMate() {
     }
     return false;
 }
+//Print captured pieces of both teams
 void Grid::printCaptured() {
     if (CapturedPieces.first.empty()) {
         std::cout << "Captured by Black: None.\n";
@@ -795,11 +839,15 @@ void Grid::printCaptured() {
         }
     }
 }
+//Return true if game ended
 bool Grid::gameEnded() { return endReached; }
+//Return int responding to result of game (respective winner/draws)
 int Grid::getWinner() { return winner;  }
+//Print description of move at specified move number in game history
 std::string Grid::printMoveDescription(int moveNum) {
     return moveDescriptionHistory[moveNum];
 }
+//Grid class destructor
 Grid::~Grid() {
     deletePieces(WhitePieces);
     deletePieces(BlackPieces);

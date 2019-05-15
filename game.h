@@ -41,14 +41,13 @@ public:
             << ypos << "\nAlph: " << getAlphPos() 
             << "\n" << "\n";
     }
-    //check valid move
-    virtual bool checkValidMove(int newxpos, int newypos) = 0;
-    //execute move
     void move(int newxpos, int newypos) {
         xpos = newxpos;
         ypos = newypos;
         ++moveCount;
     }
+    virtual bool checkValidMove(int newxpos, int newypos) = 0;
+
     virtual ~Piece() {}
 protected:
     std::string title;
@@ -59,6 +58,7 @@ protected:
     int id;
 };
 
+//King Derived Class
 class King : public Piece {
 public:
     King(char team_in) {
@@ -74,6 +74,7 @@ public:
         ypos = alphToNumY(position_in);
         status = 1, moveCount = 0, id = -1;
     }
+    //Check valid King Move
     bool checkValidMove(int newxpos, int newypos) override {
         if(abs(newxpos - xpos) > 1 || abs(newypos - ypos) > 1) {
             std::cout << "\tInvalid move: " << this->getFullTeam() 
@@ -89,6 +90,8 @@ public:
         return true;
     }
 };
+
+//Queen Derived Class
 class Queen : public Piece {
 public:
     Queen(char team_in) {
@@ -104,6 +107,7 @@ public:
         ypos = alphToNumY(position_in);
         status = 1, moveCount = 0, id = -1;
     }
+    //Check valid Queen Move
     bool checkValidMove(int newxpos, int newypos) override {
         if ((abs(newxpos - xpos) > 0 && abs(newypos - ypos) > 0) &&
             (abs(newxpos - xpos) != abs(newypos - ypos))) {
@@ -120,6 +124,8 @@ public:
         return true;
     }
 };
+
+//Rook Derived Class
 class Rook : public Piece {
 public:
     Rook(char team_in) {
@@ -134,6 +140,7 @@ public:
         ypos = alphToNumY(position_in);
         status = 1, moveCount = 0, id = -1;
     }
+    //Check valid Rook Move
     bool checkValidMove(int newxpos, int newypos) override {
 
         if (abs(newxpos - xpos) > 0 && abs(newypos - ypos) > 0) {
@@ -152,6 +159,8 @@ public:
         return true;
     }
 };
+
+//Bishop Derived Class
 class Bishop : public Piece {
 public:
     Bishop(char team_in) {
@@ -166,6 +175,7 @@ public:
         ypos = alphToNumY(position_in);
         status = 1, moveCount = 0, id = -1;
     }
+    //Check valid Bishop Move
     bool checkValidMove(int newxpos, int newypos) override {
         if (abs(newxpos - xpos) != abs(newypos - ypos)) {
             std::cout << "\tInvalid move: " << this->getFullTeam()
@@ -181,6 +191,8 @@ public:
         return true;
     }
 };
+
+//Knight Derived Class
 class Knight : public Piece {
 public:
     Knight(char team_in) {
@@ -195,6 +207,7 @@ public:
         ypos = alphToNumY(position_in);
         status = 1, moveCount = 0, id = -1;
     }
+    //Check valid Knight Move
     bool checkValidMove(int newxpos, int newypos) override {
 
         if ((abs(newxpos - xpos) == 2 && abs(newypos - ypos) == 1) ||
@@ -212,6 +225,8 @@ public:
         return false;
     }
 };
+
+//Pawn Derived Class
 class Pawn : public Piece {
 public:
     Pawn(char team_in) {
@@ -226,7 +241,9 @@ public:
         ypos = alphToNumY(position_in);
         status = 1, moveCount = 0, id = -1;
     }
+    //Check valid Pawn Move
     bool checkValidMove(int newxpos, int newypos) override {
+        //Invalid: backward movement
         if ((team == 'W' && newypos > ypos) ||
             (team == 'B' && ypos > newypos)) {
             std::cout << "\tInvalid move: " << this->getFullTeam()
@@ -235,7 +252,10 @@ public:
                 << "\n";
             return false;
         }
+        //Horizontal movement
         if (newxpos != xpos) {
+            //Invalid: moving horizontally/vertically more than one space or
+            //moving fully sideways
             if ((abs(newxpos - xpos) > 1) || abs(newypos - ypos) > 1 || 
                 (newypos == ypos)) {
                 std::cout << "\tInvalid move: " << this->getFullTeam()
@@ -245,6 +265,8 @@ public:
                 return false;
             }
         }
+        //Invalid: Moving more than twice on first move or 
+        //more than once after first move
         if ((moveCount == 0 && abs(newypos - ypos) > 2) || 
             (moveCount != 0 && abs(newypos - ypos) > 1)) {
             std::cout << "\tInvalid move: " << this->getFullTeam()
@@ -258,6 +280,7 @@ public:
     }
 };
 
+//Overloaded insertion operator for printing Piece
 std::ostream & operator<<(std::ostream & os, Piece* piece) {
     if (piece == nullptr) {
         return os << "null piece";

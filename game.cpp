@@ -205,23 +205,24 @@ bool checkMove(Grid &grid, string &position_1, char team){
 }
 void helpOptions(Grid &grid) {
     std::string option = "0";
-    while (option[0] < '1' || option[0] > '5') {
+    while (option[0] < '1' || option[0] > '6') {
         std::cout << "\nOptions:\n";
         std::cout << "1: Cancel move (can also type cancel during gameplay)\n";
-        std::cout << "2: Print move history\n";
-        std::cout << "3: Print captured pieces\n4: Draw game\n";
-        std::cout << "5: Return to game\n";
+        std::cout << "2: Castle (currently not functional)\n"; //do
+        std::cout << "3: Print move history\n";
+        std::cout << "4: Print captured pieces\n5: Draw game\n";
+        std::cout << "6: Return to game\n";
         std::cin >> option;
         if (option.size() > 1) option = '0';
     }
     std::cout << "\n";
     if (option == "1") throw cancelMove();
-    else if (option == "2") grid.printTurnHistory(0);
-    else if (option == "3") {
+    else if (option == "3") grid.printTurnHistory(0);
+    else if (option == "4") {
         grid.printCaptured();
         std::cout << "\n";
     }
-    else if (option == "4") throw gameDraw();
+    else if (option == "5") throw gameDraw();
 }
 bool checkValidInput(Grid &grid, string position, bool &cancelled) {
     string temp = position;

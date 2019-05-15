@@ -10,6 +10,8 @@
 #include <algorithm>
 #include "conversions.h"
 
+//Dynamic allocation of pieces
+//Initialize with default positions and IDs
 void fillPieces(std::vector<std::vector<Piece*>> &Pieces, char team) {
     assert(Pieces.empty());
     std::vector<Piece*> kings;
@@ -103,6 +105,9 @@ void fillPieces(std::vector<std::vector<Piece*>> &Pieces, char team) {
     knights.clear();
     pawns.clear();
 }
+//Dynamic allocation of pieces
+//Initialize with IDs and custom specified positions from input file
+//Testing only
 void fillPieces(std::string fileName,
     std::vector<std::vector<Piece*>> &Pieces, char team) {
     assert(Pieces.empty());
@@ -209,6 +214,7 @@ void fillPieces(std::string fileName,
     knights.clear();
     pawns.clear();
 }
+//Delete pieces from memory
 void deletePieces(std::vector<std::vector<Piece*>>Pieces) {
     assert(Pieces.size() == 6);
     //std::cout << Pieces.size() << "\n";
@@ -218,6 +224,7 @@ void deletePieces(std::vector<std::vector<Piece*>>Pieces) {
         }
     }
 }
+//Delete any pawn promoted pieces newly allocated during game
 void deletePromotedPieces(std::pair<std::vector<Piece*>,
     std::vector<Piece*>>PiecePair) {
     for (size_t i = 0; i < PiecePair.first.size(); ++i) {
@@ -227,6 +234,7 @@ void deletePromotedPieces(std::pair<std::vector<Piece*>,
         delete PiecePair.second[i];
     }
 }
+//Print pieces
 void printPieces(std::vector<std::vector<Piece*>>Pieces) {
     for (size_t i = 0; i < Pieces.size(); ++i) {
         for (size_t j = 0; j < Pieces[i].size(); ++j) {
@@ -234,9 +242,12 @@ void printPieces(std::vector<std::vector<Piece*>>Pieces) {
         }
     }
 }
+//User input handling for pawn promotion
 std::string promoteInput() {
     std::string in;
     bool validInput = false;
+
+    //Repeat until input valid
     while (validInput == false) {
         std::cout << "\nChoose piece to promote pawn to: ";
         std::cin >> in;
@@ -244,6 +255,7 @@ std::string promoteInput() {
             std::cout << "Error. Re-enter.";
             continue;
         }
+        //Input Queen
         if (toupper(in[0]) == 'Q') {
             if (in.size() > 1) {
                 for (auto & i : in) i = toupper(i);
@@ -260,6 +272,7 @@ std::string promoteInput() {
             }
             continue;
         }
+        //Input Rook
         else if (toupper(in[0]) == 'R') {
             if (in.size() > 1) {
                 for (auto & i : in) i = toupper(i);
@@ -276,6 +289,7 @@ std::string promoteInput() {
             }
             continue;
         }
+        //Input Bishop
         else if (toupper(in[0]) == 'B') {
             if (in.size() > 1) {
                 for (auto & i : in) i = toupper(i);
@@ -292,9 +306,11 @@ std::string promoteInput() {
             }     
             continue;
         }
+        //Input Knight
         else if (toupper(in[0]) == 'K') {
             if (in.size() > 1) {
                 for (auto & i : in) i = toupper(i);
+                //Input King - always invalid
                 if (in == "KING") {
                     std::cout << "Cannot promote to King.";
                     continue;
@@ -312,6 +328,7 @@ std::string promoteInput() {
             }      
             continue;
         }
+        //Input Pawn - always invalid
         else if (toupper(in[0]) == 'P') {
             if (in.size() > 1) {
                 for (auto & i : in) i = toupper(i);
@@ -335,9 +352,14 @@ std::string promoteInput() {
     assert(false);
     return "error";
 }
+
+//King Check helper functions
+
+//Check if Knight Checking King
 bool checkKnight(std::vector<std::vector<Piece*>>grid, 
     std::string kingLocation, char kingTeam) {
     int p1x = alphToNumX(kingLocation), p1y = alphToNumY(kingLocation);
+    //Check if enemy Knight on position Left 1, Up 2 relative to King
     if (p1x - 1 >= 0 && p1y - 2 >= 0) {
         if (grid[p1x - 1][p1y - 2] != nullptr) {
             if (grid[p1x - 1][p1y - 2]->getTeam() != kingTeam &&
@@ -346,6 +368,7 @@ bool checkKnight(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Knight on position Right 1, Up 2 relative to King
     if (p1x + 1 < 8 && p1y - 2 >= 0) {
         if (grid[p1x + 1][p1y - 2] != nullptr) {
             if (grid[p1x + 1][p1y - 2]->getTeam() != kingTeam &&
@@ -354,6 +377,7 @@ bool checkKnight(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Knight on position Right 2, Up 1 relative to King
     if (p1x + 2 < 8 && p1y - 1 >= 0) {
         if (grid[p1x + 2][p1y - 1] != nullptr) {
             if (grid[p1x + 2][p1y - 1]->getTeam() != kingTeam &&
@@ -362,6 +386,7 @@ bool checkKnight(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Knight on position Right 2, Down 1 relative to King
     if (p1x + 2 < 8 && p1y + 1 < 8) {
         if (grid[p1x + 2][p1y + 1] != nullptr) {
             if (grid[p1x + 2][p1y + 1]->getTeam() != kingTeam &&
@@ -370,6 +395,7 @@ bool checkKnight(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Knight on position Right 1, Down 2 relative to King
     if (p1x + 1 < 8 && p1y + 2 < 8) {
         if (grid[p1x + 1][p1y + 2] != nullptr) {
             if (grid[p1x + 1][p1y + 2]->getTeam() != kingTeam &&
@@ -378,6 +404,7 @@ bool checkKnight(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Knight on position Left 1, Down 2 relative to King
     if (p1x - 1 >= 0 && p1y + 2 < 8) {
         if (grid[p1x - 1][p1y + 2] != nullptr) {
             if (grid[p1x - 1][p1y + 2]->getTeam() != kingTeam &&
@@ -386,6 +413,7 @@ bool checkKnight(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Knight on position Left 2, Up 1 relative to King
     if (p1x - 2 >= 0 && p1y - 1 >= 0) {
         if (grid[p1x - 2][p1y - 1] != nullptr) {
             if (grid[p1x - 2][p1y - 1]->getTeam() != kingTeam &&
@@ -394,6 +422,7 @@ bool checkKnight(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Knight on position Left 2, Down 1 relative to King
     if (p1x - 2 >= 0 && p1y + 1 < 8) {
         if (grid[p1x - 2][p1y + 1] != nullptr) {
             if (grid[p1x - 2][p1y + 1]->getTeam() != kingTeam &&
@@ -404,11 +433,13 @@ bool checkKnight(std::vector<std::vector<Piece*>>grid,
     }
     return false;
 }
+//Check if Pawn Checking King
 bool checkPawn(std::vector<std::vector<Piece*>>grid,
     std::string kingLocation, char kingTeam) {
     int p1x = alphToNumX(kingLocation), p1y = alphToNumY(kingLocation);
     
     if (kingTeam == 'W') {
+        //Check if enemy Pawn Diagonally left relative to King
         if (p1x - 1 >= 0 && p1y - 1 >= 0) {
             if (grid[p1x - 1][p1y - 1] != nullptr) {
                 if (grid[p1x - 1][p1y - 1]->getTeam() != kingTeam &&
@@ -417,6 +448,7 @@ bool checkPawn(std::vector<std::vector<Piece*>>grid,
                 }
             }
         }
+        //Check if enemy Pawn Diagonally right relative to King
         if (p1x + 1 < 8 && p1y - 1 >= 0) {
             if (grid[p1x + 1][p1y - 1] != nullptr) {
                 if (grid[p1x + 1][p1y - 1]->getTeam() != kingTeam &&
@@ -427,6 +459,7 @@ bool checkPawn(std::vector<std::vector<Piece*>>grid,
         }
     }
     else {
+        //Check if enemy Pawn Diagonally left relative to King
         if (p1x - 1 >= 0 && p1y + 1 < 8) {
             if (grid[p1x - 1][p1y + 1] != nullptr) {
                 if (grid[p1x - 1][p1y + 1]->getTeam() != kingTeam &&
@@ -435,6 +468,7 @@ bool checkPawn(std::vector<std::vector<Piece*>>grid,
                 }
             }
         }
+        //Check if enemy Pawn Diagonally right relative to King
         if (p1x + 1 < 8 && p1y + 1 < 8) {
             if (grid[p1x + 1][p1y + 1] != nullptr) {
                 if (grid[p1x + 1][p1y + 1]->getTeam() != kingTeam &&
@@ -446,69 +480,81 @@ bool checkPawn(std::vector<std::vector<Piece*>>grid,
     }
     return false;
 }
+//Check if Rook Checking King
 bool checkRook(std::vector<std::vector<Piece*>>grid,
     std::string kingLocation, char kingTeam, char rook) {
     int p1x = alphToNumX(kingLocation), p1y = alphToNumY(kingLocation);
 
+    //Check if enemy Rook in path right of King
     for (int x = p1x + 1; x < 8; ++x) {
         if (grid[x][p1y] != nullptr) {
             if (grid[x][p1y]->getTeam() == kingTeam) {
-                if (grid[x][p1y]->getTitleChar() != 'K') {
-                    break;
-                }
+                //If encountered team piece that isn't King itself, Check blocked
+                if (grid[x][p1y]->getTitleChar() != 'K') break;
+                //Encountered King's current position, skip
                 else continue;
             }
+            //Encountered non-Rook enemy piece, Rook Check blocked
             else if (grid[x][p1y]->getTitleChar() != rook) break;
             return true;
         }
     }
+    //Check if enemy Rook in path left of King
     for (int x = p1x - 1; x >= 0; --x) {
         if (grid[x][p1y] != nullptr) {
             if (grid[x][p1y]->getTeam() == kingTeam) {
-                if (grid[x][p1y]->getTitleChar() != 'K') {
-                    break;
-                }
+                //If encountered team piece that isn't King itself, Check blocked
+                if (grid[x][p1y]->getTitleChar() != 'K') break;
+                //Encountered King's current position, skip
                 else continue;
             }
+            //Encountered non-Rook enemy piece, Rook Check blocked
             else if (grid[x][p1y]->getTitleChar() != rook) break;
             return true;
         }
     }
+    //Check if enemy Rook in path below King
     for (int y = p1y + 1; y < 8; ++y) {
         if (grid[p1x][y] != nullptr) {
             if (grid[p1x][y]->getTeam() == kingTeam) {
-                if (grid[p1x][y]->getTitleChar() != 'K') {
-                    break;
-                }
+                //If encountered team piece that isn't King itself, Check blocked
+                if (grid[p1x][y]->getTitleChar() != 'K') break;
+                //Encountered King's current position, skip
                 else continue;
             }
+            //Encountered non-Rook enemy piece, Rook Check blocked
             else if (grid[p1x][y]->getTitleChar() != rook) break;
             return true;
         }
     }
+    //Check if enemy Rook in path above King
     for (int y = p1y - 1; y >= 0; --y) {
         if (grid[p1x][y] != nullptr) {
             if (grid[p1x][y]->getTeam() == kingTeam) {
-                if (grid[p1x][y]->getTitleChar() != 'K') {
-                    break;
-                }
+                //If encountered team piece that isn't King itself, Check blocked
+                if (grid[p1x][y]->getTitleChar() != 'K') break;
+                //Encountered King's current position, skip
                 else continue;
             }
+            //Encountered non-Rook enemy piece, Rook Check blocked
             else if (grid[p1x][y]->getTitleChar() != rook) break;
             return true;
         }
     }
     return false;
 }
+//Check if Bishop Checking King
 bool checkBishop(std::vector<std::vector<Piece*>>grid,
     std::string kingLocation, char kingTeam, char bishop) {
     int p1x = alphToNumX(kingLocation), p1y = alphToNumY(kingLocation);
+
+    //Check if enemy Bishop on path Down, Right relative to King
     for (int i = 1; (p1x + i < 8) && (p1y + i < 8); ++i) {
         if (grid[p1x + i][p1y + i] != nullptr) {
             if (grid[p1x + i][p1y + i]->getTeam() == kingTeam) {
-                if (grid[p1x + i][p1y + i]->getTitleChar() != 'K') {
-                    break;
-                }
+                //If encountered team piece that isn't King itself, Check blocked
+                if (grid[p1x + i][p1y + i]->getTitleChar() != 'K') break;
+                //Encountered King's current position, skip
                 else continue;
             }
             if (grid[p1x + i][p1y + i]->getTitleChar() != bishop) break;
@@ -518,12 +564,13 @@ bool checkBishop(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Bishop on path Up, Right relative to King
     for (int i = 1; (p1x + i < 8) && (p1y - i >= 0); ++i) {
         if (grid[p1x + i][p1y - i] != nullptr) {
             if (grid[p1x + i][p1y - i]->getTeam() == kingTeam) {
-                if (grid[p1x + i][p1y - i]->getTitleChar() != 'K') {
-                    break;
-                }
+                //If encountered team piece that isn't King itself, Check blocked
+                if (grid[p1x + i][p1y - i]->getTitleChar() != 'K') break;
+                //Encountered King's current position, skip
                 else continue;
             }
             if (grid[p1x + i][p1y - i]->getTitleChar() != bishop) break;
@@ -533,12 +580,13 @@ bool checkBishop(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Bishop on path Down, Left relative to King
     for (int i = 1; (p1x - i >= 0) && (p1y + i < 8); ++i) {
         if (grid[p1x - i][p1y + i] != nullptr) {
             if (grid[p1x - i][p1y + i]->getTeam() == kingTeam) {
-                if (grid[p1x - i][p1y + i]->getTitleChar() != 'K') {
-                    break;
-                }
+                //If encountered team piece that isn't King itself, Check blocked
+                if (grid[p1x - i][p1y + i]->getTitleChar() != 'K') break;
+                //Encountered King's current position, skip
                 else continue;
             }
             if (grid[p1x - i][p1y + i]->getTitleChar() != bishop) break;
@@ -548,12 +596,13 @@ bool checkBishop(std::vector<std::vector<Piece*>>grid,
             }
         }
     }
+    //Check if enemy Bishop on path Up, Left relative to King
     for (int i = 1; (p1x - i >= 0) && (p1y - i >= 0); ++i) {
         if (grid[p1x - i][p1y - i] != nullptr) {
             if (grid[p1x - i][p1y - i]->getTeam() == kingTeam) {
-                if (grid[p1x - i][p1y - i]->getTitleChar() != 'K') {
-                    break;
-                }
+                //If encountered team piece that isn't King itself, Check blocked
+                if (grid[p1x - i][p1y - i]->getTitleChar() != 'K') break;
+                //Encountered King's current position, skip
                 else continue;
             }
             if (grid[p1x - i][p1y - i]->getTitleChar() != bishop) break;
@@ -565,11 +614,13 @@ bool checkBishop(std::vector<std::vector<Piece*>>grid,
     }
     return false;
 }
+//Check if Queen Checking King
 bool checkQueen(std::vector<std::vector<Piece*>>grid,
     std::string kingLocation, char kingTeam) {
     return (checkRook(grid, kingLocation, kingTeam, 'Q') ||
         checkBishop(grid, kingLocation, kingTeam, 'Q'));
 }
+//Check if any pieces Checking King
 bool checkHelper(std::vector<std::vector<Piece*>>grid, 
     std::string kingPosition, char kingTeam) {
     
@@ -583,15 +634,10 @@ bool checkHelper(std::vector<std::vector<Piece*>>grid,
         //<< " in Check at " << kingPosition << "\n";
         return true;
     }
-    
-    /*if (checkQueen(grid, kingPosition, kingTeam)) {
-
-        //std::cout << grid[alphToNumX(kingPosition)][alphToNumY(kingPosition)] 
-        //<< " in Check at " << kingPosition << "\n";
-        return true;
-    }*/
     return false;
 }
+//Helper function for checkKingCheckMate()
+//Check if position King is considering to move under Check is taken by team member
 bool checkTeam(std::vector<std::vector<Piece*>>grid, int x, int y, char kingTeam) {
     if (x > 0 && x < 8 && y > 0 && y < 8) {
         if (grid[x][y] != nullptr) {
@@ -602,19 +648,24 @@ bool checkTeam(std::vector<std::vector<Piece*>>grid, int x, int y, char kingTeam
     }
     return false;
 }
+//Check if King is Checkmated
 bool checkKingCheckMate(std::vector<std::vector<Piece*>>grid,
     std::string kingPosition, char kingTeam) {
     int x = alphToNumX(kingPosition), y = alphToNumY(kingPosition);
     bool foundEnemy = false;
+
+    //Loop through all possible positions for King to move to escape Check
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
+            //Skip if position off grid
             if ((x - 1) + j > 7 || (x - 1) + j < 0 ||
                 (y - 1) + i > 7 || (y - 1) + i < 0) continue;
+            //Skip considering position King is currently on
             if ((x - 1) + j == x && (y - 1) + i == y) continue;
-            if (checkTeam(grid, (x - 1) + j, (y - 1) + i, kingTeam)) {
-                continue;
-            }
+            //Skip if team member on position
+            if (checkTeam(grid, (x - 1) + j, (y - 1) + i, kingTeam)) continue;
             foundEnemy = true;
+            //If Check not possible on position, Checkmate return false
             if (!checkHelper(grid, 
                 numToAlph((x - 1) + j, (y - 1) + i), kingTeam)) {
                 return false;
