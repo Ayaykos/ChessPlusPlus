@@ -1,5 +1,7 @@
 # ChessPlusPlus
-
+<p align="left">
+  <img src="https://raw.githubusercontent.com/Ayaykos/ChessPlusPlus/master/icon.ico" width="150" title="icon">
+</p>
 Working on a Chess spinoff, exploring where I can take this. Will incorporate proper GUI and interactive interface.
 
 Core Chess game nearly complete, currently working on finishing: 
