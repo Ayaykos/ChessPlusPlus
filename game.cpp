@@ -8,7 +8,6 @@ using namespace std;
 
 bool asked = false;
 string input;
-bool runInterface = false;
 
 void inputMove(Grid &grid, string &position_1, string &position_2, char team);
 bool checkChosenPiece(Grid &grid, string &position_1, char team);
@@ -25,15 +24,6 @@ class cancelMove {};
 
 int main() {
 
-    std::string runInterfaceInput = "0";
-    while (runInterfaceInput.size() > 1 || 
-        (toupper(runInterfaceInput[0]) != 'Y' && toupper(runInterfaceInput[0]) != 'N')) {
-        std::cout << "Include interface? Only functional on Windows (y/n): ";
-        std::cin >> runInterfaceInput;
-    }
-    if (toupper(runInterfaceInput[0]) == 'Y') runInterface = true;
-
-
     std::thread SFMLthread(SFMLsetup);
     std::thread backendthread(backend);
     std::thread SFMLinterfacethread(SFMLinterface);
@@ -46,10 +36,7 @@ int main() {
 }
 
 void SFMLinterface() {
-    if (runInterface) {
-        Interface gameinterface;
-        gameinterface.process();
-    }
+    Interface gameinterface();
 }
 void SFMLsetup() {
     while (true) {

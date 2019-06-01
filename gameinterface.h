@@ -7,10 +7,10 @@
 
 class Interface {
 public:
-    void process();
+    Interface();
 };
 
-void Interface::process() {
+Interface::Interface() {
     sf::RenderWindow window(sf::VideoMode(1300, 650), "ChessPlusPlus", sf::Style::Titlebar);
     sf::Texture chessbacktext;
     if (!chessbacktext.loadFromFile("Images/chessboardback.png")) std::cout << "Chessback error\n";
