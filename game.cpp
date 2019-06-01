@@ -1,12 +1,14 @@
 #include <iostream>
 #include <string>
 #include "grid.h"
+#include "gameinterface.h"
 #include <vector>
 #include <thread>
 using namespace std;
 
 bool asked = false;
 string input;
+bool runInterface = false;
 
 void inputMove(Grid &grid, string &position_1, string &position_2, char team);
 bool checkChosenPiece(Grid &grid, string &position_1, char team);
@@ -17,20 +19,38 @@ bool playerMove(Grid &grid, string other_name, bool &drawReached, char team);
 void gameCycle(bool &play, string p1_name, string p2_name);
 void backend();
 void SFMLsetup();
+void SFMLinterface();
 class gameDraw {};
 class cancelMove {};
 
 int main() {
 
+    std::string runInterfaceInput = "0";
+    while (runInterfaceInput.size() > 1 || 
+        (toupper(runInterfaceInput[0]) != 'Y' && toupper(runInterfaceInput[0]) != 'N')) {
+        std::cout << "Include interface? Only functional on Windows (y/n): ";
+        std::cin >> runInterfaceInput;
+    }
+    if (toupper(runInterfaceInput[0]) == 'Y') runInterface = true;
+
+
     std::thread SFMLthread(SFMLsetup);
     std::thread backendthread(backend);
+    std::thread SFMLinterfacethread(SFMLinterface);
 
     backendthread.join();
     SFMLthread.join();
+    SFMLinterfacethread.join();
 
     return 0;
 }
 
+void SFMLinterface() {
+    if (runInterface) {
+        Interface gameinterface;
+        gameinterface.process();
+    }
+}
 void SFMLsetup() {
     while (true) {
 
@@ -43,7 +63,6 @@ void SFMLsetup() {
         }
     }
 }
-
 void backend() {
     bool play = true;
     std::cout << "Welcome to ChessPlusPlus!\n\n";
