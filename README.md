@@ -2,7 +2,7 @@
 <p align="left">
   <img src="https://raw.githubusercontent.com/Ayaykos/ChessPlusPlus/master/icon.ico" width="150" title="icon">
 </p>
-Working on a Chess spinoff, exploring where I can take this. Will incorporate proper GUI and interactive interface.
+Working on a Chess spinoff, exploring where I can take this. Using SFML for GUI and interactive interface.
 
 Core Chess game nearly complete, currently working on finishing: 
 - castling
@@ -17,6 +17,7 @@ g++ game.cpp -o game.exe
   - game.h  *//Piece classes/subclasses*
   - grid.h  *//Grid class containing pieces*
   - helper.h  *//Helper functions for Grid's use of Pieces*
+  - gameinterface.h  *//Interface class using SFML*
   - conversions.h  *//Numerical/alphabetical grid notation conversion functions*
   
 - tests.cpp  *//test suite*
