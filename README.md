@@ -6,11 +6,16 @@ Working on a Chess spinoff, exploring where I can take this. Using SFML for GUI 
 
 Core Chess game nearly complete, currently working on finishing: 
 - castling
-- chceking for possible elimation of threat during checkmate
+- checking for possible elimation of threat during checkmate
 - draw technicality - impossible checkmate
 
+## Setup:
+Currently have no simple way to circumvent setting up SFML.
+To avoid compiler errors, in game.cpp, comment out:
+* //#include "gameinterface.h"
+* in SFMLinterface(): //Interface gameinterface();
 ```
-g++ game.cpp -o game.exe
+g++ -pthread game.cpp -o game.exe
 ./game.exe
 ```
 - game.cpp  *//main driver*
