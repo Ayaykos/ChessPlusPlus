@@ -2,7 +2,11 @@
 #include <string>
 #include "grid.h"
 #include <vector>
+#include <thread>
 using namespace std;
+
+bool asked = false;
+string input;
 
 void inputMove(Grid &grid, string &position_1, string &position_2, char team);
 bool checkChosenPiece(Grid &grid, string &position_1, char team);
@@ -11,15 +15,40 @@ void printResult(Grid &grid, string p1_name, string p2_name);
 void helpOptions(Grid &grid);
 bool playerMove(Grid &grid, string other_name, bool &drawReached, char team);
 void gameCycle(bool &play, string p1_name, string p2_name);
+void backend();
+void SFMLsetup();
 class gameDraw {};
 class cancelMove {};
 
 int main() {
 
+    std::thread SFMLthread(SFMLsetup);
+    std::thread backendthread(backend);
+
+    backendthread.join();
+    SFMLthread.join();
+
+    return 0;
+}
+
+void SFMLsetup() {
+    while (true) {
+
+        //if user input requested
+        if (asked) {
+            std::cin >> input;
+
+            //break data request
+            asked = false;
+        }
+    }
+}
+
+void backend() {
     bool play = true;
     std::cout << "Welcome to ChessPlusPlus!\n\n";
     string p1_name, p2_name, garbage;
-    
+
     //Player names input
     bool nameSuccess = false;
     while (!nameSuccess) {
@@ -56,8 +85,6 @@ int main() {
         std::cout << "\n";
         gameCycle(play, p1_name,p2_name);
     }
-
-    return 0;
 }
 //Full gameplay with repeated games until quit
 void gameCycle(bool &play, string p1_name, string p2_name) {
@@ -182,20 +209,41 @@ void inputMove(Grid &grid, string &position_1, string &position_2, char team) {
 
         //Choose first piece
         std::cout << "Move which piece? ";
-        std::cin >> position_1;
+
+        //Multithreaded call to user input
+        asked = true;
+        while (asked) {}
+        position_1 = input;
+
         while (!checkChosenPiece(grid, position_1, team)) {
             std::cout << "Move which piece? ";
-            std::cin >> position_1;
+
+            //Multithreaded call to user input
+            asked = true;
+            while (asked) {}
+            position_1 = input;
+
         }
 
         //Choose position to move piece to
         std::cout << "Move " << grid[position_1]->getTitle() << " to? ";
-        std::cin >> position_2;
+
+        //Multithreaded call to user input
+        asked = true;
+        while (asked) {}
+        position_2 = input;
+
         while (!checkValidInput(grid, position_2, cancelled)) {
             //Break from loop if move successful and not cancelled
             if (cancelled == true) break;
             std::cout << "Move " << grid[position_1]->getTitle() << " to? ";
-            std::cin >> position_2;
+
+            //Multithreaded call to user input
+            asked = true;
+            while (asked) {}
+            position_2 = input;
+
+
         }
     }
     std::cout << "\n";
@@ -206,7 +254,11 @@ bool checkChosenPiece(Grid &grid, string &position_1, char team){
     //Check valid input
     while (!checkValidInput(grid, position_1, cancelled)) {
         std::cout << "Move which piece? ";
-        std::cin >> position_1;
+
+        //Multithreaded call to user input
+        asked = true;
+        while (asked) {}
+        position_1 = input;
     }
     //Check if chosen exists on chosen position
     if (grid[position_1] == nullptr) {
